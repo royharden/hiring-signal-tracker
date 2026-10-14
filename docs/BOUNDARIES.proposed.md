@@ -1,6 +1,12 @@
 # Proposed app boundaries
 
-Status: specification only. No extraction, annotation, generic shared schema, provider, persistence or aggregate module is implemented by this scaffold.
+Status: app-owned classification/config contracts are implemented in `contracts.py`, with generated schema under `config/schemas`. Other rows remain proposals. No extraction, annotation, generic shared schema, provider, persistence or aggregate module is implemented.
+
+The 37 field IDs include all 30 separately required skills. Absent booleans are null/ok/absent; explicit negatives are false/ok/explicit_negative with safe candidate coordinates. Failed/abstained categorical outputs are null, never default onsite/full_time. Multiple seniority requires two distinct levels; unresolved conflicting evidence abstains. Salary normalization preserves explicit decimal amounts/currency/period; unknown units remain stated with normalization abstained.
+
+`TransientInput` omits text from repr and rejects JSON/dict/dataclass/pickle serialization. This is an ordinary Python boundary, not process isolation or guaranteed erasure. It validates the UTF-8 input hash and byte limit; candidate references validate coordinates and source-digest binding, not actual extraction or recall. `PrivateDerivedRecord` allows only finite domain fields and safe hashes; it is private pseudonymous data, not a public per-posting export. Public config/schema inventories contain no posting data. HMAC generation/mapping recovery, storage and public aggregate suppression remain unimplemented.
+
+Every model field is mandatory and nested extras are forbidden. Cross-field rules require `model_validate_json`; generated JSON Schema alone describes only part of validation. Do not log rejected inputs or `ValidationError.errors()` payloads. Human provenance remains unprovided in the experiment config; self-attested actor references never authenticate a human or establish corrected gold. `ClassifierProposal` is an app-owned signature, not an implemented extractor or competing shared driver.
 
 | Boundary | Intended input/output and invariant |
 |---|---|

@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "evaluation_status": {
+      "const": "not_implemented",
+      "title": "Evaluation Status",
+      "type": "string"
+    },
+    "field_ids": {
+      "const": [
+        "ai_engineering_role",
+        "portfolio_requested",
+        "seniority",
+        "work_mode",
+        "employment",
+        "skills.python",
+        "skills.javascript",
+        "skills.typescript",
+        "skills.go",
+        "skills.rust",
+        "skills.java",
+        "skills.c",
+        "skills.cpp",
+        "skills.sql",
+        "skills.pytorch",
+        "skills.tensorflow",
+        "skills.jax",
+        "skills.llm_apis",
+        "skills.agents",
+        "skills.rag",
+        "skills.evals",
+        "skills.fine_tuning",
+        "skills.mcp",
+        "skills.vector_db",
+        "skills.prompt_engineering",
+        "skills.mlops",
+        "skills.data_pipelines",
+        "skills.kubernetes",
+        "skills.aws",
+        "skills.gcp",
+        "skills.react",
+        "skills.node",
+        "skills.postgres",
+        "skills.distributed_systems",
+        "skills.security",
+        "salary",
+        "location_stated"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 37,
+      "minItems": 37,
+      "title": "Field Ids",
+      "type": "array"
+    },
+    "human_labels": {
+      "const": "unprovided",
+      "title": "Human Labels",
+      "type": "string"
+    },
+    "methods": {
+      "items": {
+        "enum": [
+          "rules",
+          "jev",
+          "generative",
+          "dev_majority"
+        ],
+        "type": "string"
+      },
+      "title": "Methods",
+      "type": "array"
+    },
+    "provider_execution": {
+      "const": "disabled",
+      "title": "Provider Execution",
+      "type": "string"
+    },
+    "schema_version": {
+      "maximum": 1,
+      "minimum": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "split_seed": {
+      "maximum": 20261014,
+      "minimum": 20261014,
+      "title": "Split Seed",
+      "type": "integer"
+    },
+    "taxonomy_version": {
+      "const": "taxonomy-v1",
+      "title": "Taxonomy Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "taxonomy_version",
+    "field_ids",
+    "methods",
+    "split_seed",
+    "human_labels",
+    "evaluation_status",
+    "provider_execution"
+  ],
+  "title": "ExperimentConfig",
+  "type": "object",
+  "x-runtime-validators-required": true
+}

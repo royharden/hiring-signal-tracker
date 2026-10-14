@@ -26,7 +26,8 @@ class ScaffoldTests(unittest.TestCase):
             code = cli.main(["status", "--json"])
         result = json.loads(output.getvalue())
         self.assertEqual(code, 0)
-        self.assertEqual(result["stage"], "scaffold")
+        self.assertEqual(result["stage"], "contracts_only")
+        self.assertIn("domain_contracts", result["implemented"])
         self.assertFalse(result["complete_workflow"])
         self.assertEqual(result["evaluation_status"], "not_implemented")
         self.assertIn("extraction", result["unavailable"])
@@ -82,7 +83,7 @@ class ScaffoldTests(unittest.TestCase):
                 timeout=10,
             )
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertEqual(json.loads(completed.stdout)["stage"], "scaffold")
+        self.assertEqual(json.loads(completed.stdout)["stage"], "contracts_only")
 
     def test_moved_scripts_use_only_their_detached_package(self):
         """Catches hidden workspace/import dependency or a fake script success."""

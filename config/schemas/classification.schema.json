@@ -1,0 +1,775 @@
+{
+  "$defs": {
+    "BooleanJudgment": {
+      "additionalProperties": false,
+      "description": "Absent is null/ok/absent; an explicit negative is false/ok/explicit_negative.",
+      "properties": {
+        "candidates": {
+          "items": {
+            "$ref": "#/$defs/CandidateReference"
+          },
+          "maxItems": 8,
+          "title": "Candidates",
+          "type": "array"
+        },
+        "certainty": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Certainty"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "enum": [
+                "provider_error",
+                "invalid_output",
+                "candidate_missing",
+                "screen_hold"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Error Code"
+        },
+        "evidence_state": {
+          "enum": [
+            "absent",
+            "explicit_positive",
+            "explicit_negative",
+            "multiple",
+            "conflicting",
+            "uncertain",
+            "unavailable"
+          ],
+          "title": "Evidence State",
+          "type": "string"
+        },
+        "process_status": {
+          "enum": [
+            "ok",
+            "abstained",
+            "error",
+            "blocked"
+          ],
+          "title": "Process Status",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "evidence_state",
+        "process_status",
+        "certainty",
+        "candidates",
+        "error_code",
+        "value"
+      ],
+      "title": "BooleanJudgment",
+      "type": "object"
+    },
+    "CandidateReference": {
+      "additionalProperties": false,
+      "description": "Coordinates only, never snippets, names, URLs or source identifiers.\n\nByte coordinates refer to a transient input with this digest. This validates\nshape and bounds, not candidate recall or correspondence to actual input.",
+      "properties": {
+        "end_byte": {
+          "exclusiveMinimum": 0,
+          "maximum": 32768,
+          "title": "End Byte",
+          "type": "integer"
+        },
+        "input_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Input Sha256",
+          "type": "string"
+        },
+        "start_byte": {
+          "exclusiveMaximum": 32768,
+          "minimum": 0,
+          "title": "Start Byte",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "input_sha256",
+        "start_byte",
+        "end_byte"
+      ],
+      "title": "CandidateReference",
+      "type": "object"
+    },
+    "Certainty": {
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "native_probability",
+            "self_reported_confidence"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "title": "Certainty",
+      "type": "object"
+    },
+    "EmploymentJudgment": {
+      "additionalProperties": false,
+      "properties": {
+        "candidates": {
+          "items": {
+            "$ref": "#/$defs/CandidateReference"
+          },
+          "maxItems": 8,
+          "title": "Candidates",
+          "type": "array"
+        },
+        "certainty": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Certainty"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "enum": [
+                "provider_error",
+                "invalid_output",
+                "candidate_missing",
+                "screen_hold"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Error Code"
+        },
+        "evidence_state": {
+          "enum": [
+            "absent",
+            "explicit_positive",
+            "explicit_negative",
+            "multiple",
+            "conflicting",
+            "uncertain",
+            "unavailable"
+          ],
+          "title": "Evidence State",
+          "type": "string"
+        },
+        "process_status": {
+          "enum": [
+            "ok",
+            "abstained",
+            "error",
+            "blocked"
+          ],
+          "title": "Process Status",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "enum": [
+                "full_time",
+                "part_time",
+                "contract",
+                "internship",
+                "not_stated"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "evidence_state",
+        "process_status",
+        "certainty",
+        "candidates",
+        "error_code",
+        "value"
+      ],
+      "title": "EmploymentJudgment",
+      "type": "object"
+    },
+    "NormalizedSalary": {
+      "additionalProperties": false,
+      "description": "Unit-preserving decimal range; no annual conversion or inferred units.",
+      "properties": {
+        "currency": {
+          "enum": [
+            "USD",
+            "EUR",
+            "GBP",
+            "CAD",
+            "AUD",
+            "JPY",
+            "CHF",
+            "INR"
+          ],
+          "title": "Currency",
+          "type": "string"
+        },
+        "maximum": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Maximum"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Minimum"
+        },
+        "period": {
+          "enum": [
+            "hour",
+            "day",
+            "week",
+            "month",
+            "year"
+          ],
+          "title": "Period",
+          "type": "string"
+        }
+      },
+      "required": [
+        "minimum",
+        "maximum",
+        "currency",
+        "period"
+      ],
+      "title": "NormalizedSalary",
+      "type": "object"
+    },
+    "SalaryJudgment": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "anyOf": [
+            {
+              "enum": [
+                "USD",
+                "EUR",
+                "GBP",
+                "CAD",
+                "AUD",
+                "JPY",
+                "CHF",
+                "INR"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Currency"
+        },
+        "normalization_status": {
+          "enum": [
+            "ok",
+            "abstained",
+            "not_applicable",
+            "error",
+            "blocked"
+          ],
+          "title": "Normalization Status",
+          "type": "string"
+        },
+        "normalized": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NormalizedSalary"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "period": {
+          "anyOf": [
+            {
+              "enum": [
+                "hour",
+                "day",
+                "week",
+                "month",
+                "year"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Period"
+        },
+        "presence": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "stated_maximum": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Stated Maximum"
+        },
+        "stated_minimum": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Stated Minimum"
+        }
+      },
+      "required": [
+        "presence",
+        "stated_minimum",
+        "stated_maximum",
+        "currency",
+        "period",
+        "normalization_status",
+        "normalized"
+      ],
+      "title": "SalaryJudgment",
+      "type": "object"
+    },
+    "SeniorityJudgment": {
+      "additionalProperties": false,
+      "properties": {
+        "candidates": {
+          "items": {
+            "$ref": "#/$defs/CandidateReference"
+          },
+          "maxItems": 8,
+          "title": "Candidates",
+          "type": "array"
+        },
+        "certainty": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Certainty"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "enum": [
+                "provider_error",
+                "invalid_output",
+                "candidate_missing",
+                "screen_hold"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Error Code"
+        },
+        "evidence_state": {
+          "enum": [
+            "absent",
+            "explicit_positive",
+            "explicit_negative",
+            "multiple",
+            "conflicting",
+            "uncertain",
+            "unavailable"
+          ],
+          "title": "Evidence State",
+          "type": "string"
+        },
+        "levels": {
+          "items": {
+            "enum": [
+              "junior",
+              "mid",
+              "senior",
+              "staff_or_lead"
+            ],
+            "type": "string"
+          },
+          "maxItems": 4,
+          "title": "Levels",
+          "type": "array"
+        },
+        "process_status": {
+          "enum": [
+            "ok",
+            "abstained",
+            "error",
+            "blocked"
+          ],
+          "title": "Process Status",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "enum": [
+                "junior",
+                "mid",
+                "senior",
+                "staff_or_lead",
+                "not_stated",
+                "multiple"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "evidence_state",
+        "process_status",
+        "certainty",
+        "candidates",
+        "error_code",
+        "value",
+        "levels"
+      ],
+      "title": "SeniorityJudgment",
+      "type": "object"
+    },
+    "SkillJudgments": {
+      "additionalProperties": false,
+      "description": "Thirty separately required judgments; no omitted skill defaults.",
+      "properties": {
+        "agents": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "aws": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "c": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "cpp": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "data_pipelines": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "distributed_systems": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "evals": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "fine_tuning": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "gcp": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "go": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "java": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "javascript": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "jax": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "kubernetes": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "llm_apis": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "mcp": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "mlops": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "node": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "postgres": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "prompt_engineering": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "python": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "pytorch": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "rag": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "react": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "rust": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "security": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "sql": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "tensorflow": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "typescript": {
+          "$ref": "#/$defs/BooleanJudgment"
+        },
+        "vector_db": {
+          "$ref": "#/$defs/BooleanJudgment"
+        }
+      },
+      "required": [
+        "python",
+        "javascript",
+        "typescript",
+        "go",
+        "rust",
+        "java",
+        "c",
+        "cpp",
+        "sql",
+        "pytorch",
+        "tensorflow",
+        "jax",
+        "llm_apis",
+        "agents",
+        "rag",
+        "evals",
+        "fine_tuning",
+        "mcp",
+        "vector_db",
+        "prompt_engineering",
+        "mlops",
+        "data_pipelines",
+        "kubernetes",
+        "aws",
+        "gcp",
+        "react",
+        "node",
+        "postgres",
+        "distributed_systems",
+        "security"
+      ],
+      "title": "SkillJudgments",
+      "type": "object"
+    },
+    "WorkModeJudgment": {
+      "additionalProperties": false,
+      "properties": {
+        "candidates": {
+          "items": {
+            "$ref": "#/$defs/CandidateReference"
+          },
+          "maxItems": 8,
+          "title": "Candidates",
+          "type": "array"
+        },
+        "certainty": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Certainty"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "enum": [
+                "provider_error",
+                "invalid_output",
+                "candidate_missing",
+                "screen_hold"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Error Code"
+        },
+        "evidence_state": {
+          "enum": [
+            "absent",
+            "explicit_positive",
+            "explicit_negative",
+            "multiple",
+            "conflicting",
+            "uncertain",
+            "unavailable"
+          ],
+          "title": "Evidence State",
+          "type": "string"
+        },
+        "process_status": {
+          "enum": [
+            "ok",
+            "abstained",
+            "error",
+            "blocked"
+          ],
+          "title": "Process Status",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "enum": [
+                "remote",
+                "hybrid",
+                "onsite",
+                "not_stated"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "evidence_state",
+        "process_status",
+        "certainty",
+        "candidates",
+        "error_code",
+        "value"
+      ],
+      "title": "WorkModeJudgment",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "ai_engineering_role": {
+      "$ref": "#/$defs/BooleanJudgment"
+    },
+    "employment": {
+      "$ref": "#/$defs/EmploymentJudgment"
+    },
+    "location_stated": {
+      "$ref": "#/$defs/BooleanJudgment"
+    },
+    "portfolio_requested": {
+      "$ref": "#/$defs/BooleanJudgment"
+    },
+    "salary": {
+      "$ref": "#/$defs/SalaryJudgment"
+    },
+    "seniority": {
+      "$ref": "#/$defs/SeniorityJudgment"
+    },
+    "skills": {
+      "$ref": "#/$defs/SkillJudgments"
+    },
+    "work_mode": {
+      "$ref": "#/$defs/WorkModeJudgment"
+    }
+  },
+  "required": [
+    "ai_engineering_role",
+    "portfolio_requested",
+    "seniority",
+    "work_mode",
+    "employment",
+    "skills",
+    "salary",
+    "location_stated"
+  ],
+  "title": "Classification",
+  "type": "object",
+  "x-runtime-validators-required": true
+}

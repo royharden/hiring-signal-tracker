@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Inventory only; not a dictionary or a ratified labeling rubric.",
+  "properties": {
+    "ratification_status": {
+      "const": "pending",
+      "title": "Ratification Status",
+      "type": "string"
+    },
+    "schema_version": {
+      "maximum": 1,
+      "minimum": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "skills": {
+      "const": [
+        "python",
+        "javascript",
+        "typescript",
+        "go",
+        "rust",
+        "java",
+        "c",
+        "cpp",
+        "sql",
+        "pytorch",
+        "tensorflow",
+        "jax",
+        "llm_apis",
+        "agents",
+        "rag",
+        "evals",
+        "fine_tuning",
+        "mcp",
+        "vector_db",
+        "prompt_engineering",
+        "mlops",
+        "data_pipelines",
+        "kubernetes",
+        "aws",
+        "gcp",
+        "react",
+        "node",
+        "postgres",
+        "distributed_systems",
+        "security"
+      ],
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 30,
+      "minItems": 30,
+      "title": "Skills",
+      "type": "array"
+    },
+    "taxonomy_version": {
+      "const": "taxonomy-v1",
+      "title": "Taxonomy Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "taxonomy_version",
+    "ratification_status",
+    "skills"
+  ],
+  "title": "TaxonomyConfig",
+  "type": "object",
+  "x-runtime-validators-required": true
+}
