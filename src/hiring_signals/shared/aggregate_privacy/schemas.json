@@ -1,0 +1,439 @@
+{
+  "partition": {
+    "$defs": {
+      "Cell": {
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "enum": [
+              "positive",
+              "negative",
+              "not_stated",
+              "conflicting",
+              "uncertain",
+              "error",
+              "blocked",
+              "junior",
+              "mid",
+              "senior",
+              "staff_or_lead",
+              "multiple",
+              "remote",
+              "hybrid",
+              "onsite",
+              "full_time",
+              "part_time",
+              "contract",
+              "internship",
+              "stated_normalized",
+              "stated_unknown_units"
+            ],
+            "title": "Label",
+            "type": "string"
+          },
+          "numerator": {
+            "maximum": 9223372036854775807,
+            "minimum": 0,
+            "title": "Numerator",
+            "type": "integer"
+          },
+          "uncertainty": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Interval"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "label",
+          "numerator",
+          "uncertainty"
+        ],
+        "title": "Cell",
+        "type": "object"
+      },
+      "Interval": {
+        "additionalProperties": false,
+        "properties": {
+          "lower": {
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Lower",
+            "type": "number"
+          },
+          "upper": {
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Upper",
+            "type": "number"
+          }
+        },
+        "required": [
+          "lower",
+          "upper"
+        ],
+        "title": "Interval",
+        "type": "object"
+      }
+    },
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "description": "Exactly one exhaustive ordered partition, without arbitrary marginal cuts.",
+    "properties": {
+      "cells": {
+        "items": {
+          "$ref": "#/$defs/Cell"
+        },
+        "maxItems": 10,
+        "minItems": 2,
+        "title": "Cells",
+        "type": "array"
+      },
+      "coverage": {
+        "enum": [
+          "complete",
+          "partial",
+          "failed"
+        ],
+        "title": "Coverage",
+        "type": "string"
+      },
+      "denominator": {
+        "maximum": 9223372036854775807,
+        "minimum": 0,
+        "title": "Denominator",
+        "type": "integer"
+      },
+      "evidence_category": {
+        "enum": [
+          "prediction",
+          "synthetic_expectation",
+          "human_self_attested"
+        ],
+        "title": "Evidence Category",
+        "type": "string"
+      },
+      "method": {
+        "enum": [
+          "rules",
+          "jev",
+          "generative",
+          "dev_majority",
+          "human"
+        ],
+        "title": "Method",
+        "type": "string"
+      },
+      "metric": {
+        "enum": [
+          "ai_engineering_role",
+          "portfolio_requested",
+          "seniority",
+          "work_mode",
+          "employment",
+          "skills.python",
+          "skills.javascript",
+          "skills.typescript",
+          "skills.go",
+          "skills.rust",
+          "skills.java",
+          "skills.c",
+          "skills.cpp",
+          "skills.sql",
+          "skills.pytorch",
+          "skills.tensorflow",
+          "skills.jax",
+          "skills.llm_apis",
+          "skills.agents",
+          "skills.rag",
+          "skills.evals",
+          "skills.fine_tuning",
+          "skills.mcp",
+          "skills.vector_db",
+          "skills.prompt_engineering",
+          "skills.mlops",
+          "skills.data_pipelines",
+          "skills.kubernetes",
+          "skills.aws",
+          "skills.gcp",
+          "skills.react",
+          "skills.node",
+          "skills.postgres",
+          "skills.distributed_systems",
+          "skills.security",
+          "salary",
+          "location_stated"
+        ],
+        "title": "Metric",
+        "type": "string"
+      },
+      "month": {
+        "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$",
+        "title": "Month",
+        "type": "string"
+      },
+      "version_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Version Sha256",
+        "type": "string"
+      }
+    },
+    "required": [
+      "month",
+      "metric",
+      "method",
+      "version_sha256",
+      "evidence_category",
+      "coverage",
+      "denominator",
+      "cells"
+    ],
+    "title": "Partition",
+    "type": "object",
+    "x-runtime-validators-required": true
+  },
+  "released-partition": {
+    "$defs": {
+      "Interval": {
+        "additionalProperties": false,
+        "properties": {
+          "lower": {
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Lower",
+            "type": "number"
+          },
+          "upper": {
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Upper",
+            "type": "number"
+          }
+        },
+        "required": [
+          "lower",
+          "upper"
+        ],
+        "title": "Interval",
+        "type": "object"
+      },
+      "ReleasedCell": {
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "enum": [
+              "positive",
+              "negative",
+              "not_stated",
+              "conflicting",
+              "uncertain",
+              "error",
+              "blocked",
+              "junior",
+              "mid",
+              "senior",
+              "staff_or_lead",
+              "multiple",
+              "remote",
+              "hybrid",
+              "onsite",
+              "full_time",
+              "part_time",
+              "contract",
+              "internship",
+              "stated_normalized",
+              "stated_unknown_units"
+            ],
+            "title": "Label",
+            "type": "string"
+          },
+          "numerator": {
+            "anyOf": [
+              {
+                "maximum": 9223372036854775807,
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Numerator"
+          },
+          "share": {
+            "anyOf": [
+              {
+                "maximum": 1,
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Share"
+          },
+          "uncertainty": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Interval"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "label",
+          "numerator",
+          "share",
+          "uncertainty"
+        ],
+        "title": "ReleasedCell",
+        "type": "object"
+      }
+    },
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "cells": {
+        "items": {
+          "$ref": "#/$defs/ReleasedCell"
+        },
+        "maxItems": 10,
+        "minItems": 2,
+        "title": "Cells",
+        "type": "array"
+      },
+      "coverage": {
+        "enum": [
+          "complete",
+          "partial",
+          "failed"
+        ],
+        "title": "Coverage",
+        "type": "string"
+      },
+      "denominator": {
+        "anyOf": [
+          {
+            "maximum": 9223372036854775807,
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Denominator"
+      },
+      "evidence_category": {
+        "enum": [
+          "prediction",
+          "synthetic_expectation",
+          "human_self_attested"
+        ],
+        "title": "Evidence Category",
+        "type": "string"
+      },
+      "method": {
+        "enum": [
+          "rules",
+          "jev",
+          "generative",
+          "dev_majority",
+          "human"
+        ],
+        "title": "Method",
+        "type": "string"
+      },
+      "metric": {
+        "enum": [
+          "ai_engineering_role",
+          "portfolio_requested",
+          "seniority",
+          "work_mode",
+          "employment",
+          "skills.python",
+          "skills.javascript",
+          "skills.typescript",
+          "skills.go",
+          "skills.rust",
+          "skills.java",
+          "skills.c",
+          "skills.cpp",
+          "skills.sql",
+          "skills.pytorch",
+          "skills.tensorflow",
+          "skills.jax",
+          "skills.llm_apis",
+          "skills.agents",
+          "skills.rag",
+          "skills.evals",
+          "skills.fine_tuning",
+          "skills.mcp",
+          "skills.vector_db",
+          "skills.prompt_engineering",
+          "skills.mlops",
+          "skills.data_pipelines",
+          "skills.kubernetes",
+          "skills.aws",
+          "skills.gcp",
+          "skills.react",
+          "skills.node",
+          "skills.postgres",
+          "skills.distributed_systems",
+          "skills.security",
+          "salary",
+          "location_stated"
+        ],
+        "title": "Metric",
+        "type": "string"
+      },
+      "month": {
+        "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$",
+        "title": "Month",
+        "type": "string"
+      },
+      "policy": {
+        "const": "single-partition-all-siblings-min10-v1",
+        "title": "Policy",
+        "type": "string"
+      },
+      "suppressed": {
+        "title": "Suppressed",
+        "type": "boolean"
+      },
+      "trend_eligible": {
+        "title": "Trend Eligible",
+        "type": "boolean"
+      },
+      "version_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Version Sha256",
+        "type": "string"
+      }
+    },
+    "required": [
+      "month",
+      "metric",
+      "method",
+      "version_sha256",
+      "evidence_category",
+      "coverage",
+      "policy",
+      "denominator",
+      "suppressed",
+      "trend_eligible",
+      "cells"
+    ],
+    "title": "ReleasedPartition",
+    "type": "object",
+    "x-runtime-validators-required": true
+  }
+}

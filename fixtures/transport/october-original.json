@@ -1,0 +1,12 @@
+{
+  "id": 900001,
+  "type": "story",
+  "title": "Ask HN: Who is hiring? (October 2026)",
+  "by": "SYNTHETIC_THREAD_AUTHOR",
+  "children": [
+    {"id": 900002, "type": "comment", "by": "SYNTHETIC_PERSON", "text": "Canary Workshop seeks an engineer. Contact Canary Person at https://example.invalid/apply", "children": []},
+    {"id": 900003, "type": "comment", "deleted": true, "text": "SYNTHETIC_DELETED_TEXT", "children": []},
+    {"id": 900004, "type": "comment", "dead": true, "text": "SYNTHETIC_DEAD_TEXT", "children": []},
+    {"id": 900005, "type": "comment", "text": "  ", "children": []}
+  ]
+}
