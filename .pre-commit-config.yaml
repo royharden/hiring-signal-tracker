@@ -1,0 +1,8 @@
+repos:
+  - repo: local
+    hooks:
+      - id: public-files
+        name: Check bounded staged product files
+        entry: uv run --offline --frozen python scripts/check_public_files.py
+        language: system
+        pass_filenames: false
