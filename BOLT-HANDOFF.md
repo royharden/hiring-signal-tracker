@@ -1,6 +1,6 @@
 # Bolt handoff inventory
 
-Current status: local Python deterministic-libraries-only stage. Readiness, product-text checks, domain/schema contracts, supplied-synthetic ingest/privacy, a portable skill dictionary and narrow deterministic extraction libraries exist. CLI workflow integration, live/model execution, evaluation and rendered aggregate reports are not implemented.
+Current status: local Python deterministic-libraries-only stage. Readiness, product-text checks, domain/schema contracts, supplied-synthetic ingest/privacy, a portable skill dictionary, narrow deterministic extraction and monthly accounting/public-renderer libraries exist. Renderers produce closed JSON/Markdown/HTML/SVG for supplied released values. CLI workflow integration, live/model execution, independent data and evaluation remain unfinished; no real aggregate report is claimed.
 
 Database path: **No hosted database**. The local privacy library uses owner-private SQLite and a separate generated HMAC secret outside the product checkout. No cloud migrations, functions, auth, buckets, provider bindings or resources are implemented or provisioned. A later static aggregate viewer needs actual report outputs and portable-build verification.
 

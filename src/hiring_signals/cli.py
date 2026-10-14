@@ -29,6 +29,7 @@ def scaffold_status() -> dict[str, object]:
             "aggregate_privacy",
             "skill_dictionary",
             "deterministic_rules",
+            "population_reporting_library",
         ],
         "unavailable": [
             "cli_ingestion",

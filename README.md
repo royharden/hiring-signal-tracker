@@ -32,6 +32,7 @@ uv run python scripts/check_public_files.py
 - `src/hiring_signals/shared/aggregate_privacy/`: independent closed single-partition min-ten/all-sibling suppression and format-neutral released scalars; no rendered chart/report pipeline.
 - `src/hiring_signals/shared/skill_dictionary/`: thirty original alias entries, explicit clause-local requests/exclusions/unknowns and source-bound byte references; standalone M2/M9 consumers are exercised.
 - `src/hiring_signals/extract/rules.py`: narrow deterministic duty/application/category/salary/location grammar and actual private-state adapter. No calibrated confidence or empirical extraction-quality claim.
+- `src/hiring_signals/reporting/`: expected-ID monthly accounting and closed JSON/Markdown/HTML/four-month SVG exports. Missing/suppressed/partial points are gaps; no measured-quality rows. See `docs/reporting.md` for scope, version, denominator and current conservative suppression limits.
 - `config/`: complete pending taxonomy/experiment inventories and generated JSON Schema. Run `uv run python scripts/generate_schemas.py` to regenerate. Python runtime validators enforce additional cross-field constraints; JSON Schema alone is insufficient.
 - `docs/BOUNDARIES.proposed.md`: implemented domain boundary and remaining proposals; no shared provider implementation.
 - `tests/`: command, detached-copy, no-network/no-credential, domain/privacy-boundary and publication-guard controls.

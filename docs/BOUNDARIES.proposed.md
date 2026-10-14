@@ -1,6 +1,6 @@
 # Proposed app boundaries
 
-Status: app-owned classification/config contracts, supplied-synthetic ingest/privacy, independent aggregate-privacy/dictionary libraries and narrow deterministic rules are implemented. CLI workflow integration, independently authored frozen data, annotation/evaluation, providers, rendered reporting and foreign shared-runtime integration remain proposals.
+Status: app-owned classification/config contracts, supplied-synthetic ingest/privacy, independent aggregate-privacy/dictionary libraries, narrow deterministic rules and monthly accounting/public-renderer libraries are implemented. CLI workflow integration, independently authored frozen data, annotation/evaluation, providers, actual data reports and foreign shared-runtime integration remain unfinished.
 
 The baseline recognizes explicit duty/application and category headers, original technology aliases with local request/exclusion grammar, exact decimal salary candidates and location presence only. It leaves incidental/unsupported wording unobserved or explicitly unknown; it does not infer professional-experience seniority buckets before rubric ratification. Salary amounts with unknown/unsupported currency or period remain stated with normalization abstained. Invalid ranges or mixed scales fail rather than being repaired. Multiple seniority levels remain separate from conflicting evidence; absent fields never default to false/full_time/onsite. Rules confidence and empirical quality remain unmeasured.
 
