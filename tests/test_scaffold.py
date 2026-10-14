@@ -26,11 +26,12 @@ class ScaffoldTests(unittest.TestCase):
             code = cli.main(["status", "--json"])
         result = json.loads(output.getvalue())
         self.assertEqual(code, 0)
-        self.assertEqual(result["stage"], "contracts_only")
+        self.assertEqual(result["stage"], "deterministic_libraries_only")
         self.assertIn("domain_contracts", result["implemented"])
         self.assertFalse(result["complete_workflow"])
         self.assertEqual(result["evaluation_status"], "not_implemented")
-        self.assertIn("extraction", result["unavailable"])
+        self.assertIn("cli_extraction", result["unavailable"])
+        self.assertIn("deterministic_rules", result["implemented"])
 
     def test_readiness_needs_no_network_or_credential_values(self):
         """Catches provider startup/env dumping introduced into a keyless command."""
@@ -83,7 +84,7 @@ class ScaffoldTests(unittest.TestCase):
                 timeout=10,
             )
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertEqual(json.loads(completed.stdout)["stage"], "contracts_only")
+        self.assertEqual(json.loads(completed.stdout)["stage"], "deterministic_libraries_only")
 
     def test_moved_scripts_use_only_their_detached_package(self):
         """Catches hidden workspace/import dependency or a fake script success."""

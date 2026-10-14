@@ -18,14 +18,26 @@ def scaffold_status() -> dict[str, object]:
     """Return product-stage metadata, never guessed benchmark evidence."""
     return {
         "schema_version": 1,
-        "stage": "contracts_only",
+        "stage": "deterministic_libraries_only",
         "implemented": [
             "readiness_command",
             "staged_public_file_checks",
             "domain_contracts",
             "json_schemas",
+            "synthetic_ingest",
+            "private_state",
+            "aggregate_privacy",
+            "skill_dictionary",
+            "deterministic_rules",
         ],
-        "unavailable": ["ingestion", "extraction", "annotation", "evaluation", "aggregate_reports"],
+        "unavailable": [
+            "cli_ingestion",
+            "cli_extraction",
+            "live_acquisition",
+            "annotation",
+            "evaluation",
+            "aggregate_reports",
+        ],
         "complete_workflow": False,
         "network_required": False,
         "credentials_required": False,
@@ -48,7 +60,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.json:
             print(json.dumps(scaffold_status(), sort_keys=True))
         else:
-            print("Hiring Signal Tracker: contracts only. Use status --json for availability.")
+            print("Hiring Signal Tracker: deterministic libraries only. Use status --json.")
         return 0
     print(
         json.dumps({"code": "workflow_not_implemented", "workflow": args.command}),

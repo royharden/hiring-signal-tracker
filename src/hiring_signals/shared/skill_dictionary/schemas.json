@@ -1,0 +1,209 @@
+{
+  "entry": {
+    "$defs": {
+      "Alias": {
+        "additionalProperties": false,
+        "properties": {
+          "case_sensitive": {
+            "title": "Case Sensitive",
+            "type": "boolean"
+          },
+          "guard": {
+            "enum": [
+              "none",
+              "go",
+              "c"
+            ],
+            "title": "Guard",
+            "type": "string"
+          },
+          "phrase": {
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9 +#._-]{0,47}$",
+            "title": "Phrase",
+            "type": "string"
+          }
+        },
+        "required": [
+          "phrase",
+          "case_sensitive",
+          "guard"
+        ],
+        "title": "Alias",
+        "type": "object"
+      }
+    },
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "aliases": {
+        "items": {
+          "$ref": "#/$defs/Alias"
+        },
+        "maxItems": 8,
+        "minItems": 1,
+        "title": "Aliases",
+        "type": "array"
+      },
+      "skill_id": {
+        "enum": [
+          "python",
+          "javascript",
+          "typescript",
+          "go",
+          "rust",
+          "java",
+          "c",
+          "cpp",
+          "sql",
+          "pytorch",
+          "tensorflow",
+          "jax",
+          "llm_apis",
+          "agents",
+          "rag",
+          "evals",
+          "fine_tuning",
+          "mcp",
+          "vector_db",
+          "prompt_engineering",
+          "mlops",
+          "data_pipelines",
+          "kubernetes",
+          "aws",
+          "gcp",
+          "react",
+          "node",
+          "postgres",
+          "distributed_systems",
+          "security"
+        ],
+        "title": "Skill Id",
+        "type": "string"
+      }
+    },
+    "required": [
+      "skill_id",
+      "aliases"
+    ],
+    "title": "Entry",
+    "type": "object",
+    "x-runtime-validators-required": true
+  },
+  "skill-signal": {
+    "$defs": {
+      "Match": {
+        "additionalProperties": false,
+        "properties": {
+          "alias_index": {
+            "maximum": 7,
+            "minimum": 0,
+            "title": "Alias Index",
+            "type": "integer"
+          },
+          "end_byte": {
+            "exclusiveMinimum": 0,
+            "maximum": 32768,
+            "title": "End Byte",
+            "type": "integer"
+          },
+          "polarity": {
+            "enum": [
+              "requested",
+              "excluded",
+              "uncertain"
+            ],
+            "title": "Polarity",
+            "type": "string"
+          },
+          "start_byte": {
+            "exclusiveMaximum": 32768,
+            "minimum": 0,
+            "title": "Start Byte",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "alias_index",
+          "start_byte",
+          "end_byte",
+          "polarity"
+        ],
+        "title": "Match",
+        "type": "object"
+      }
+    },
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "input_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Input Sha256",
+        "type": "string"
+      },
+      "matches": {
+        "items": {
+          "$ref": "#/$defs/Match"
+        },
+        "maxItems": 8,
+        "title": "Matches",
+        "type": "array"
+      },
+      "skill_id": {
+        "enum": [
+          "python",
+          "javascript",
+          "typescript",
+          "go",
+          "rust",
+          "java",
+          "c",
+          "cpp",
+          "sql",
+          "pytorch",
+          "tensorflow",
+          "jax",
+          "llm_apis",
+          "agents",
+          "rag",
+          "evals",
+          "fine_tuning",
+          "mcp",
+          "vector_db",
+          "prompt_engineering",
+          "mlops",
+          "data_pipelines",
+          "kubernetes",
+          "aws",
+          "gcp",
+          "react",
+          "node",
+          "postgres",
+          "distributed_systems",
+          "security"
+        ],
+        "title": "Skill Id",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "requested",
+          "excluded",
+          "not_stated",
+          "conflicting",
+          "uncertain"
+        ],
+        "title": "Status",
+        "type": "string"
+      }
+    },
+    "required": [
+      "input_sha256",
+      "skill_id",
+      "status",
+      "matches"
+    ],
+    "title": "SkillSignal",
+    "type": "object",
+    "x-runtime-validators-required": true
+  }
+}
