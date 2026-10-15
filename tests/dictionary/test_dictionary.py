@@ -13,8 +13,7 @@ from pydantic import ValidationError
 
 from hiring_signals.shared.skill_dictionary import core as d
 
-ROOT = Path(__file__).resolve().parents[2]
-CORE = ROOT / "src/hiring_signals/shared/skill_dictionary"
+CORE = Path(d.__file__).resolve().parent
 
 # Independent handoracles; do not derive expected labels from catalog matching.
 POSITIVE = [
@@ -131,7 +130,39 @@ def test_reference_bound_keeps_late_opposite_evidence_and_unicode_offsets():
 
 def test_catalog_and_exhaustive_schema_have_no_owner_dependency_or_source_quote():
     """Catches taxonomy drift, open models or raw match text accidentally made serializable."""
-    from hiring_signals.contracts import SKILL_IDS
+    # Frozen adopted taxonomy oracle, independent of the library under test.
+    SKILL_IDS = (
+        "python",
+        "javascript",
+        "typescript",
+        "go",
+        "rust",
+        "java",
+        "c",
+        "cpp",
+        "sql",
+        "pytorch",
+        "tensorflow",
+        "jax",
+        "llm_apis",
+        "agents",
+        "rag",
+        "evals",
+        "fine_tuning",
+        "mcp",
+        "vector_db",
+        "prompt_engineering",
+        "mlops",
+        "data_pipelines",
+        "kubernetes",
+        "aws",
+        "gcp",
+        "react",
+        "node",
+        "postgres",
+        "distributed_systems",
+        "security",
+    )
 
     assert tuple(entry.skill_id for entry in d.CATALOG) == SKILL_IDS
     assert tuple(signal.skill_id for signal in d.scan("")) == SKILL_IDS

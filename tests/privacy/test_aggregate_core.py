@@ -12,8 +12,7 @@ from pydantic import ValidationError
 
 from hiring_signals.shared.aggregate_privacy import models as p
 
-ROOT = Path(__file__).resolve().parents[2]
-CORE = ROOT / "src/hiring_signals/shared/aggregate_privacy"
+CORE = Path(p.__file__).resolve().parent
 CANARY = "SYNTHETIC_PRIVATE_COMPANY_PERSON https://example.invalid/private"
 
 
@@ -148,7 +147,46 @@ def test_released_model_rejects_bypassed_suppression_and_complete_claims():
 
 def test_all_field_inventories_and_generated_closed_schema():
     """Catches owner-free copy closure losing a skill or exporting an open/stale nested schema."""
-    from hiring_signals.contracts import FIELD_IDS
+    # Frozen adopted taxonomy oracle, independent of the library under test.
+    FIELD_IDS = (
+        "ai_engineering_role",
+        "portfolio_requested",
+        "seniority",
+        "work_mode",
+        "employment",
+        "skills.python",
+        "skills.javascript",
+        "skills.typescript",
+        "skills.go",
+        "skills.rust",
+        "skills.java",
+        "skills.c",
+        "skills.cpp",
+        "skills.sql",
+        "skills.pytorch",
+        "skills.tensorflow",
+        "skills.jax",
+        "skills.llm_apis",
+        "skills.agents",
+        "skills.rag",
+        "skills.evals",
+        "skills.fine_tuning",
+        "skills.mcp",
+        "skills.vector_db",
+        "skills.prompt_engineering",
+        "skills.mlops",
+        "skills.data_pipelines",
+        "skills.kubernetes",
+        "skills.aws",
+        "skills.gcp",
+        "skills.react",
+        "skills.node",
+        "skills.postgres",
+        "skills.distributed_systems",
+        "skills.security",
+        "salary",
+        "location_stated",
+    )
 
     for metric in FIELD_IDS:
         assert p.release_partition(validate(partition(metric=metric))).metric == metric
