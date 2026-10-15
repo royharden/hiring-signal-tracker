@@ -34,16 +34,17 @@ uv run python scripts/check_public_files.py
 - `src/hiring_signals/extract/rules.py`: narrow deterministic duty/application/category/salary/location grammar and actual private-state adapter. No calibrated confidence or empirical extraction-quality claim.
 - `src/hiring_signals/reporting/`: expected-ID monthly accounting and closed JSON/Markdown/HTML/four-month SVG exports. Missing/suppressed/partial points are gaps; no measured-quality rows. See `docs/reporting.md` for scope, version, denominator and current conservative suppression limits.
 - `src/hiring_signals/annotation/` and `adapters/rulings.py`: transient37-field keyboard/session controls and safe intents mapped to the actual canonical private journal, with fsync acknowledgements, current-source checks and head conflicts. No implicit absence, blind prefill or mock-as-human Gold. Human/Gold validation and CLI workflow remain pending; see `docs/annotation-guide.md` and `docs/gold-format.md`.
-- `src/hiring_signals/shared/screen/` and `adapters/screen.py`: unchanged canonical offline rules/preparation plus an S10 gate over complete reviewed privacy-redacted input. Actual holds block semantic input; deterministic outcomes remain separate. Model probabilities stay null. See `VENDORED.md`; typed/replay/provider integration remains pending.
+- `src/hiring_signals/shared/screen/` and `adapters/screen.py`: unchanged canonical offline rules/preparation plus an S10 gate over complete reviewed privacy-redacted input. Actual holds block semantic input; deterministic outcomes remain separate. Model probabilities stay null. See `VENDORED.md`; S6 typed-screen integration remains pending.
+- `src/hiring_signals/shared/providers/` and `shared/callledger/`: unchanged canonical offline controller and actual SQLite accounting, with moved allocation/replay/error/cumulative-limit controls. Synthetic replies/prices remain synthetic. S10 semantic composition and live adapters are pending; see `docs/providers.md`.
 - `config/`: complete pending taxonomy/experiment inventories and generated JSON Schema. Run `uv run python scripts/generate_schemas.py` to regenerate. Python runtime validators enforce additional cross-field constraints; JSON Schema alone is insufficient.
-- `docs/BOUNDARIES.proposed.md`: implemented domain boundary and remaining proposals; no shared provider implementation.
+- `docs/BOUNDARIES.proposed.md`: implemented domain boundary and remaining proposals. `docs/providers.md` records the actual offline provider scope and unfinished joins.
 - `tests/`: command, detached-copy, no-network/no-credential, domain/privacy-boundary and publication-guard controls.
 
 The later workflow will join these libraries to counting and rules/Jev/generative comparison. Independently authored frozen synthetic data, real human gold and the gold/report example remain required. Upstream modules will be integrated only from verified owner sources with provenance and compatibility tests.
 
 ## Results and cost
 
-Extraction accuracy, per-field reports, model usage/cost, four-month trends and human self-agreement are **not yet measured**. No provider implementation or live call exists in this package. `results/README.md` records the present evidence scope without placeholder performance numbers.
+Extraction accuracy, per-field quality, model usage/cost, four-month trends and human self-agreement are **not yet measured**. The canonical offline provider/controller is available; no live call or completed semantic-extraction workflow exists. `results/README.md` records the present evidence scope without placeholder performance numbers.
 
 ## Verification
 
