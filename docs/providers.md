@@ -62,10 +62,25 @@ syntax limits candidate recall. Explicit unknown units remain a stated range wit
 normalization abstained. This bounded candidate choice reduces coverage and is not
 a measured-quality claim. Location returns presence only; no location names.
 
-Generation content-repair execution is unfinished: the published S3 controller
-does not expose the required counted schema/content-repair route. The decoder
-does not invent a retry or claim repair counters were exercised. A bounded owner
-API successor is required before that path is accepted. Semantic CLI, independent
+Generation now uses the exact canonical fixed-repair successor through
+`adapters/generation.py`. Only injected simulation with capture disabled is
+accepted. A source/code/schema-bound pure validator checks all37 fields; valid
+uncertainty stays an abstention and never buys another answer. Both original and
+fixed-regeneration physical request proofs must be registered before the first
+send. The canonical controller makes at most two total attempts including
+transport retries, at most one counted content repair, with SDK retries disabled.
+The app calls that controller once and does not supply another retry loop.
+
+Closed private results retain actual child counters, returned attempt IDs and
+final physical-request capture identity. Simulation authority totals are cumulative
+synthetic ledger observations, not measured provider bills. An admitted preflight
+failure can retain an outstanding hold; unknown first-call usage stays liability.
+Removed/changed sources block predictions and stop a further repair; already spent
+amounts are retained. Used children cannot automatically resume or invent replay.
+
+Opt-in mock/strict-replay/capture modes remain unsupported. Default keyless Jev
+lookups are unchanged. There is no SDK/authentication/live model or empirical
+quality evidence from these authored controls. Semantic CLI, independent
 60-post/four-month fixtures/Gold and empirical evaluation remain unfinished.
 The S6 adapter still selects only rules screening;
 its optional typed port is not connected to this actual controller by this source

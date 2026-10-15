@@ -80,7 +80,8 @@ def compile_request(
                                 "Do not infer employment/work mode. "
                                 "Seniority multiple means genuine levels, "
                                 "not contradictory evidence. Only choose supplied salary "
-                                "candidates or none/unknown. Do not return quotes, locations, "
+                                "candidates or none, not_stated, conflicting or uncertain. "
+                                "Do not return quotes, locations, "
                                 "identities, links or arbitrary explanatory text."
                             ),
                         }

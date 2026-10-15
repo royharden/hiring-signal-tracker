@@ -105,6 +105,21 @@ def test_missing_salary_candidate_is_not_offered_or_fabricated_by_decoder():
     )
 
 
+def test_salary_prompt_alternatives_agree_with_the_closed_schema():
+    """Catches prompt-suggested unknown labels forcing needless invalid outputs and repairs."""
+    ctx = context()
+    request = g.compile_request(ctx, model="synthetic-luna", max_output_tokens=4096).request
+    instruction = " ".join(
+        part.text for message in request.messages[:1] for part in message.content
+    )
+    salary_options = request.output_schema["properties"]["salary"]["properties"]["label"]["enum"]
+    assert "unknown" not in salary_options and "none/unknown" not in instruction
+    assert all(
+        label in salary_options and label in instruction
+        for label in ("none", "not_stated", "conflicting", "uncertain")
+    )
+
+
 def test_request_no_tools_or_model_confidence_calibration_and_actual_source_binding():
     """Catches extra execution channels or mutated request/source bundles reused for decoding."""
     ctx = context()

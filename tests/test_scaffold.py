@@ -39,7 +39,8 @@ class ScaffoldTests(unittest.TestCase):
         self.assertIn("canonical_offline_provider_ledger", result["implemented"])
         self.assertIn("semantic_question_schema_compilers", result["implemented"])
         self.assertIn("synthetic_offline_jev_extraction", result["implemented"])
-        self.assertIn("generation_content_repair_runtime", result["unavailable"])
+        self.assertIn("synthetic_generation_counted_repair", result["implemented"])
+        self.assertIn("live_generation_content_repair", result["unavailable"])
         self.assertIn("original_synthetic_rules_cli", result["implemented"])
 
     def test_readiness_needs_no_network_or_credential_values(self):

@@ -13,7 +13,10 @@ currently accepts synthetic-only zero-outbound replay through the real canonical
 ledger/controller. Captures and prices remain synthetic. No SDK installation,
 provider credential access, actual model call, calibrated confidence, current
 price/account capability or empirical extraction-quality result is established.
-Generation's counted content-repair execution awaits a verified owner API.
+The full37 generation adapter exercises canonical counted fixed repair through
+injected simulation only. Two total attempts and one repair share the actual
+ledger, preserving unknown liability and final physical-request metadata. This
+is not an SDK/live-provider run or measured billing/quality evidence.
 
 Salary selection is limited to the existing narrow source-bound candidate grammar.
 Unknown units stay stated with normalization abstained; unsupported candidate
@@ -22,7 +25,7 @@ evidence accuracy. Absence, explicit negatives, conflicts, multiple levels,
 uncertainty and processing failures remain different states.
 
 The taxonomy/rubric are not yet owner-ratified. Required independent synthetic
-fixtures/Gold, dev/heldout freezing, canonical evalkit integration, support and
+fixtures/Gold, dev/heldout freezing, the app-specific canonical evalkit join, support and
 calibration checks, paired statistics and actual human agreement remain incomplete.
 The real benchmark still requires an authorized source, 300 corrected rows, a
 timing pilot and 20 blind repeats at least seven days later. No measured accuracy,
