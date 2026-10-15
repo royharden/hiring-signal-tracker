@@ -88,3 +88,27 @@ The library provides typed corpus admission, injected comparison, generic statis
 The provider/callledger runtime closure advances to llm-router-eval commit `2671816d4f4fc46b9a650fc4c05ae4389dada326`, tree `2887e018acff384fc1a872080f399c2aeb44c5e0`. Only `callledger/ledger.py` differs from the original c7 closure above: Git blob `e3760ba9efbb6cf140a03c412d66b7ff888c7f1c`, SHA256 `ca38e0776e8b13d95e6ac31087431d45b8c984a40a33f8f8212d7c7bcf16eecb`. All thirteen remaining runtime files and MIT notice are verified unchanged. Prior pins describe prior execution and remain separate.
 
 Offline reuse permits the declared child purpose to differ from the root operation purpose, while checking the stored child purpose unconditionally even when optional caller limits are omitted. Four named purpose test/helper assets use only namespace mappings. This successor adds no generation repair, SDK or live authority.
+
+## Opt-in generation repair successor
+
+Canonical provider/callledger closure advances to llm-router-eval commit `3e7fcdaeb82fff8f84cef6e575d265ae8b08493b`, tree `e30158aa39213847ec10c32d4113153bbbde22b7`. All fifteen runtime/docs files are copied from exact committed Git bytes. Existing c7 and purpose-successor pins remain historical execution views. MIT notice remains `LICENSES/llm-router-eval-MIT.txt`.
+
+This opt-in path supports fixed regeneration from the original facts/schema on a fresh injected-simulation child: two total attempts including transport retries, at most one content repair, both physical request proofs registered before first dispatch, actual ledger settlement/liability and read-only child counters. Final capture metadata identifies the final physical request. No failed-response-specific editing, automatic interrupted continuation or logical repaired capture/reuse is provided. Opt-in mock/strict replay/capture modes are unsupported; their default behavior remains unchanged. There is no SDK/live/key/resource or model-quality authority from this copy. App-domain generation joins remain separate.
+
+| File within shared | Git blob | SHA256 |
+|---|---|---|
+| callledger/__init__.py | c3157a894fc46d727cdd73d29a1b285b9eee77c0 | c02724ab9a21cfb0387e5d87183634e33a40e8953bd73f443b7489496e260349 |
+| callledger/ledger.py | 09e24f876c2ce5f8b5b485e46c12bcd3f7a98ea8 | 3957431f57e8ecbe3147b37aa19487e68331ccd20e357ee20639e09c0f568e31 |
+| callledger/models.py | ad215ff2bbe06472295b06b66487f526cde59eb9 | 7274d1eebed5370460d83af6e4187cc74037d0ab600889219423dbcdd81277e7 |
+| callledger/pricing.py | f8d63558e6238f3cabaf2c52611ab3e632dd29c9 | daf38f487eeb70b48cc4025c54a19eea581a2d5d00084f534d9f2b9a55056c74 |
+| callledger/projection.py | 7d20500102b07471caec6362f3b71099ff92df10 | 5c0194e299b2c58f85e745ac093063dcb89689ea162ba378a37afc48a0f4dc69 |
+| providers/__init__.py | 3048ad0a2ea9630d2eb79b6c989069b1beac3964 | 636a5e5451aeec4e30f446efa25d326a52523efc1f53ff2e550903f175600f14 |
+| providers/adapters.py | 6baa3035f8bd7a04e54281833ff2fd144ed3f02b | 0f04a7f3231c2a22c36541b9cdaeb53214899d4da111f264eab73278847a3023 |
+| providers/captures.py | a632ff56ae51d0a416c0d08bf3a2090aeddfcbe8 | 0c91934a090d5f1481fd1116c4ee74a073e0cc8b6ee9c1c8d19cacdce2ebde00 |
+| providers/controller.py | 454ca12991c23354bbe723e47cc5b4f2eb621448 | bcf8e49b038552d07fa4e20b11999019de492ffb6ac3a3db8720eb9d9f56049b |
+| providers/images.py | 9ff512f336a219cb7b4dedad400b523b4de1447e | d847124ef8dc76461f3257df2586075f7ca9602bebe4a15009c6a48aefa6aa13 |
+| providers/models.py | a2c2f478b881e1d172085355f9ee347bba919f9f | 7d00a646f583aec1b77abd8c956f1b0c830726be3c17ce37737ac05841060ea2 |
+| providers/repair.py | 0fb88a8e1481b9d82125ff7b7c2f42131ab3d23d | 0908fd8a8905b49376520eb63e4cd7cd697dc8bdfd0b895f8632819952f96c7d |
+| providers/schema.py | 0d84ca157fa6bbd1fac3b7cbc0aba75751f552c3 | a0c4a84b14a95d2834a150e8fa16224ccec03e1a84325b359b92868a61613391 |
+| __init__.py | d54c1da1c6df701267a3ccc931aca3852992f333 | 60913c6d12caa4ba9139d870ad493d4a68738580c996662d7ad7b8d71622e1b8 |
+| callledger/README.md | 4eb6cce7d1bc853da62db8ce048247375caf0916 | bdc63ddb26832750654cdbffc09fca33d46b9e5ef2e0b7b1a34cac4e1cea0c50 |
