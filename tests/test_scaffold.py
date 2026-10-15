@@ -34,6 +34,7 @@ class ScaffoldTests(unittest.TestCase):
         self.assertIn("deterministic_rules", result["implemented"])
         self.assertIn("population_reporting_library", result["implemented"])
         self.assertIn("annotation_session_library", result["implemented"])
+        self.assertIn("offline_rules_screen", result["implemented"])
 
     def test_readiness_needs_no_network_or_credential_values(self):
         """Catches provider startup/env dumping introduced into a keyless command."""

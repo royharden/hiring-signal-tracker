@@ -31,6 +31,7 @@ def scaffold_status() -> dict[str, object]:
             "deterministic_rules",
             "population_reporting_library",
             "annotation_session_library",
+            "offline_rules_screen",
         ],
         "unavailable": [
             "cli_ingestion",

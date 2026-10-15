@@ -4,6 +4,8 @@ Current status: local Python deterministic-libraries-only stage. Readiness, prod
 
 Aggregate releases retain conservative V1 by default. Explicit opt-in V2 releases true zero cells only when the whole cohort is at least ten and every positive cell is at least ten; rare positive cells suppress every sibling. All report formats bind exact policy/version/scope, and policy changes break trend comparisons.
 
+The published S6 screen closure is copied unchanged with its MIT notice. The S10 adapter uses only its offline rules on complete privacy-redacted input; holds stay blocked and model probabilities remain null. Optional typed ports have injected-spy controls, without actual provider/replay/budget integration evidence.
+
 Database path: **No hosted database**. The local privacy library uses owner-private SQLite and a separate generated HMAC secret outside the product checkout. No cloud migrations, functions, auth, buckets, provider bindings or resources are implemented or provisioned. A later static aggregate viewer needs actual report outputs and portable-build verification.
 
 The Python core requires a Python runtime and local private state when those workflows exist. The annotation library currently emits safe app commands to an injected owner backend; it is not a journal, human-authentication or Gold validator. Importing this repo does not supply the runtime, model credentials, human labels, live data rights or evaluation results. Current commands and locally checked scope are documented in README.md.
