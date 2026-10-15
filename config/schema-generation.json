@@ -1,0 +1,1031 @@
+{
+  "schema_version": 1,
+  "field_ids": [
+    "ai_engineering_role",
+    "portfolio_requested",
+    "seniority",
+    "work_mode",
+    "employment",
+    "skills.python",
+    "skills.javascript",
+    "skills.typescript",
+    "skills.go",
+    "skills.rust",
+    "skills.java",
+    "skills.c",
+    "skills.cpp",
+    "skills.sql",
+    "skills.pytorch",
+    "skills.tensorflow",
+    "skills.jax",
+    "skills.llm_apis",
+    "skills.agents",
+    "skills.rag",
+    "skills.evals",
+    "skills.fine_tuning",
+    "skills.mcp",
+    "skills.vector_db",
+    "skills.prompt_engineering",
+    "skills.mlops",
+    "skills.data_pipelines",
+    "skills.kubernetes",
+    "skills.aws",
+    "skills.gcp",
+    "skills.react",
+    "skills.node",
+    "skills.postgres",
+    "skills.distributed_systems",
+    "skills.security",
+    "salary",
+    "location_stated"
+  ],
+  "schema": {
+    "type": "object",
+    "properties": {
+      "ai_engineering_role": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "portfolio_requested": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "seniority": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "junior",
+              "mid",
+              "senior",
+              "staff_or_lead",
+              "multiple_junior__mid",
+              "multiple_junior__senior",
+              "multiple_junior__staff_or_lead",
+              "multiple_mid__senior",
+              "multiple_mid__staff_or_lead",
+              "multiple_senior__staff_or_lead",
+              "multiple_junior__mid__senior",
+              "multiple_junior__mid__staff_or_lead",
+              "multiple_junior__senior__staff_or_lead",
+              "multiple_mid__senior__staff_or_lead",
+              "multiple_junior__mid__senior__staff_or_lead",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "work_mode": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "remote",
+              "hybrid",
+              "onsite",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "employment": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "full_time",
+              "part_time",
+              "contract",
+              "internship",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.python": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.javascript": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.typescript": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.go": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.rust": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.java": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.c": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.cpp": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.sql": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.pytorch": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.tensorflow": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.jax": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.llm_apis": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.agents": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.rag": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.evals": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.fine_tuning": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.mcp": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.vector_db": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.prompt_engineering": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.mlops": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.data_pipelines": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.kubernetes": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.aws": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.gcp": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.react": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.node": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.postgres": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.distributed_systems": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "skills.security": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "salary": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "candidate_0",
+              "none",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      },
+      "location_stated": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "enum": [
+              "requested",
+              "excluded",
+              "not_stated",
+              "conflicting",
+              "uncertain"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "label",
+          "confidence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "ai_engineering_role",
+      "portfolio_requested",
+      "seniority",
+      "work_mode",
+      "employment",
+      "skills.python",
+      "skills.javascript",
+      "skills.typescript",
+      "skills.go",
+      "skills.rust",
+      "skills.java",
+      "skills.c",
+      "skills.cpp",
+      "skills.sql",
+      "skills.pytorch",
+      "skills.tensorflow",
+      "skills.jax",
+      "skills.llm_apis",
+      "skills.agents",
+      "skills.rag",
+      "skills.evals",
+      "skills.fine_tuning",
+      "skills.mcp",
+      "skills.vector_db",
+      "skills.prompt_engineering",
+      "skills.mlops",
+      "skills.data_pipelines",
+      "skills.kubernetes",
+      "skills.aws",
+      "skills.gcp",
+      "skills.react",
+      "skills.node",
+      "skills.postgres",
+      "skills.distributed_systems",
+      "skills.security",
+      "salary",
+      "location_stated"
+    ],
+    "additionalProperties": false
+  },
+  "candidate_inventory": "prototype includes candidate0; actual source schema omits it when unavailable",
+  "confidence": "uncalibrated_self_report",
+  "repair_runtime": "pending_owner_api"
+}

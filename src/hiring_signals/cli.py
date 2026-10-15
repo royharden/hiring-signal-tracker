@@ -34,6 +34,8 @@ def scaffold_status() -> dict[str, object]:
             "offline_rules_screen",
             "canonical_annotation_journal",
             "canonical_offline_provider_ledger",
+            "semantic_question_schema_compilers",
+            "synthetic_offline_jev_extraction",
         ],
         "unavailable": [
             "cli_ingestion",
@@ -42,6 +44,8 @@ def scaffold_status() -> dict[str, object]:
             "annotation",
             "evaluation",
             "aggregate_reports",
+            "generation_content_repair_runtime",
+            "live_semantic_extraction",
         ],
         "complete_workflow": False,
         "network_required": False,

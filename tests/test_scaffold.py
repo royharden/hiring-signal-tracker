@@ -37,6 +37,9 @@ class ScaffoldTests(unittest.TestCase):
         self.assertIn("offline_rules_screen", result["implemented"])
         self.assertIn("canonical_annotation_journal", result["implemented"])
         self.assertIn("canonical_offline_provider_ledger", result["implemented"])
+        self.assertIn("semantic_question_schema_compilers", result["implemented"])
+        self.assertIn("synthetic_offline_jev_extraction", result["implemented"])
+        self.assertIn("generation_content_repair_runtime", result["unavailable"])
 
     def test_readiness_needs_no_network_or_credential_values(self):
         """Catches provider startup/env dumping introduced into a keyless command."""

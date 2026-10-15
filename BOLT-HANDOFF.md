@@ -6,7 +6,9 @@ Aggregate releases retain conservative V1 by default. Explicit opt-in V2 release
 
 The published S6 screen closure is copied unchanged with its MIT notice. The S10 adapter uses only its offline rules on complete privacy-redacted input; holds stay blocked and model probabilities remain null. Optional typed ports have injected-spy controls, without actual provider/replay/budget integration evidence.
 
-Canonical S3 provider/callledger source is also copied unchanged with its MIT notice. Real offline ledger/controller controls run in the consumer namespace, including allocation, strict hit/miss, errors and cumulative limits. Synthetic capture/price provenance is preserved. S10 semantic composition and live adapters remain unfinished; no SDK or credential setup is supplied.
+Canonical S3 provider/callledger source is also copied unchanged with its MIT notice. Real offline ledger/controller controls run in the consumer namespace, including allocation, strict hit/miss, errors and cumulative limits. Synthetic capture/price provenance is preserved. Live adapters remain unfinished; no SDK or credential setup is supplied.
+
+S10 now includes exhaustive69 native questions and37-field generation schema/decoders, plus actual synthetic-only zero-outbound Jev lookups after whole-operation admission. It uses complete privacy-redacted text and keeps partial/error outcomes. Generation content-repair runtime remains pending its owner API; no retry or repair evidence is invented. Candidate salary coverage is limited to the narrow deterministic grammar. CLI joins, independent data and evaluation remain incomplete.
 
 Database path: **No hosted database**. The local privacy library uses owner-private SQLite and a separate generated HMAC secret outside the product checkout. No cloud migrations, functions, auth, buckets, provider bindings or resources are implemented or provisioned. A later static aggregate viewer needs actual report outputs and portable-build verification.
 
