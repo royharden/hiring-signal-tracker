@@ -1,6 +1,6 @@
 # Hiring Signal Tracker
 
-Hiring Signal Tracker is being built to measure AI-engineering and portfolio-request signals in curated job postings and publish monthly aggregates. The current package provides a keyless readiness command, publication checks, strict contracts and tested local deterministic, annotation and report-rendering libraries. CLI workflow integration, semantic providers, durable annotation and evaluation remain upcoming work.
+Hiring Signal Tracker is being built to measure AI-engineering and portfolio-request signals in curated job postings and publish monthly aggregates. The current package provides a keyless readiness command, publication checks, strict contracts and tested local deterministic, durable annotation and report-rendering libraries. CLI workflow integration, semantic providers and evaluation remain upcoming work.
 
 ## Quickstart
 
@@ -33,7 +33,7 @@ uv run python scripts/check_public_files.py
 - `src/hiring_signals/shared/skill_dictionary/`: thirty original alias entries, explicit clause-local requests/exclusions/unknowns and source-bound byte references; standalone M2/M9 consumers are exercised.
 - `src/hiring_signals/extract/rules.py`: narrow deterministic duty/application/category/salary/location grammar and actual private-state adapter. No calibrated confidence or empirical extraction-quality claim.
 - `src/hiring_signals/reporting/`: expected-ID monthly accounting and closed JSON/Markdown/HTML/four-month SVG exports. Missing/suppressed/partial points are gaps; no measured-quality rows. See `docs/reporting.md` for scope, version, denominator and current conservative suppression limits.
-- `src/hiring_signals/annotation/`: transient37-field keyboard/session controls and closed app intents for an injected owner rulings adapter. No implicit absence, blind prefill or mock-as-human Gold. Actual backend/Gold validation remains pending; see `docs/annotation-guide.md` and `docs/gold-format.md`.
+- `src/hiring_signals/annotation/` and `adapters/rulings.py`: transient37-field keyboard/session controls and safe intents mapped to the actual canonical private journal, with fsync acknowledgements, current-source checks and head conflicts. No implicit absence, blind prefill or mock-as-human Gold. Human/Gold validation and CLI workflow remain pending; see `docs/annotation-guide.md` and `docs/gold-format.md`.
 - `src/hiring_signals/shared/screen/` and `adapters/screen.py`: unchanged canonical offline rules/preparation plus an S10 gate over complete reviewed privacy-redacted input. Actual holds block semantic input; deterministic outcomes remain separate. Model probabilities stay null. See `VENDORED.md`; typed/replay/provider integration remains pending.
 - `config/`: complete pending taxonomy/experiment inventories and generated JSON Schema. Run `uv run python scripts/generate_schemas.py` to regenerate. Python runtime validators enforce additional cross-field constraints; JSON Schema alone is insufficient.
 - `docs/BOUNDARIES.proposed.md`: implemented domain boundary and remaining proposals; no shared provider implementation.

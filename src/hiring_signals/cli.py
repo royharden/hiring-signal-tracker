@@ -32,6 +32,7 @@ def scaffold_status() -> dict[str, object]:
             "population_reporting_library",
             "annotation_session_library",
             "offline_rules_screen",
+            "canonical_annotation_journal",
         ],
         "unavailable": [
             "cli_ingestion",

@@ -1,8 +1,8 @@
 # Annotation guide and current controller boundary
 
-The memory-only annotation/controller library is implemented. An actual published
-S2 rulings adapter, owner-authorized data and validated human provenance are still
-required for real durable labels and Gold eligibility. Agent/staging examples are
+The memory-only annotation/controller library and an actual canonical S2 journal
+adapter are implemented. Owner-authorized data and validated human provenance
+remain required for real labels and Gold eligibility. Agent/staging examples are
 not human annotations or agreement evidence. Ratify this rubric/taxonomy and run
 the ten-item timing pilot before a real300-item workload; measured effort remains
 unknown. Twenty preselected blind repeats require the same operator and at least
@@ -50,10 +50,14 @@ The repeat guard enforces the seven-day/item/operator check but does not prove
 human identity, prior evidence or actual human agreement. Actor self-attestation
 is attribution, not authentication or a dataset/data-rights grant.
 
-The app emits neutral scalar commands; it does not implement another rulings
-journal/reducer. The injected owner adapter must validate the current raw/evidence
-generation and stable CAS head atomically, recognize an exact retry before an
-obsolete head and acknowledge only after durable owner append. This controller
+The app emits neutral scalar commands to `adapters/rulings.py`, using the unchanged
+published S2 journal/reducer. It validates the current raw/evidence generation and
+stable CAS head, recognizes exact retries before obsolete source/head checks and
+acknowledges only after actual journal fsync. A first UI confirmation introduces
+a label and maps to canonical `correct`; canonical `confirm` preserves the exact
+existing typed value. Absence and reopen remain null. Evidence generation binds
+input, evidence revision, taxonomy and rubric digests separately from raw source.
+This controller
 performs early source checks and caches an ambiguous intent unchanged. A conflict
 needs owner resolution/new review; do not silently edit a pending intent.
 
@@ -63,3 +67,15 @@ rolled back on cancel/crash. This memory-only controller is not restart recovery
 or a durable outbox. Recover actual history/intents through the owner backend.
 Missing backends are unavailable; mocks are explicitly test_staging/non-durable.
 Even complete owner receipts require separate owner human/Gold validation.
+
+`AnnotationJournal` requires an existing trusted owner-private directory outside
+the product checkout. `SourceAuthority` installs a pin only from an actually
+matching transient input and stores digests/byte lengths, never source text. Its
+process lock covers validation through append/fsync and every install/remove.
+The current source must be reinstalled after restart. This registry is not a
+multi-process source-discovery/deletion service or a durable outbox. The full
+canonical `append()` receipt exposes historical exact retries with no current
+generation authority. Controller receipt counts acknowledge recorded writes;
+they do not assert that those labels are still effective. Actor strings/ref syntax
+remain unverified without actual human evidence. Local journal tests do not prove
+power-loss recovery, hostile multi-user filesystem safety or real human agreement.

@@ -3,8 +3,9 @@
 No real or independent synthetic Gold body is supplied by this implementation.
 The app's closed annotation schema lives at `src/hiring_signals/annotation/schemas.json`.
 It describes safe field decisions, source pins and neutral commands, not a second
-canonical S2 rulings/evalkit wire. A published owner adapter must map/validate the
-actual source classes and preserve their licensed closure.
+canonical S2 rulings/evalkit wire. The actual published rulings adapter maps the
+source classes and preserves their licensed closure; evalkit integration remains
+pending. A journal acknowledgement is not an eligible Gold export.
 
 Every required field has independent presence: **present** with its actual typed
 value (including false, explicit none, multiple and a supported unknown class),
