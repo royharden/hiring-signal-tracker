@@ -385,6 +385,8 @@ def export_report(window: ReportWindow, destination: Path) -> ReportManifest:
 
 def verify_report(directory: Path) -> ReportWindow:
     directory = Path(directory)
+    if directory.is_symlink() or not directory.is_dir():
+        raise ValueError("report directory unavailable")
     manifest_path = directory / "manifest.json"
     if (
         manifest_path.is_symlink()
@@ -392,6 +394,14 @@ def verify_report(directory: Path) -> ReportWindow:
         or manifest_path.stat().st_size > MAX_ASSET_BYTES
     ):
         raise ValueError("report manifest unavailable")
+    expected_names = {*ASSETS, "manifest.json"}
+    actual_names = set()
+    for entry in directory.iterdir():
+        if entry.name not in expected_names or entry.name in actual_names:
+            raise ValueError("unexpected report asset closure")
+        actual_names.add(entry.name)
+    if actual_names != expected_names:
+        raise ValueError("incomplete report asset closure")
     try:
         manifest = ReportManifest.model_validate_json(manifest_path.read_bytes())
     except ValidationError:

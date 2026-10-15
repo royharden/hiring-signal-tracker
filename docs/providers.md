@@ -65,7 +65,7 @@ a measured-quality claim. Location returns presence only; no location names.
 Generation content-repair execution is unfinished: the published S3 controller
 does not expose the required counted schema/content-repair route. The decoder
 does not invent a retry or claim repair counters were exercised. A bounded owner
-API successor is required before that path is accepted. CLI workflow, independent
+API successor is required before that path is accepted. Semantic CLI, independent
 60-post/four-month fixtures/Gold and empirical evaluation remain unfinished.
 The S6 adapter still selects only rules screening;
 its optional typed port is not connected to this actual controller by this source

@@ -1,6 +1,6 @@
 # Hiring Signal Tracker
 
-Hiring Signal Tracker is being built to measure AI-engineering and portfolio-request signals in curated job postings and publish monthly aggregates. The current package provides a keyless readiness command, publication checks, strict contracts and tested local deterministic, durable annotation and report-rendering libraries. CLI workflow integration, semantic providers and evaluation remain upcoming work.
+Hiring Signal Tracker is being built to measure AI-engineering and portfolio-request signals in curated job postings and publish monthly aggregates. The current package provides a keyless original-synthetic rules workflow, public-report commands and tested privacy, annotation, semantic and reporting libraries. Semantic CLI, live execution, independent data and evaluation remain unfinished.
 
 ## Quickstart
 
@@ -11,21 +11,26 @@ uv sync --frozen
 uv run hst status --json
 ```
 
-The readiness response identifies the current `deterministic_libraries_only` stage, implemented libraries and unavailable workflows. It reads no posting data or credentials and requires no network after installation.
+The readiness response identifies the current `original_synthetic_cli_and_libraries` stage, implemented capabilities and unavailable workflows. Readiness reads no posting data or credentials and requires no network after installation.
 
 ## Current commands
 
 ```sh
 uv run hst status
 uv run hst status --json
+uv run hst run-synthetic --input original-source.json --private-dir /owner/private/hst --out /owner/reports/new-report --lease-seconds 120 --policy v2
+uv run hst report verify --directory /owner/reports/new-report
 uv run python scripts/check_public_files.py
 ```
 
 `scripts/demo.py --offline` and `scripts/eval.py --dataset synthetic --offline` currently return `workflow_not_implemented` with exit code 2. They create no result files. This keeps an unfinished workflow from producing a passing demo or benchmark receipt.
 
+`run-synthetic` requires an explicitly supplied original manifest and owner-private state outside the checkout. It preserves unreviewed/blocked rows in denominators and exports only closed released aggregates. Read [the input and state guide](docs/synthetic-workflow.md) before running it. Exit3 denotes partial/no-eligible processing; even exit0 does not establish quality or full workflow acceptance. Report export/verification accepts only bounded closed public JSON and new destinations.
+
 ## Architecture
 
 - `src/hiring_signals/cli.py`: readiness and explicit workflow availability.
+- `src/hiring_signals/workflow.py`: supplied-original-synthetic transport/privacy/rules/private-state/population/report joins and bounded public report IO; no network/model calls or implicit corpus.
 - `src/hiring_signals/public_files.py`: bounded checks of staged product paths and text for private material.
 - `src/hiring_signals/contracts.py`: 37 mandatory field IDs, 30 separate skill judgments, evidence/process consistency and closed private derivations. Actor references are self-attestation, not authentication.
 - `src/hiring_signals/ingest/`: bounded original-synthetic transport, reviewed-term transient redaction and generation-validating private HMAC/SQLite state. No live HN acquisition is implemented.
@@ -56,7 +61,7 @@ uv run pytest
 uv run python scripts/check_public_files.py
 ```
 
-Tests exercise command entry points, unavailable-workflow failures, detached consumers, syntax controls, malformed records and privacy/cancel/crash boundaries. Syntax handoracles are not frozen Gold or measured quality. Configured CI discovers the full test tree; it does not certify a complete app or an executed hosted workflow.
+Tests exercise actual keyless CLI/state/report joins, unavailable-workflow failures, detached consumers, syntax controls, malformed records and privacy/cancel/crash boundaries. Small original wiring and numeric controls are not the independent required fixture corpus, frozen Gold or measured quality. Configured CI discovers the full test tree; it does not certify a complete app or a hosted workflow. Current limits are recorded in [LIMITATIONS](docs/LIMITATIONS.md).
 
 ## Data and limits
 

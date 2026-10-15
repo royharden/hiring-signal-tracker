@@ -10,6 +10,16 @@ Caller-supplied scope/coverage/version metadata is not authenticated acquisition
 sampling, frozen Gold or configuration provenance; the authorized workflow must
 bind those inputs before a real run.
 
+Any admitted record field with a processing error or block makes the method
+partial, even when every expected ID has a record. Every denominator and error/
+blocked count remains accounted. Factual acquisition coverage stays separate;
+the effective released partition coverage is partial, so charts use a gap and
+percentage-point changes are unavailable. This conservative whole-method rule
+can also withhold otherwise usable fields when another field fails. Uncertain/
+conflicting abstentions and stated salaries with unknown units remain distinct;
+they are not automatically processing failures. A supported valid zero still
+releases as zero under explicit V2.
+
 Every run field produces an exhaustive partition over all expected IDs, including
 not_stated, conflicts, uncertainty, failures and blocks. Salary distinguishes
 stated normalized ranges from stated unknown units and explicit none. Only the
@@ -53,5 +63,5 @@ This is the current MVP implementation choice rather than a new plotting-runtime
 install. Geometry/markup/export tests are not browser visual QA. No independent
 four-month posting corpus/Gold, live data or empirical benchmark was authored or
 run for this slice; tests use small original numeric and boundary controls.
-CLI workflow integration and any required independent data/evaluation remain
-separate unfinished work.
+The original-synthetic rules CLI and public report commands join these libraries.
+Semantic CLI and required independent data/evaluation remain unfinished work.

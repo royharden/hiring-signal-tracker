@@ -167,9 +167,16 @@ def aggregate_month(cohort: MonthlyCohort) -> PublicMonth:
         return PublicMonth(**metadata, method_status="not_run", partitions=())
     indexed = {record.item_id: record for record in cohort.records}
     missing = denominator - len(indexed)
-    status = "partial" if missing else "outcomes_complete"
+    processing_failure = any(
+        judgment.process_status in {"error", "blocked"}
+        for record in cohort.records
+        for judgment in record.classification.judgments()
+    )
+    status = "partial" if missing or processing_failure else "outcomes_complete"
     coverage = (
-        "partial" if missing and cohort.source_coverage == "complete" else cohort.source_coverage
+        "partial"
+        if status == "partial" and cohort.source_coverage == "complete"
+        else cohort.source_coverage
     )
     parts = []
     for metric in c.FIELD_IDS:

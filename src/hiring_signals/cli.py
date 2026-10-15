@@ -4,6 +4,7 @@ import argparse
 import json
 import sys
 from collections.abc import Sequence
+from pathlib import Path
 
 
 class SafeParser(argparse.ArgumentParser):
@@ -18,7 +19,7 @@ def scaffold_status() -> dict[str, object]:
     """Return product-stage metadata, never guessed benchmark evidence."""
     return {
         "schema_version": 1,
-        "stage": "deterministic_libraries_only",
+        "stage": "original_synthetic_cli_and_libraries",
         "implemented": [
             "readiness_command",
             "staged_public_file_checks",
@@ -36,14 +37,16 @@ def scaffold_status() -> dict[str, object]:
             "canonical_offline_provider_ledger",
             "semantic_question_schema_compilers",
             "synthetic_offline_jev_extraction",
+            "original_synthetic_rules_cli",
+            "public_report_export_verify_cli",
         ],
         "unavailable": [
-            "cli_ingestion",
-            "cli_extraction",
+            "live_cli_ingestion",
+            "semantic_cli_extraction",
             "live_acquisition",
             "annotation",
             "evaluation",
-            "aggregate_reports",
+            "real_population_reports",
             "generation_content_repair_runtime",
             "live_semantic_extraction",
         ],
@@ -64,13 +67,70 @@ def main(argv: Sequence[str] | None = None) -> int:
     evaluate = commands.add_parser("eval", help="Check evaluation availability")
     evaluate.add_argument("--dataset", choices=["synthetic"], default="synthetic")
     evaluate.add_argument("--offline", action="store_true")
+    run = commands.add_parser(
+        "run-synthetic", help="Process an explicit original-synthetic manifest"
+    )
+    run.add_argument("--input", required=True, type=Path)
+    run.add_argument("--private-dir", required=True, type=Path)
+    run.add_argument("--out", required=True, type=Path)
+    run.add_argument("--lease-seconds", required=True, type=float)
+    run.add_argument("--policy", choices=["v1", "v2"], default="v1")
+    report = commands.add_parser("report", help="Export or verify closed public report artifacts")
+    actions = report.add_subparsers(dest="action", required=True, parser_class=SafeParser)
+    export = actions.add_parser("export")
+    export.add_argument("--input", required=True, type=Path)
+    export.add_argument("--out", required=True, type=Path)
+    verify = actions.add_parser("verify")
+    verify.add_argument("--directory", required=True, type=Path)
     args = parser.parse_args(argv)
     if args.command == "status":
         if args.json:
             print(json.dumps(scaffold_status(), sort_keys=True))
         else:
-            print("Hiring Signal Tracker: deterministic libraries only. Use status --json.")
+            print(
+                "Hiring Signal Tracker: original-synthetic CLI and local libraries. "
+                "Use status --json."
+            )
         return 0
+    if args.command in {"run-synthetic", "report"}:
+        # Lazy import keeps readiness independent of source/state/model access.
+        from hiring_signals import workflow
+        from hiring_signals.shared.aggregate_privacy import models as privacy
+
+        try:
+            if args.command == "run-synthetic":
+                result = workflow.execute_rules(
+                    args.input,
+                    private_directory=args.private_dir,
+                    destination=args.out,
+                    lease_seconds=args.lease_seconds,
+                    policy=privacy.POLICY_V1 if args.policy == "v1" else privacy.POLICY_V2,
+                )
+            elif args.action == "export":
+                result = workflow.export_public_report(args.input, args.out)
+            else:
+                result = workflow.verify_public_report(args.directory)
+            print(json.dumps(result, sort_keys=True))
+            return 3 if result.get("status") in {"partial", "no_eligible_input"} else 0
+        except workflow.WorkflowError as error:
+            print(
+                json.dumps(
+                    {"code": error.code, "private_effects_possible": error.private_effects_possible}
+                ),
+                file=sys.stderr,
+            )
+            return 2
+        except (Exception, KeyboardInterrupt):
+            print(
+                json.dumps(
+                    {
+                        "code": "workflow_failed_or_cancelled",
+                        "private_effects_possible": args.command == "run-synthetic",
+                    }
+                ),
+                file=sys.stderr,
+            )
+            return 2
     print(
         json.dumps({"code": "workflow_not_implemented", "workflow": args.command}),
         file=sys.stderr,

@@ -26,11 +26,11 @@ class ScaffoldTests(unittest.TestCase):
             code = cli.main(["status", "--json"])
         result = json.loads(output.getvalue())
         self.assertEqual(code, 0)
-        self.assertEqual(result["stage"], "deterministic_libraries_only")
+        self.assertEqual(result["stage"], "original_synthetic_cli_and_libraries")
         self.assertIn("domain_contracts", result["implemented"])
         self.assertFalse(result["complete_workflow"])
         self.assertEqual(result["evaluation_status"], "not_implemented")
-        self.assertIn("cli_extraction", result["unavailable"])
+        self.assertIn("semantic_cli_extraction", result["unavailable"])
         self.assertIn("deterministic_rules", result["implemented"])
         self.assertIn("population_reporting_library", result["implemented"])
         self.assertIn("annotation_session_library", result["implemented"])
@@ -40,6 +40,7 @@ class ScaffoldTests(unittest.TestCase):
         self.assertIn("semantic_question_schema_compilers", result["implemented"])
         self.assertIn("synthetic_offline_jev_extraction", result["implemented"])
         self.assertIn("generation_content_repair_runtime", result["unavailable"])
+        self.assertIn("original_synthetic_rules_cli", result["implemented"])
 
     def test_readiness_needs_no_network_or_credential_values(self):
         """Catches provider startup/env dumping introduced into a keyless command."""
@@ -92,7 +93,9 @@ class ScaffoldTests(unittest.TestCase):
                 timeout=10,
             )
         self.assertEqual(completed.returncode, 0, completed.stderr)
-        self.assertEqual(json.loads(completed.stdout)["stage"], "deterministic_libraries_only")
+        self.assertEqual(
+            json.loads(completed.stdout)["stage"], "original_synthetic_cli_and_libraries"
+        )
 
     def test_moved_scripts_use_only_their_detached_package(self):
         """Catches hidden workspace/import dependency or a fake script success."""
