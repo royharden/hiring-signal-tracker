@@ -42,6 +42,11 @@ CLI and portable local libraries; it is not a hosted Bolt backend.
   sealed files matched, and limitations reproduced from the released JSON.
   Wrong manifest hash and malformed source refused with exit2 and no output.
   This is tiny synthetic wiring evidence, not a rerun of the independent DEV set.
+- `report limitations --directory <sample-report>` reproduces the limitations
+  Markdown from verified closed assets without evaluator/source access or writes.
+  The canonical helper now lives in reporting; evaluation retains a compatible
+  entrypoint and binds the helper bytes in its configuration fingerprint. A moved
+  package control forbids evaluator imports, protected inputs and network use.
 
 ## Worked on / current scope
 

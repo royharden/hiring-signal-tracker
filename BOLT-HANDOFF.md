@@ -34,3 +34,9 @@ viewer. Keep the sibling private accuracy JSON/Markdown and run inputs private.
 The report retains min-ten suppression, scope/version/policy bindings, partial
 states and missing-month gaps. It is labelled a sample estimate, not a population
 trend or quality result. Local generation/verification is not a deployment.
+
+`hst report limitations --directory <sample-report>` reproduces the limitations
+Markdown from verified closed sample assets alone, with no evaluator import,
+source/label access or file writes. This report-only command works with a moved
+local package and report directory. It supplies no new runtime, data, provider or
+hosting capability to Bolt; Python remains an external prerequisite.

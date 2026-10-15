@@ -99,6 +99,18 @@ the released report JSON alone. The top artifact manifest also binds those exact
 files. `hst report verify --directory /owner/private/dev/new-results/sample-report`
 checks the nested report's bounded closure. The limitations file reports only
 released denominators; a suppressed small cohort stays withheld there too.
+To reproduce that Markdown without opening sibling evaluator files:
+
+```sh
+uv run hst report limitations --directory /owner/private/dev/new-results/sample-report
+```
+
+The command prints to stdout and writes no files. It verifies the exact nested
+report closure before producing text, and accepts only the rules/sample scope.
+It does not run extraction, scoring, models or data acquisition. Keep the report
+directory separate from private siblings; local closure is not source authority.
+Exact older wording requires the frozen helper/config version that produced it;
+the current command reports limitations supported by the released schema alone.
 An interrupted nested write may leave either an unsealed sample report or a
 complete sample report without the outer artifact manifest. In both cases the
 combined evaluator output is incomplete. Retrying the same destination refuses

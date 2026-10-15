@@ -20,6 +20,7 @@ uv run hst status
 uv run hst status --json
 uv run hst run-synthetic --input original-source.json --private-dir /owner/private/hst --out /owner/reports/new-report --lease-seconds 120 --policy v2
 uv run hst report verify --directory /owner/reports/new-report
+uv run hst report limitations --directory /owner/private/dev/new-results/sample-report
 uv run hst eval --offline --show-bindings
 uv run python scripts/check_public_files.py
 ```
@@ -34,6 +35,11 @@ limitations report. It uses the existing suppression policy, preserves missing
 months as gaps and keeps private reference/accuracy artifacts outside the nested
 report. Sample predictions are not population trends; local artifacts grant no
 external publication or measured-quality authority.
+
+`report limitations` prints reproducible Markdown from a verified closed rules
+sample report alone. It does not reopen private evaluator inputs or write files.
+Tampered, unsealed, population-scope or other-method reports refuse. Verification
+proves local artifact consistency, not source authenticity or rights.
 
 ## Architecture
 

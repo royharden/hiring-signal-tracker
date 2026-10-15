@@ -16,6 +16,7 @@ from hiring_signals import contracts as c
 from hiring_signals.adapters.rulings import SourceAuthority
 from hiring_signals.annotation.models import SourcePin
 from hiring_signals.extract import rules
+from hiring_signals.reporting import limitations as report_limitations
 from hiring_signals.shared.callledger.models import decode_wire_json
 from hiring_signals.shared.evalkit.corpus import contained_corpus_path, load_corpus
 from hiring_signals.shared.evalkit.identity import canonical_bytes
@@ -84,6 +85,7 @@ def bindings():
                         ("dictionary", dictionary),
                         ("metrics", metrics),
                         ("sample_report", sample_report),
+                        ("report_limitations", report_limitations),
                     )
                 },
                 "population": "all37fields/allfrozenDEV/1",

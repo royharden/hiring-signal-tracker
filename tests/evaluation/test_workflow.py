@@ -214,6 +214,18 @@ def test_actual_bindings_command_reads_only_product_metadata_and_is_explicit():
     assert json.loads(error.getvalue())["code"] == "bindings_command_requires_no_input"
 
 
+def test_bindings_include_the_canonical_report_limitations_source(tmp_path, monkeypatch):
+    """Catches moving prose code outside the frozen configuration's implementation hashes."""
+    before = w.bindings()
+    source = Path(w.report_limitations.__file__)
+    changed = tmp_path / "changed-helper.py"
+    changed.write_bytes(source.read_bytes() + b"\n# Original binding change control\n")
+    monkeypatch.setattr(w.report_limitations, "__file__", str(changed))
+    after = w.bindings()
+    assert after["config_sha256"] != before["config_sha256"]
+    assert after["domain_adapter_sha256"] == before["domain_adapter_sha256"]
+
+
 def test_duplicate_source_keys_are_rejected_even_when_actual_byte_hash_matches(
     tmp_path, monkeypatch
 ):

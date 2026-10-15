@@ -46,6 +46,7 @@ def scaffold_status() -> dict[str, object]:
             "explicit_synthetic_dev_rules_evaluation_cli",
             "original_synthetic_rules_cli",
             "public_report_export_verify_cli",
+            "public_sample_limitations_cli",
         ],
         "unavailable": [
             "live_cli_ingestion",
@@ -99,6 +100,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     export.add_argument("--out", required=True, type=Path)
     verify = actions.add_parser("verify")
     verify.add_argument("--directory", required=True, type=Path)
+    limitations = actions.add_parser("limitations", help="Reproduce verified sample limitations")
+    limitations.add_argument("--directory", required=True, type=Path)
     args = parser.parse_args(argv)
     if args.command == "status":
         if args.json:
@@ -185,8 +188,11 @@ def main(argv: Sequence[str] | None = None) -> int:
                 )
             elif args.action == "export":
                 result = workflow.export_public_report(args.input, args.out)
-            else:
+            elif args.action == "verify":
                 result = workflow.verify_public_report(args.directory)
+            else:
+                print(workflow.public_sample_limitations(args.directory), end="")
+                return 0
             print(json.dumps(result, sort_keys=True))
             return 3 if result.get("status") in {"partial", "no_eligible_input"} else 0
         except workflow.WorkflowError as error:

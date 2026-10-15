@@ -66,6 +66,17 @@ run for this slice; tests use small original numeric and boundary controls.
 The original-synthetic rules CLI and public report commands join these libraries.
 Semantic CLI and required independent data/evaluation remain unfinished work.
 
+`reporting.limitations.sample_limitations` is the canonical deterministic prose
+generator for closed rules/sample reports. The evaluation API delegates to it;
+there is no separate evaluator copy of the text. `hst report limitations
+--directory <report>` first verifies all nested asset bytes and prints Markdown
+to stdout, without importing the evaluator or opening raw sources/references.
+Wrong scope/method, incomplete closure or tampered assets produce a closed error
+and no Markdown. The command does not mutate or certify the report's provenance.
+Text comes from the installed helper version; reproducing the exact wording of an
+older evaluator artifact requires its frozen helper/config bytes. The closed
+report schema alone cannot establish source origin or past execution history.
+
 `evaluation.metrics` supplies private domain summaries over the unchanged canonical
 statistics, calibration and paired-resampling functions. It validates the full37
 axes for every frozen expected ID and consistent reference populations across

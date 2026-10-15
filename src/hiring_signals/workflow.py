@@ -392,7 +392,7 @@ def export_public_report(input_path: Path, destination: Path):
         raise WorkflowError("public_report_failed") from None
 
 
-def verify_public_report(directory: Path):
+def _verified_public_window(directory: Path):
     try:
         resolved = Path(directory).resolve(strict=True)
         if any(part.lower() in PRIVATE_INPUT_PARTS for part in resolved.parts):
@@ -402,6 +402,22 @@ def verify_public_report(directory: Path):
         raise
     except Exception:
         raise WorkflowError("public_report_verification_failed") from None
+    return window
+
+
+def public_sample_limitations(directory: Path) -> str:
+    """Reproduce text from a verified report only; no evaluator or source input."""
+    from hiring_signals.reporting.limitations import sample_limitations
+
+    window = _verified_public_window(directory)
+    try:
+        return sample_limitations(window)
+    except ValueError:
+        raise WorkflowError("closed_rules_sample_report_required") from None
+
+
+def verify_public_report(directory: Path):
+    window = _verified_public_window(directory)
     return {
         "status": "local_report_verified",
         "quality_status": "not_measured",
