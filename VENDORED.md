@@ -133,3 +133,25 @@ The explicit trusted axis-status port binds a defensive canonical Prediction and
 | runner.py | 23543cae945b98a864e85aaef856c0b4ce301074 | 0cc2b8e655db84d90a665a3f97ce1a9416a6bff182a6aa460e53686055c404c9 |
 | schema.json | cf5c8740da190f5a603eb4187b382ebb05f3e2f2 | b44b9f4cea1b90d6524ddf9aa56327667a92340810b19000bb8d47702695ffb7 |
 | statistics.py | 529b70140f40af2ae60a115a8903e68827258efe | 9e9ec5e9ba86489c8938a87bd064debbedc143126952959729ab46fd624784dc |
+
+## Private binary calibration successor
+
+Evalkit advances to receipt-field-review commit `34ccdd7aab9fe96f80b9a712421496c634b5ec12`, tree `10b0cb890d6c48d3335d3b7d7ee0b8f2ae633e19`. Exact thirteen-file closure plus existing MIT notice and eleven named public synthetic conformance files. Existing Wire/schema/identity/runner/axis/statistics source remains unchanged. Earlier249/f048 pins remain historical execution views.
+
+Private typed Brier/ECE/reliability arithmetic uses bounded finite scores, strict correctness booleans and fixed bins with the last interval including1. Score kinds/versions stay separate; there is no clipping, missing-score imputation, adaptive bin fitting or empirical calibration authority. Consumers own actual eligibility, answered/confidence-available coverage, source/label provenance and public privacy/minimum-support projection. Existing whole-group resampling remains canonical. Actual hiring confidence/correctness mapping is a separate app join. No data/Gold/human/threshold/live/model-quality authority is supplied.
+
+| File within evalkit | Git blob | SHA256 |
+|---|---|---|
+| README.md | 56be9cdc967cbbf8d01c513d6bfa90fe4e5b15e9 | 358fcb8bb501650d5b3a129982f5518497b5a1616ee8d2c0acae39bdc5aeb5c2 |
+| __init__.py | c0401907d6b0cb0491051cb4732385a1e78aaf3c | 3017cebcf1f80d410a61712cd8207c1803e09954936ce33238d886760683843e |
+| axis_status.py | c83c09000eaa65ec64ce5486d5cf74be86c64c37 | a63f1df40e7c4a939f518cddd41f96c7a7a663be1f91aebc54f0f67cbedd789a |
+| calibration.py | 5d1699b36ff6f09540357905f8fe7ab1480519c3 | 9362c64f257cda94d27cdc110c84ef2dcc3a9f3dd4f6bc62cca6f00044be694f |
+| corpus.py | a6aea0bbbed151bc550200183d675d63d1aeed04 | 427ade409f4fb83b59a2d9952c890cb830096af948e1dc9d393a8aef47c23fa0 |
+| identity.py | d4ed3a66d9f39ce948cc4d992617282c68a16484 | 5897c07d4b0f5d55dd8fee8cb74a325caaebc03b9e70bbf9c426c431d968f1b2 |
+| interfaces.py | b90636c575f743eb5e93e13697effa40e0a858fb | d23bc8be5188a968388272580b259ad4af4b1a4cbf393be52d7933514235ed9d |
+| models.py | 43bcb7314dc6085a532765ff68725165f44dbc56 | b18613383987a24569e7a9a133b2c212d858c2cf9ee147720b350c06126596c4 |
+| reporting.py | e6c46c9226cd4b80a732d0ec16a04e0a1e5b56f9 | 96d439870fe13d5c2ff5064d34eeb66fd5a96cf86fa5e5983ba243a6279aa283 |
+| resampling.py | e22ebf62aebac01a02e3a9be842a8584c68caa20 | 005c21b6d9f113db22132f0a660c3a2713e5aeaffb4dbb3c4c5349d66c194619 |
+| runner.py | 23543cae945b98a864e85aaef856c0b4ce301074 | 0cc2b8e655db84d90a665a3f97ce1a9416a6bff182a6aa460e53686055c404c9 |
+| schema.json | cf5c8740da190f5a603eb4187b382ebb05f3e2f2 | b44b9f4cea1b90d6524ddf9aa56327667a92340810b19000bb8d47702695ffb7 |
+| statistics.py | 529b70140f40af2ae60a115a8903e68827258efe | 9e9ec5e9ba86489c8938a87bd064debbedc143126952959729ab46fd624784dc |
