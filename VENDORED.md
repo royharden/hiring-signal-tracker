@@ -27,7 +27,7 @@ Exact committed source blobs (copied without newline normalization):
 
 ## Rulings
 
-Unchanged copy of receipt-field-review shared/rulings at commit 455d73c6efe283fdf3919267532de7ad5d39924b, tree 100dc262ed0bd53d52e4a508cfc22aabecbb5aaa. MIT notice: LICENSES/receipt-field-review-MIT.txt. Only this closure is imported; no Docio/evalkit/runtime app is included. The S10 adapter uses real private append/replay/fsync/CAS; source discovery and human Gold validation remain app/owner responsibilities. Bounded original conformance oracles were derived from the listed public source examples; no owner Gold/corpus was used.
+Unchanged copy of receipt-field-review shared/rulings at commit 455d73c6efe283fdf3919267532de7ad5d39924b, tree 100dc262ed0bd53d52e4a508cfc22aabecbb5aaa. MIT notice: LICENSES/receipt-field-review-MIT.txt. This rulings closure is independent of Docio and owner app runtime. The separately pinned evalkit closure is listed below. The S10 adapter uses real private append/replay/fsync/CAS; source discovery and human Gold validation remain app/owner responsibilities. Bounded original conformance oracles were derived from the listed public source examples; no owner Gold/corpus was used.
 
 | File | Git blob | SHA256 |
 |---|---|---|
@@ -62,3 +62,23 @@ All source comparisons use exact committed LF Git blobs. Upstream working CRLF v
 | providers/images.py | 9ff512f336a219cb7b4dedad400b523b4de1447e | d847124ef8dc76461f3257df2586075f7ca9602bebe4a15009c6a48aefa6aa13 |
 | providers/models.py | a2c2f478b881e1d172085355f9ee347bba919f9f | 7d00a646f583aec1b77abd8c956f1b0c830726be3c17ce37737ac05841060ea2 |
 | providers/schema.py | 0d84ca157fa6bbd1fac3b7cbc0aba75751f552c3 | a0c4a84b14a95d2834a150e8fa16224ccec03e1a84325b359b92868a61613391 |
+
+## Evalkit
+
+Unchanged eleven-file canonical evalkit closure from receipt-field-review commit `249262839c4247ff37cc5a75c6a89a422738c759`, tree `e60e8ba5efef185a6706c5d266ce3a1ccad5c553`. MIT notice: `LICENSES/receipt-field-review-MIT.txt`. Nine public synthetic conformance files are mapped under `tests/shared_contracts/evalkit`; only import namespaces and source/test root mappings change. Original and adapted hashes and diffs remain in private delivery receipts.
+
+The library provides typed corpus admission, injected comparison, generic statistics and paired 2,000 whole-group resampling. It supplies no hiring domain scorer, independent Gold, rights verification, durable heldout history or measured app quality. The authored heldout protocol controls are synthetic tests.
+
+| File within evalkit | Git blob | SHA256 |
+|---|---|---|
+| README.md | e1c3b2ab26460a5245708feba9d011f6ea35ed60 | 1308c679caa5413229ba41de0e6fc4f9cdfd8d76fcb66c0cb1aa4597d2dade94 |
+| __init__.py | c0401907d6b0cb0491051cb4732385a1e78aaf3c | 3017cebcf1f80d410a61712cd8207c1803e09954936ce33238d886760683843e |
+| corpus.py | a6aea0bbbed151bc550200183d675d63d1aeed04 | 427ade409f4fb83b59a2d9952c890cb830096af948e1dc9d393a8aef47c23fa0 |
+| identity.py | d4ed3a66d9f39ce948cc4d992617282c68a16484 | 5897c07d4b0f5d55dd8fee8cb74a325caaebc03b9e70bbf9c426c431d968f1b2 |
+| interfaces.py | b90636c575f743eb5e93e13697effa40e0a858fb | d23bc8be5188a968388272580b259ad4af4b1a4cbf393be52d7933514235ed9d |
+| models.py | 43bcb7314dc6085a532765ff68725165f44dbc56 | b18613383987a24569e7a9a133b2c212d858c2cf9ee147720b350c06126596c4 |
+| reporting.py | e6c46c9226cd4b80a732d0ec16a04e0a1e5b56f9 | 96d439870fe13d5c2ff5064d34eeb66fd5a96cf86fa5e5983ba243a6279aa283 |
+| resampling.py | e22ebf62aebac01a02e3a9be842a8584c68caa20 | 005c21b6d9f113db22132f0a660c3a2713e5aeaffb4dbb3c4c5349d66c194619 |
+| runner.py | 3a4871fed7ac5a5fe81b0bf6a5f3fe45fb27967c | b3a9078cf3265d750296907572dfeb66de780c01028b715cfdafb39dbad7bccb |
+| schema.json | cf5c8740da190f5a603eb4187b382ebb05f3e2f2 | b44b9f4cea1b90d6524ddf9aa56327667a92340810b19000bb8d47702695ffb7 |
+| statistics.py | 529b70140f40af2ae60a115a8903e68827258efe | 9e9ec5e9ba86489c8938a87bd064debbedc143126952959729ab46fd624784dc |
