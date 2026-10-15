@@ -6,6 +6,12 @@ from typing import Annotated, Literal, Self
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 MIN_COHORT = 10
+POLICY_V1 = "single-partition-all-siblings-min10-v1"
+POLICY_V2 = "single-partition-all-siblings-nonzero-min10-v2"
+Policy = Literal[
+    "single-partition-all-siblings-min10-v1",
+    "single-partition-all-siblings-nonzero-min10-v2",
+]
 Digest = Annotated[str, Field(pattern=r"^[0-9a-f]{64}$")]
 Month = Annotated[str, Field(pattern=r"^[0-9]{4}-(0[1-9]|1[0-2])$")]
 Count = Annotated[int, Field(ge=0, le=2**63 - 1)]
@@ -148,7 +154,7 @@ class ReleasedPartition(Closed):
     version_sha256: Digest
     evidence_category: Literal["prediction", "synthetic_expectation", "human_self_attested"]
     coverage: Literal["complete", "partial", "failed"]
-    policy: Literal["single-partition-all-siblings-min10-v1"]
+    policy: Policy
     denominator: Count | None
     suppressed: bool
     trend_eligible: bool
@@ -171,8 +177,12 @@ class ReleasedPartition(Closed):
                 raise ValueError("released partition needs a supported denominator")
             total = 0
             for cell in self.cells:
-                if cell.numerator is None or cell.numerator < MIN_COHORT or cell.share is None:
-                    raise ValueError("all released cells require support at least ten")
+                if cell.numerator is None or cell.share is None:
+                    raise ValueError("released cells require count and share")
+                if cell.numerator < MIN_COHORT and not (
+                    self.policy == POLICY_V2 and cell.numerator == 0
+                ):
+                    raise ValueError("released cell support violates exact policy")
                 if not math.isclose(
                     cell.share, cell.numerator / self.denominator, rel_tol=0, abs_tol=1e-12
                 ):
@@ -185,9 +195,14 @@ class ReleasedPartition(Closed):
         return self
 
 
-def release_partition(partition: Partition) -> ReleasedPartition:
+def release_partition(partition: Partition, *, policy: Policy = POLICY_V1) -> ReleasedPartition:
     partition = Partition.model_validate(partition)
-    suppressed = any(cell.numerator < MIN_COHORT for cell in partition.cells)
+    if policy not in {POLICY_V1, POLICY_V2}:
+        raise ValueError("unsupported release policy")
+    suppressed = partition.denominator < MIN_COHORT or any(
+        cell.numerator < MIN_COHORT and (policy == POLICY_V1 or cell.numerator != 0)
+        for cell in partition.cells
+    )
     cells = tuple(
         ReleasedCell(
             label=cell.label,
@@ -204,7 +219,7 @@ def release_partition(partition: Partition) -> ReleasedPartition:
         version_sha256=partition.version_sha256,
         evidence_category=partition.evidence_category,
         coverage=partition.coverage,
-        policy="single-partition-all-siblings-min10-v1",
+        policy=policy,
         denominator=partition.denominator if partition.denominator >= MIN_COHORT else None,
         suppressed=suppressed,
         trend_eligible=partition.coverage == "complete" and not suppressed,

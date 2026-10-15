@@ -55,6 +55,7 @@ class MonthlyCohort(Closed):
     source_coverage: Coverage
     method_status: Literal["run", "not_run"]
     missing_status: Literal["error", "blocked"]
+    policy: p.Policy = p.POLICY_V1
     expected_ids: Annotated[tuple[c.Digest, ...], Field(max_length=600)]
     records: Annotated[tuple[c.PrivateDerivedRecord, ...], Field(max_length=600)]
 
@@ -87,6 +88,7 @@ class PublicMonth(Closed):
     source_coverage: Coverage
     method_status: Literal["outcomes_complete", "partial", "not_run"]
     quality_status: Literal["not_measured"]
+    policy: p.Policy = p.POLICY_V1
     eligible_denominator: Annotated[int, Field(ge=10, le=600)] | None
     partitions: Annotated[tuple[p.ReleasedPartition, ...], Field(max_length=37)]
 
@@ -102,6 +104,8 @@ class PublicMonth(Closed):
         if effective == "complete" and self.method_status == "partial":
             effective = "partial"
         for part in self.partitions:
+            if part.policy != self.policy:
+                raise ValueError("mixed release policies within a monthly cohort")
             if part.evidence_category != "prediction":
                 raise ValueError("population reports require prediction evidence")
             if (part.month, part.method, part.version_sha256, part.coverage) != (
@@ -156,6 +160,7 @@ def aggregate_month(cohort: MonthlyCohort) -> PublicMonth:
         source_scope=cohort.source_scope,
         source_coverage=cohort.source_coverage,
         quality_status="not_measured",
+        policy=cohort.policy,
         eligible_denominator=denominator if denominator >= 10 else None,
     )
     if cohort.method_status == "not_run":
@@ -186,5 +191,9 @@ def aggregate_month(cohort: MonthlyCohort) -> PublicMonth:
                 for label, count in counts.items()
             ),
         )
-        parts.append(p.release_partition(private))
+        parts.append(
+            p.release_partition(private)
+            if cohort.policy == p.POLICY_V1
+            else p.release_partition(private, policy=cohort.policy)
+        )
     return PublicMonth(**metadata, method_status=status, partitions=tuple(parts))

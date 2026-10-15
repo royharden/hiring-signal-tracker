@@ -80,52 +80,12 @@
         "type": "object"
       }
     },
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "additionalProperties": false,
     "description": "Exactly one exhaustive ordered partition, without arbitrary marginal cuts.",
     "properties": {
-      "cells": {
-        "items": {
-          "$ref": "#/$defs/Cell"
-        },
-        "maxItems": 10,
-        "minItems": 2,
-        "title": "Cells",
-        "type": "array"
-      },
-      "coverage": {
-        "enum": [
-          "complete",
-          "partial",
-          "failed"
-        ],
-        "title": "Coverage",
-        "type": "string"
-      },
-      "denominator": {
-        "maximum": 9223372036854775807,
-        "minimum": 0,
-        "title": "Denominator",
-        "type": "integer"
-      },
-      "evidence_category": {
-        "enum": [
-          "prediction",
-          "synthetic_expectation",
-          "human_self_attested"
-        ],
-        "title": "Evidence Category",
-        "type": "string"
-      },
-      "method": {
-        "enum": [
-          "rules",
-          "jev",
-          "generative",
-          "dev_majority",
-          "human"
-        ],
-        "title": "Method",
+      "month": {
+        "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$",
+        "title": "Month",
         "type": "string"
       },
       "metric": {
@@ -171,15 +131,54 @@
         "title": "Metric",
         "type": "string"
       },
-      "month": {
-        "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$",
-        "title": "Month",
+      "method": {
+        "enum": [
+          "rules",
+          "jev",
+          "generative",
+          "dev_majority",
+          "human"
+        ],
+        "title": "Method",
         "type": "string"
       },
       "version_sha256": {
         "pattern": "^[0-9a-f]{64}$",
         "title": "Version Sha256",
         "type": "string"
+      },
+      "evidence_category": {
+        "enum": [
+          "prediction",
+          "synthetic_expectation",
+          "human_self_attested"
+        ],
+        "title": "Evidence Category",
+        "type": "string"
+      },
+      "coverage": {
+        "enum": [
+          "complete",
+          "partial",
+          "failed"
+        ],
+        "title": "Coverage",
+        "type": "string"
+      },
+      "denominator": {
+        "maximum": 9223372036854775807,
+        "minimum": 0,
+        "title": "Denominator",
+        "type": "integer"
+      },
+      "cells": {
+        "items": {
+          "$ref": "#/$defs/Cell"
+        },
+        "maxItems": 10,
+        "minItems": 2,
+        "title": "Cells",
+        "type": "array"
       }
     },
     "required": [
@@ -194,6 +193,7 @@
     ],
     "title": "Partition",
     "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "x-runtime-validators-required": true
   },
   "released-partition": {
@@ -298,58 +298,11 @@
         "type": "object"
       }
     },
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "additionalProperties": false,
     "properties": {
-      "cells": {
-        "items": {
-          "$ref": "#/$defs/ReleasedCell"
-        },
-        "maxItems": 10,
-        "minItems": 2,
-        "title": "Cells",
-        "type": "array"
-      },
-      "coverage": {
-        "enum": [
-          "complete",
-          "partial",
-          "failed"
-        ],
-        "title": "Coverage",
-        "type": "string"
-      },
-      "denominator": {
-        "anyOf": [
-          {
-            "maximum": 9223372036854775807,
-            "minimum": 0,
-            "type": "integer"
-          },
-          {
-            "type": "null"
-          }
-        ],
-        "title": "Denominator"
-      },
-      "evidence_category": {
-        "enum": [
-          "prediction",
-          "synthetic_expectation",
-          "human_self_attested"
-        ],
-        "title": "Evidence Category",
-        "type": "string"
-      },
-      "method": {
-        "enum": [
-          "rules",
-          "jev",
-          "generative",
-          "dev_majority",
-          "human"
-        ],
-        "title": "Method",
+      "month": {
+        "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$",
+        "title": "Month",
         "type": "string"
       },
       "metric": {
@@ -395,15 +348,60 @@
         "title": "Metric",
         "type": "string"
       },
-      "month": {
-        "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$",
-        "title": "Month",
+      "method": {
+        "enum": [
+          "rules",
+          "jev",
+          "generative",
+          "dev_majority",
+          "human"
+        ],
+        "title": "Method",
+        "type": "string"
+      },
+      "version_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Version Sha256",
+        "type": "string"
+      },
+      "evidence_category": {
+        "enum": [
+          "prediction",
+          "synthetic_expectation",
+          "human_self_attested"
+        ],
+        "title": "Evidence Category",
+        "type": "string"
+      },
+      "coverage": {
+        "enum": [
+          "complete",
+          "partial",
+          "failed"
+        ],
+        "title": "Coverage",
         "type": "string"
       },
       "policy": {
-        "const": "single-partition-all-siblings-min10-v1",
+        "enum": [
+          "single-partition-all-siblings-min10-v1",
+          "single-partition-all-siblings-nonzero-min10-v2"
+        ],
         "title": "Policy",
         "type": "string"
+      },
+      "denominator": {
+        "anyOf": [
+          {
+            "maximum": 9223372036854775807,
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Denominator"
       },
       "suppressed": {
         "title": "Suppressed",
@@ -413,10 +411,14 @@
         "title": "Trend Eligible",
         "type": "boolean"
       },
-      "version_sha256": {
-        "pattern": "^[0-9a-f]{64}$",
-        "title": "Version Sha256",
-        "type": "string"
+      "cells": {
+        "items": {
+          "$ref": "#/$defs/ReleasedCell"
+        },
+        "maxItems": 10,
+        "minItems": 2,
+        "title": "Cells",
+        "type": "array"
       }
     },
     "required": [
@@ -434,6 +436,7 @@
     ],
     "title": "ReleasedPartition",
     "type": "object",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "x-runtime-validators-required": true
   }
 }

@@ -2,6 +2,8 @@
 
 Current status: local Python deterministic-libraries-only stage. Readiness, product-text checks, domain/schema contracts, supplied-synthetic ingest/privacy, a portable skill dictionary, narrow deterministic extraction and monthly accounting/public-renderer libraries exist. Renderers produce closed JSON/Markdown/HTML/SVG for supplied released values. CLI workflow integration, live/model execution, independent data and evaluation remain unfinished; no real aggregate report is claimed.
 
+Aggregate releases retain conservative V1 by default. Explicit opt-in V2 releases true zero cells only when the whole cohort is at least ten and every positive cell is at least ten; rare positive cells suppress every sibling. All report formats bind exact policy/version/scope, and policy changes break trend comparisons.
+
 Database path: **No hosted database**. The local privacy library uses owner-private SQLite and a separate generated HMAC secret outside the product checkout. No cloud migrations, functions, auth, buckets, provider bindings or resources are implemented or provisioned. A later static aggregate viewer needs actual report outputs and portable-build verification.
 
 The Python core requires a Python runtime and local private state when those workflows exist. The annotation library currently emits safe app commands to an injected owner backend; it is not a journal, human-authentication or Gold validator. Importing this repo does not supply the runtime, model credentials, human labels, live data rights or evaluation results. Current commands and locally checked scope are documented in README.md.

@@ -2,6 +2,7 @@
 
 import hashlib
 import html
+import json
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Annotated, Literal, Self
@@ -46,6 +47,7 @@ class Point(Closed):
     share: p.Share | None
     change_pp: Annotated[float, Field(ge=-100, le=100, allow_inf_nan=False)] | None
     version_sha256: c.Digest | None
+    policy: p.Policy | None
 
 
 def _window(value) -> ReportWindow:
@@ -63,9 +65,10 @@ def series(window: ReportWindow, metric: p.Metric, label: p.ClassLabel) -> tuple
     result = []
     for month_id in window.month_ids:
         month = indexed.get(month_id)
-        share, version, state = None, None, "not_provided"
+        share, version, policy, state = None, None, None, "not_provided"
         if month is not None:
             version = month.version_sha256
+            policy = month.policy
             if month.method_status == "not_run":
                 state = "not_run"
             elif month.source_coverage == "failed":
@@ -85,11 +88,17 @@ def series(window: ReportWindow, metric: p.Metric, label: p.ClassLabel) -> tuple
             and share is not None
             and result[-1].share is not None
             and result[-1].version_sha256 == version
+            and result[-1].policy == policy
         ):
             change = (share - result[-1].share) * 100
         result.append(
             Point(
-                month=month_id, state=state, share=share, change_pp=change, version_sha256=version
+                month=month_id,
+                state=state,
+                share=share,
+                change_pp=change,
+                version_sha256=version,
+                policy=policy,
             )
         )
     return tuple(result)
@@ -135,6 +144,14 @@ def _released_rows(window):
                     )
 
 
+def _bindings(window):
+    return [
+        f"{month.month}: policy={month.policy}; version={month.version_sha256}; "
+        f"method={month.method}; scope={month.source_scope}"
+        for month in window.months
+    ]
+
+
 def render_markdown(window: ReportWindow) -> str:
     window = _window(window)
     lines = [
@@ -143,6 +160,7 @@ def render_markdown(window: ReportWindow) -> str:
         _scope(window.source_scope),
         "",
         f"Method: {window.method}. Prediction quality: not measured.",
+        *(_bindings(window) or ["No monthly release supplied."]),
         "",
         "Rates use the admitted monthly cohort, including unavailable/error outcomes.",
         "Small cells and siblings are withheld. Incomplete months are not complete trends.",
@@ -167,6 +185,10 @@ def render_svg(window: ReportWindow) -> str:
         },
     )
     ET.SubElement(root, "title", {"id": "chart-title"}).text = "Four-month hiring prediction shares"
+    ET.SubElement(root, "metadata").text = json.dumps(
+        {"method": window.method, "scope": window.source_scope, "bindings": _bindings(window)},
+        sort_keys=True,
+    )
     ET.SubElement(root, "desc", {"id": "chart-desc"}).text = (
         _scope(window.source_scope)
         + ". Quality not measured. Hidden or incomplete points are gaps, never zero."
@@ -286,7 +308,10 @@ def render_html(window: ReportWindow) -> str:
         ".scroll{overflow:auto}a{color:#1d4ed8}footer{color:#66758b;margin:2rem 0}"
         "</style></head><body><main><h1>Hiring signal trends</h1>"
         f"<p>{scope} · {html.escape(window.method)}</p>"
-        "<div class='notice'><strong>Prediction quality has not been measured.</strong> "
+        + "<p>"
+        + "<br>".join(html.escape(value) for value in _bindings(window))
+        + "</p>"
+        + "<div class='notice'><strong>Prediction quality has not been measured.</strong> "
         "No accuracy, human-agreement, cost or uncertainty estimate is supplied. "
         "Rates include unavailable/error outcomes in the admitted monthly denominator. "
         "Small cells and all complementary siblings are withheld. "

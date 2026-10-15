@@ -8,10 +8,18 @@ and actual source provenance when reusing it. This source is not a vendor receip
 `Partition.model_validate_json` requires one exhaustive ordered, disjoint field
 partition. Counts include absent/conflicting/uncertain/error/blocked classes and
 sum to the denominator. There is no arbitrary company/cohort/marginal-cut input.
-`release_partition` withholds **all** sibling counts, shares and intervals when
+By default, `release_partition` uses `single-partition-all-siblings-min10-v1` and
+withholds **all** sibling counts, shares and intervals when
 any cell is below ten, including zero cells. This intentionally limits utility;
 a supported cohort with any rare class is still suppressed. A cohort below ten
 also loses its denominator. Partial/failed coverage never becomes a complete trend.
+
+An explicit `policy=POLICY_V2` selects
+`single-partition-all-siblings-nonzero-min10-v2`: a cohort at least ten with all
+cells zero or at least ten may release true zero counts/shares. Any positive cell
+one through nine hides every sibling and interval, including zeros. V1 defaults
+and vectors are preserved. Consumers must bind exact policy/version/scope and
+refuse trend comparisons across policies. No positive support threshold is lowered.
 
 `format_projection` gives JSON/table/chart/HTML consumers the same closed released
 scalars, after revalidation. It does not render tables, charts or a report pipeline.

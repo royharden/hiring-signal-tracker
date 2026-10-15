@@ -1,6 +1,6 @@
 # Hiring Signal Tracker
 
-Hiring Signal Tracker is being built to measure AI-engineering and portfolio-request signals in curated job postings and publish monthly aggregates. The current package provides a keyless readiness command, publication checks, strict contracts and tested local deterministic libraries. CLI workflow integration, semantic providers, annotation, evaluation and rendered charts remain upcoming work.
+Hiring Signal Tracker is being built to measure AI-engineering and portfolio-request signals in curated job postings and publish monthly aggregates. The current package provides a keyless readiness command, publication checks, strict contracts and tested local deterministic, annotation and report-rendering libraries. CLI workflow integration, semantic providers, durable annotation and evaluation remain upcoming work.
 
 ## Quickstart
 
@@ -29,7 +29,7 @@ uv run python scripts/check_public_files.py
 - `src/hiring_signals/public_files.py`: bounded checks of staged product paths and text for private material.
 - `src/hiring_signals/contracts.py`: 37 mandatory field IDs, 30 separate skill judgments, evidence/process consistency and closed private derivations. Actor references are self-attestation, not authentication.
 - `src/hiring_signals/ingest/`: bounded original-synthetic transport, reviewed-term transient redaction and generation-validating private HMAC/SQLite state. No live HN acquisition is implemented.
-- `src/hiring_signals/shared/aggregate_privacy/`: independent closed single-partition min-ten/all-sibling suppression and format-neutral released scalars; no rendered chart/report pipeline.
+- `src/hiring_signals/shared/aggregate_privacy/`: independent closed single-partition min-ten/all-sibling suppression and format-neutral released scalars. Conservative V1 remains default; explicit V2 allows true zeros only when every positive cell has support of at least ten.
 - `src/hiring_signals/shared/skill_dictionary/`: thirty original alias entries, explicit clause-local requests/exclusions/unknowns and source-bound byte references; standalone M2/M9 consumers are exercised.
 - `src/hiring_signals/extract/rules.py`: narrow deterministic duty/application/category/salary/location grammar and actual private-state adapter. No calibrated confidence or empirical extraction-quality claim.
 - `src/hiring_signals/reporting/`: expected-ID monthly accounting and closed JSON/Markdown/HTML/four-month SVG exports. Missing/suppressed/partial points are gaps; no measured-quality rows. See `docs/reporting.md` for scope, version, denominator and current conservative suppression limits.

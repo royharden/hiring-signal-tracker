@@ -21,15 +21,23 @@ JSON, Markdown tables, HTML and an accessible headless SVG use the same released
 values. The chart has four explicit consecutive month slots. Missing, failed,
 partial, not-run and suppressed points are gaps, never invented zero observations.
 Percentage-point changes/line segments require adjacent complete released points
-with the same method/config fingerprint and source scope. Gold-sample predictions
+with the same method/config fingerprint, exact release policy and source scope.
+Every exported format includes monthly policy/version/method/scope bindings.
+Gold-sample predictions
 are explicitly labelled sample estimates, not population trends. Prediction quality,
 accuracy, human agreement, measured cost and uncertainty remain unprovided.
 
-Current policy is the exact conservative V1: any cell below ten, including zero,
-suppresses every sibling count/share/interval. An unused error class can therefore
-withhold an otherwise supported field. A bounded zero-cell successor is under
-separate semantic review; the renderer does not silently alter the policy. The
-policy does not solve all cross-field or cross-release correlations or establish
+The default remains exact conservative V1 (`single-partition-all-siblings-min10-v1`):
+any cell below ten, including zero, suppresses every sibling count/share/interval.
+An unused error class can therefore withhold an otherwise supported field.
+Explicit opt-in V2 (`single-partition-all-siblings-nonzero-min10-v2`) releases a
+whole cohort of at least ten only when each cell is zero or at least ten. True
+zero is count/share zero. Any positive cell from one through nine suppresses all
+siblings, including zeros and intervals. Cohorts below ten withhold their
+denominator under either policy. Monthly cohorts default to V1; callers must
+select V2 explicitly. Policy changes break percentage-point comparisons and chart
+segments even when all other versions match. Neither
+policy solves all cross-field or cross-release correlations or establishes
 anonymity. Additional overlapping cuts require an addressed successor policy.
 
 `export_report` writes a new explicit destination only, with fixed public asset
