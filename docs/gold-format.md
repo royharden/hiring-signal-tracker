@@ -47,3 +47,14 @@ do not establish actual human trust. Raw-machine projections reject human/refere
 records and keep each field's processing/error/certainty metadata. They produce no
 Prediction, Outcome, metric or benchmark. The mixed-field shared runner join needs
 its separately published owner status contract and actual source-bound app adapter.
+
+`evaluation.majority.fit_dev_majority` fits a private reference baseline through
+the unchanged canonical frozen JSONL reader, selecting only the dev split. It binds
+actual manifest/dev-byte/order/source-code hashes, label versions, an explicit
+eligible-support minimum and a deterministic tie policy. Unlabelled cells do not
+train; unsupported fields get no guessed defaults. This support policy does not
+replace the separate per-class calibration/default-selection requirement. The fit
+emits no predictions, extraction candidates, calls, quality scores or public report.
+Heldout metadata is retained by the manifest; its bodies are never read by this
+fitter. Actual independent labels/rights/history and later prediction integration
+remain required.
