@@ -25,8 +25,11 @@ evidence accuracy. Absence, explicit negatives, conflicts, multiple levels,
 uncertainty and processing failures remain different states.
 
 The taxonomy/rubric are not yet owner-ratified. Required independent synthetic
-fixtures/Gold, dev/heldout freezing, support and calibration checks, paired statistics
-and actual human agreement remain incomplete. The private app-specific canonical
+fixtures/Gold, dev/heldout freezing, supported empirical calibration and actual
+human agreement remain incomplete. Private class/skill/salary statistics, scored
+coverage, fixed-bin calibration and paired whole-group intervals now compose the
+canonical arithmetic with hand-computed controls. They do not establish an actual
+benchmark, production thresholds or public quality release. The app-specific canonical
 runner/37-field join exists with actual concrete execution and retained partial
 controller metadata. It enables no public quality release or empirical claim.
 The real benchmark still requires an authorized source, 300 corrected rows, a

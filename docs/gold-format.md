@@ -67,6 +67,12 @@ before the frozen reader; supplied objects are not data-read authorization.
 No public quality projection is enabled by this domain adapter. These controls do
 not establish independent Gold, human agreement or measured model quality.
 
+The separate private metrics adapter composes actual canonical class statistics,
+fixed-bin calibration and whole-family paired resampling. It validates complete
+expected axes and actual machine issuance, retaining errors, unlabelled cells and
+score-coverage denominators. It opens no source/Gold files, supplies no heldout
+authorization or human authority, and selects no threshold or production default.
+
 `evaluation.majority.fit_dev_majority` fits a private reference baseline through
 the unchanged canonical frozen JSONL reader, selecting only the dev split. It binds
 actual manifest/dev-byte/order/source-code hashes, label versions, an explicit

@@ -65,3 +65,40 @@ four-month posting corpus/Gold, live data or empirical benchmark was authored or
 run for this slice; tests use small original numeric and boundary controls.
 The original-synthetic rules CLI and public report commands join these libraries.
 Semantic CLI and required independent data/evaluation remain unfinished work.
+
+`evaluation.metrics` supplies private domain summaries over the unchanged canonical
+statistics, calibration and paired-resampling functions. It validates the full37
+axes for every frozen expected ID and consistent reference populations across
+executed methods. The trusted in-process comparison/registry boundary is not a
+signature or external proof. Never-run methods retain explicit empty metric rows.
+Actual raw issuance is checked before machine-derived field/calibration summaries;
+whole-controller partial status stays partial even where individual fields work.
+
+Each field retains class supports/confusions/P/R/F1, eligibility and processing
+counts, answered coverage, end-to-end accuracy and separately named accuracy on
+answered. False and not_stated remain separate. Seniority's multiple category can
+match while the exact level set is wrong. Positive skill micro/macro scores use
+eligible skill cells; posting-level exact set requires all30 Gold cells eligible.
+Incomplete labels are excluded explicitly; any processing failure on a completely
+labelled posting remains an exact-set miss. Unsupported classes remain undefined.
+
+Salary reports stated prediction rate, exact narrow-candidate recall, accepted
+normalization coverage and exact range correctness separately. Recall and coverage
+use all eligible Gold-stated ranges, including omissions and failed predictions.
+Missing units remain stated and do not count as accepted normalization. The
+candidate check runs the same existing narrow grammar on current transient source.
+
+Calibration uses only eligible, answered fields with an actual machine score.
+It retains eligible/answered/scored counts and both score-coverage denominators.
+Fixed bins and exact method-version pins are required; native_probability and
+self_reported_confidence are separate signals. Missing confidence is not a zero
+score. These are uncalibrated scores versus observed correctness, not established
+probabilities of correctness or permission to tune thresholds.
+
+Private interval calls use the canonical fixed-seed2000 paired whole-family draw
+stream at95% confidence with at least15 target-support observations and1900 valid
+draws. One family crossing months remains whole: its comparison uses an explicit
+unstratified profile. Otherwise whole groups are stratified by month. Undefined or
+unsupported intervals retain their point/counts and reason; they are not redrawn
+until convenient. This library reads no corpus/history and enables no public
+quality projection, independent Gold, real benchmark, rights or human agreement.
