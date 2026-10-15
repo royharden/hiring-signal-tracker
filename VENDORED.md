@@ -82,3 +82,9 @@ The library provides typed corpus admission, injected comparison, generic statis
 | runner.py | 3a4871fed7ac5a5fe81b0bf6a5f3fe45fb27967c | b3a9078cf3265d750296907572dfeb66de780c01028b715cfdafb39dbad7bccb |
 | schema.json | cf5c8740da190f5a603eb4187b382ebb05f3e2f2 | b44b9f4cea1b90d6524ddf9aa56327667a92340810b19000bb8d47702695ffb7 |
 | statistics.py | 529b70140f40af2ae60a115a8903e68827258efe | 9e9ec5e9ba86489c8938a87bd064debbedc143126952959729ab46fd624784dc |
+
+## Offline purpose successor
+
+The provider/callledger runtime closure advances to llm-router-eval commit `2671816d4f4fc46b9a650fc4c05ae4389dada326`, tree `2887e018acff384fc1a872080f399c2aeb44c5e0`. Only `callledger/ledger.py` differs from the original c7 closure above: Git blob `e3760ba9efbb6cf140a03c412d66b7ff888c7f1c`, SHA256 `ca38e0776e8b13d95e6ac31087431d45b8c984a40a33f8f8212d7c7bcf16eecb`. All thirteen remaining runtime files and MIT notice are verified unchanged. Prior pins describe prior execution and remain separate.
+
+Offline reuse permits the declared child purpose to differ from the root operation purpose, while checking the stored child purpose unconditionally even when optional caller limits are omitted. Four named purpose test/helper assets use only namespace mappings. This successor adds no generation repair, SDK or live authority.
