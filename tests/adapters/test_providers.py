@@ -164,6 +164,15 @@ def test_actual_full_inventory_admission_replay_and_zero_current_charge(tmp_path
         assert result.classification.skills.go.value is None
         assert result.outbound_attempts == ledger.totals()["dispatched_attempts"] == 0
         assert result.current_external_cost_usd == "0" and result.quality_status == "not_measured"
+        assert len(result.native_children) == len(rig.bundle.requests)
+        for child, request in zip(result.native_children, rig.bundle.requests, strict=True):
+            assert child.origin == "mock" and child.source_capture.origin == "synthetic"
+            assert child.source_capture.model_requested == request.model
+            assert child.source_capture.request_identity_sha256 == child.request_identity_sha256
+            assert child.accounting_ref is not None
+            assert child.counters.child_id == child.child_id
+            assert child.counters.used_attempts == child.counters.repairs_used == 0
+            assert child.counters.mode == "offline"
         assert "original_text" not in result.model_dump_json()
 
 
@@ -178,6 +187,9 @@ def test_split_strict_miss_preserves_other_group_and_does_not_fallback(tmp_path)
         assert result.status == "partial" and result.lookup_statuses == ("cache_miss", "ok")
         assert result.classification.ai_engineering_role.process_status == "error"
         assert result.classification.skills.python.value is True
+        assert tuple(child.status for child in result.native_children) == ("cache_miss", "ok")
+        assert result.native_children[0].source_capture is None
+        assert result.native_children[1].source_capture.origin == "synthetic"
         assert ledger.totals()["dispatched_attempts"] == 0
 
 

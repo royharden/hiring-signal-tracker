@@ -25,8 +25,10 @@ evidence accuracy. Absence, explicit negatives, conflicts, multiple levels,
 uncertainty and processing failures remain different states.
 
 The taxonomy/rubric are not yet owner-ratified. Required independent synthetic
-fixtures/Gold, dev/heldout freezing, the app-specific canonical evalkit join, support and
-calibration checks, paired statistics and actual human agreement remain incomplete.
+fixtures/Gold, dev/heldout freezing, support and calibration checks, paired statistics
+and actual human agreement remain incomplete. The private app-specific canonical
+runner/37-field join exists with actual concrete execution and retained partial
+controller metadata. It enables no public quality release or empirical claim.
 The real benchmark still requires an authorized source, 300 corrected rows, a
 timing pilot and 20 blind repeats at least seven days later. No measured accuracy,
 population change, human agreement or live cost is claimed. Missing prerequisites

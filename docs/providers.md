@@ -72,7 +72,11 @@ transport retries, at most one counted content repair, with SDK retries disabled
 The app calls that controller once and does not supply another retry loop.
 
 Closed private results retain actual child counters, returned attempt IDs and
-final physical-request capture identity. Simulation authority totals are cumulative
+final physical-request capture identity. Jev replay also retains each actual child
+status, request identity, synthetic capture, accounting reference and public ledger
+counter snapshot. Capture hashes are not relabelled as ledger references. The
+private evaluation join validates these references against its actual current
+binding before issuing field authority. Simulation authority totals are cumulative
 synthetic ledger observations, not measured provider bills. An admitted preflight
 failure can retain an outstanding hold; unknown first-call usage stays liability.
 Removed/changed sources block predictions and stop a further repair; already spent

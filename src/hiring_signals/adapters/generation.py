@@ -16,10 +16,11 @@ from hiring_signals.adapters.rulings import SourceAuthority, generation
 from hiring_signals.adapters.screen import POLICY
 from hiring_signals.annotation.models import SourcePin
 from hiring_signals.extract import generative, semantic
-from hiring_signals.shared.callledger.ledger import Ledger
+from hiring_signals.shared.callledger.ledger import ChildCounters, Ledger
 from hiring_signals.shared.callledger.models import (
     BudgetAuthority,
     CallContext,
+    Identifier,
     Limits,
     OperationPlan,
     Status,
@@ -28,6 +29,7 @@ from hiring_signals.shared.callledger.models import (
 from hiring_signals.shared.providers import GenerationRepairPolicy
 from hiring_signals.shared.providers import schema as provider_schema
 from hiring_signals.shared.providers.controller import Provider
+from hiring_signals.shared.providers.models import SourceCaptureRef
 
 Money = Annotated[Decimal, Field(ge=0, allow_inf_nan=False)]
 
@@ -110,6 +112,9 @@ class SimulatedGeneration(c.ClosedModel):
     child_used_attempts: Annotated[int, Field(ge=0, le=2)] | None
     child_repairs_used: Annotated[int, Field(ge=0, le=1)] | None
     final_physical_request_sha256: c.Digest | None
+    source_capture: SourceCaptureRef | None
+    accounting_ref: Identifier | None
+    child_counters: ChildCounters | None
     canonical_current_external_cost_usd: Money | None
     authority_simulation_known_spend_usd: Money | None
     authority_simulation_unknown_liability_usd: Money | None
@@ -261,6 +266,9 @@ def run_generation_simulation(
             child_used_attempts=counters.used_attempts if counters else None,
             child_repairs_used=counters.repairs_used if counters else None,
             final_physical_request_sha256=capture.request_identity_sha256 if capture else None,
+            source_capture=capture,
+            accounting_ref=result.accounting_ref if result else None,
+            child_counters=counters,
             canonical_current_external_cost_usd=Decimal(result.current_external_cost_usd)
             if result
             else None,

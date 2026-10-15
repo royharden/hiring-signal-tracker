@@ -6,8 +6,10 @@ It describes safe field decisions, source pins and neutral commands, not a secon
 canonical S2 rulings/evalkit wire. The actual published rulings adapter maps the
 source classes and preserves their licensed closure. The canonical evalkit library
 and its public synthetic controls are vendored separately. App-specific pure label
-codecs use its actual GoldRecord/FieldLabels classes; the full experiment/scorer
-join remains pending. A journal acknowledgement is not an eligible Gold export.
+codecs use its actual GoldRecord/FieldLabels classes. The private domain adapter
+now joins concrete execution to the canonical runner; private statistics, the full
+experiment and quality release remain pending. A journal acknowledgement is not
+an eligible Gold export.
 
 Every required field has independent presence: **present** with its actual typed
 value (including false, explicit none, multiple and a supported unknown class),
@@ -45,8 +47,25 @@ values, exact salary decimal ranges with unknown units and actual multiple level
 Human references require an injected authority after domain validation; test spies
 do not establish actual human trust. Raw-machine projections reject human/reference
 records and keep each field's processing/error/certainty metadata. They produce no
-Prediction, Outcome, metric or benchmark. The mixed-field shared runner join needs
-its separately published owner status contract and actual source-bound app adapter.
+Prediction, Outcome, metric or benchmark by themselves.
+
+`evaluation.domain` uses the unchanged canonical comparison runner and its published
+axis-status port. Only actual concrete rules, zero-outbound Jev replay or injected
+generation execution can issue a source/code/config-bound private prediction in
+the current in-process registry. A supplied payload and matching hashes alone do
+not issue a prediction. This registry is trusted Python code, not authentication
+against hostile callers. Source changes invalidate earlier issuance.
+
+All37 field outcomes retain typed absence, false, unlabelled, multiple levels and
+salary units. A validated complete envelope may retain a partial controller result
+while its valid fields remain scoreable; original child failures and partial status
+remain in private machine metadata. Whole failed, stale, blocked or unavailable
+execution cannot promote fields. Actual canonical child counters, capture/request
+identities and accounting references remain distinct. Methods receive only the
+current source text, not scorer Gold. Missing heldout admission/history rejects
+before the frozen reader; supplied objects are not data-read authorization.
+No public quality projection is enabled by this domain adapter. These controls do
+not establish independent Gold, human agreement or measured model quality.
 
 `evaluation.majority.fit_dev_majority` fits a private reference baseline through
 the unchanged canonical frozen JSONL reader, selecting only the dev split. It binds

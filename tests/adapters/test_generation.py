@@ -156,6 +156,12 @@ def test_full37_schema_repair_uses_actual_two_attempts_and_final_physical_captur
         assert result.classification.skills.python.certainty.kind == "self_reported_confidence"
         assert result.child_used_attempts == len(result.attempt_ids) == len(transport.calls) == 2
         assert result.child_repairs_used == 1
+        assert result.child_counters.used_attempts == 2
+        assert result.child_counters.repairs_used == 1
+        assert result.child_counters.mode == "simulation"
+        assert result.accounting_ref is not None
+        assert result.source_capture.origin == "synthetic"
+        assert result.source_capture.request_identity_sha256 == result.final_physical_request_sha256
         assert result.authority_simulation_known_spend_usd == Decimal("0.02")
         assert result.authority_simulation_future_holds_usd == 0
         assert (

@@ -1,7 +1,7 @@
 """S10 synthetic-only Jev replay orchestration over the actual canonical S3 API.
 
 No provider/ledger reimplementation, retries, secret handling, capture or live
-dispatch. Generation content-repair runtime awaits its actual owner API.
+dispatch. Counted generation simulation lives in adapters/generation.py.
 """
 
 from typing import Literal
@@ -12,16 +12,28 @@ from hiring_signals.adapters.screen import POLICY
 from hiring_signals.annotation.models import SourcePin
 from hiring_signals.extract import jev
 from hiring_signals.extract.semantic import DecisionPolicy, SemanticInput, failure
-from hiring_signals.shared.callledger.ledger import Ledger
+from hiring_signals.shared.callledger.ledger import ChildCounters, Ledger
 from hiring_signals.shared.callledger.models import (
     BudgetAuthority,
     CallContext,
+    Identifier,
     Limits,
     OperationPlan,
     Status,
     canonical_digest,
 )
 from hiring_signals.shared.providers.controller import Provider
+from hiring_signals.shared.providers.models import SourceCaptureRef
+
+
+class NativeChildReceipt(c.ClosedModel):
+    child_id: Identifier
+    request_identity_sha256: c.Digest
+    status: Status
+    origin: Literal["mock", "replay", "live"] | None
+    source_capture: SourceCaptureRef | None
+    accounting_ref: Identifier | None
+    counters: ChildCounters
 
 
 class OfflineExtraction(c.ClosedModel):
@@ -34,6 +46,7 @@ class OfflineExtraction(c.ClosedModel):
     outbound_attempts: Literal[0]
     quality_status: Literal["not_measured"]
     classification: c.Classification
+    native_children: tuple[NativeChildReceipt, ...]
 
 
 def policy_sha256(policy: DecisionPolicy):
@@ -45,7 +58,9 @@ def template_sha256(bundle: jev.JevBundle):
     return canonical_digest([r.question_identity() for r in bundle.requests])
 
 
-def _result(classification, *, admission_status="not_attempted", statuses=(), blocked=False):
+def _result(
+    classification, *, admission_status="not_attempted", statuses=(), blocked=False, children=()
+):
     errors = sum(j.process_status == "error" for j in classification.judgments())
     status = (
         "blocked"
@@ -66,6 +81,7 @@ def _result(classification, *, admission_status="not_attempted", statuses=(), bl
         outbound_attempts=0,
         quality_status="not_measured",
         classification=classification,
+        native_children=tuple(children),
     )
 
 
@@ -126,7 +142,7 @@ def run_jev_offline(
                 or len(plan.children) != len(requests)
             ):
                 raise ValueError("offline_posting_context_or_inventory_mismatch")
-            contexts = []
+            contexts, identities = [], []
             for request, child in zip(requests, plan.children, strict=True):
                 if (
                     child.max_attempts != 0
@@ -138,8 +154,9 @@ def run_jev_offline(
                 ):
                     raise ValueError("offline_posting_child_mismatch")
                 child_context = context.model_copy(update={"child_id": child.child_id})
-                provider.prepare(request, context=child_context, limits=limits)
+                prepared = provider.prepare(request, context=child_context, limits=limits)
                 contexts.append(child_context)
+                identities.append(prepared.request_identity_sha256)
             before = ledger.totals()["dispatched_attempts"]
             admission_status = "unknown"
             allocation = provider.admit_operation(
@@ -159,8 +176,9 @@ def run_jev_offline(
                 )
         except Exception:
             return _result(failure(code="provider_error"), admission_status=admission_status)
-        results, statuses = [], []
-        for request, child_context in zip(requests, contexts, strict=True):
+        results, statuses, children = [], [], []
+        for request, child_context, identity in zip(requests, contexts, identities, strict=True):
+            result = None
             try:
                 result = provider.run(
                     request,
@@ -182,7 +200,25 @@ def run_jev_offline(
             except Exception:
                 statuses.append("provider_error")
                 results.append(None)
+            children.append(
+                dict(
+                    child_id=child_context.child_id,
+                    request_identity_sha256=identity,
+                    status=statuses[-1],
+                    origin=result.origin if result else None,
+                    source_capture=result.source_capture if result else None,
+                    accounting_ref=result.accounting_ref if result else None,
+                )
+            )
         if ledger.totals()["dispatched_attempts"] != before:
             raise RuntimeError("offline_controller_dispatched_unexpectedly")
         classification = jev.decode(source, bundle, results, policy=policy)
-        return _result(classification, admission_status="admitted", statuses=statuses)
+        children = [
+            NativeChildReceipt(
+                **child, counters=ledger.child_counters(allocation, context=child_context)
+            )
+            for child, child_context in zip(children, contexts, strict=True)
+        ]
+        return _result(
+            classification, admission_status="admitted", statuses=statuses, children=children
+        )
