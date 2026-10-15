@@ -108,3 +108,7 @@ database, migration, function, auth service, SDK install or live call was starte
 - A nested report manifest seals only that report. The outer artifact manifest
   must also exist before calling the combined evaluator output complete; preserve
   interrupted files and use a fresh destination rather than overwriting a retry.
+- Runtime fingerprints bind exact on-disk bytes. Git LF and checkout CRLF editions
+  can differ at one commit; preserve that distinction and capture actual runtime
+  bindings. Report-only verification is not full-evaluator config equivalence,
+  and a new hash never reauthorizes consumed inputs or evaluation.

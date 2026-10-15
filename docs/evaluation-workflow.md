@@ -56,6 +56,16 @@ bindings reject. The rubric is the current annotation guide and needs owner
 ratification before a real benchmark. Code changes require a deliberate new DEV
 assembly, preserving original data rather than silently reusing stale bindings.
 
+Fingerprints bind the actual on-disk implementation bytes, not only a Git commit.
+Checkout newline conversion can make a Windows CRLF copy and an exact Git LF copy
+produce different helper and full evaluation configuration hashes at the same
+commit. Capture `--show-bindings` from the actual admitted runtime edition before
+preparing its manifest. A report-only fingerprint is not a full evaluator config;
+report verification does not establish their equivalence. Preserve the original
+edition and evidence rather than normalizing files or substituting a newer hash
+to make an old manifest run. A changed edition still needs the applicable input
+and execution authority; it does not reopen an already consumed run.
+
 Sources are JSONL in exactly the frozen DEV order. Each record has only:
 
 ```json
