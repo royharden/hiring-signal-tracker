@@ -112,3 +112,24 @@ This opt-in path supports fixed regeneration from the original facts/schema on a
 | providers/schema.py | 0d84ca157fa6bbd1fac3b7cbc0aba75751f552c3 | a0c4a84b14a95d2834a150e8fa16224ccec03e1a84325b359b92868a61613391 |
 | __init__.py | d54c1da1c6df701267a3ccc931aca3852992f333 | 60913c6d12caa4ba9139d870ad493d4a68738580c996662d7ad7b8d71622e1b8 |
 | callledger/README.md | 4eb6cce7d1bc853da62db8ce048247375caf0916 | bdc63ddb26832750654cdbffc09fca33d46b9e5ef2e0b7b1a34cac4e1cea0c50 |
+
+## Trusted evaluation axis status successor
+
+Evalkit advances to receipt-field-review commit `f0484fe5b1db3eca842ad7fd691264b61f94a1f8`, tree `e620f22a87043c64e20d2d68f43aa962131c51a5`. Exact twelve-file closure plus the existing MIT notice and ten public synthetic conformance files; no Docio source is included. Wire/schema/identity/interface files remain unchanged. Earlier249 source and execution pins remain historical records.
+
+The explicit trusted axis-status port binds a defensive canonical Prediction and its raw machine envelope to complete predeclared field/class axes. Default whole-status equality remains. Only a validated whole-ok domain envelope can use the port; whole failed/stale/blocked/unavailable/invalid/not-run branches cannot promote field success. The consumer must validate actual raw/controller outcomes, retain a partial operation and its child statuses/accounting, and report the method partial. Matching digests do not supply source/status authority. App-specific37-axis source/controller validation remains a separate join. There is no independent data/Gold/human/calibration or app-quality acceptance from source conformance.
+
+| File within evalkit | Git blob | SHA256 |
+|---|---|---|
+| README.md | 691b8feb13c3b87cd23c4612084fa398d1384767 | 9d205106651184ba1d3057bc985da7fa0900424926cf0fbe69b9e8836f38b4f4 |
+| __init__.py | c0401907d6b0cb0491051cb4732385a1e78aaf3c | 3017cebcf1f80d410a61712cd8207c1803e09954936ce33238d886760683843e |
+| axis_status.py | c83c09000eaa65ec64ce5486d5cf74be86c64c37 | a63f1df40e7c4a939f518cddd41f96c7a7a663be1f91aebc54f0f67cbedd789a |
+| corpus.py | a6aea0bbbed151bc550200183d675d63d1aeed04 | 427ade409f4fb83b59a2d9952c890cb830096af948e1dc9d393a8aef47c23fa0 |
+| identity.py | d4ed3a66d9f39ce948cc4d992617282c68a16484 | 5897c07d4b0f5d55dd8fee8cb74a325caaebc03b9e70bbf9c426c431d968f1b2 |
+| interfaces.py | b90636c575f743eb5e93e13697effa40e0a858fb | d23bc8be5188a968388272580b259ad4af4b1a4cbf393be52d7933514235ed9d |
+| models.py | 43bcb7314dc6085a532765ff68725165f44dbc56 | b18613383987a24569e7a9a133b2c212d858c2cf9ee147720b350c06126596c4 |
+| reporting.py | e6c46c9226cd4b80a732d0ec16a04e0a1e5b56f9 | 96d439870fe13d5c2ff5064d34eeb66fd5a96cf86fa5e5983ba243a6279aa283 |
+| resampling.py | e22ebf62aebac01a02e3a9be842a8584c68caa20 | 005c21b6d9f113db22132f0a660c3a2713e5aeaffb4dbb3c4c5349d66c194619 |
+| runner.py | 23543cae945b98a864e85aaef856c0b4ce301074 | 0cc2b8e655db84d90a665a3f97ce1a9416a6bff182a6aa460e53686055c404c9 |
+| schema.json | cf5c8740da190f5a603eb4187b382ebb05f3e2f2 | b44b9f4cea1b90d6524ddf9aa56327667a92340810b19000bb8d47702695ffb7 |
+| statistics.py | 529b70140f40af2ae60a115a8903e68827258efe | 9e9ec5e9ba86489c8938a87bd064debbedc143126952959729ab46fd624784dc |
