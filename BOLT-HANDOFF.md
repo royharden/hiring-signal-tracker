@@ -1,6 +1,6 @@
 # Bolt handoff inventory
 
-Current status: local Python original-synthetic CLI and libraries. An explicit four-month original-synthetic manifest can run through bounded ingest/privacy, deterministic rules, owner-private state and closed JSON/Markdown/HTML/SVG reports. Public report export/verification commands also exist. Semantic CLI, live/model execution, independent data and evaluation remain unfinished; no real aggregate report is claimed.
+Current status: local Python original-synthetic rules/population workflow plus explicit private synthetic DEV evaluation. Supplied four-month inputs run through bounded ingest/privacy, deterministic rules, owner-private state and closed JSON/Markdown/HTML/SVG reports. The DEV command joins supplied frozen canonical references and source JSONL to actual rules,37-field comparison and private statistics. Semantic CLI, heldout and live/model execution remain unfinished; no real aggregate report is claimed.
 
 Aggregate releases retain conservative V1 by default. Explicit opt-in V2 releases true zero cells only when the whole cohort is at least ten and every positive cell is at least ten; rare positive cells suppress every sibling. All report formats bind exact policy/version/scope, and policy changes break trend comparisons.
 
@@ -14,6 +14,14 @@ Database path: **No hosted database**. The local privacy library uses owner-priv
 
 The Python core requires a Python runtime and local private state. The annotation library maps safe commands to the unchanged canonical S2 journal in an explicit private directory outside the checkout. Durable receipts do not establish current approval, human authentication or Gold eligibility. Annotation/semantic CLI, actual data and human validation remain pending. Importing this repo does not supply the runtime, model credentials, human labels, live data rights or evaluation results. Current commands and locally checked scope are documented in README.md.
 
-Future GitHub/Bolt import, publication and any supported backend provisioning require actual owner instructions and a completed inventory. No provisioning prompt or hosted-readiness claim is supplied at this local stage.
+Future GitHub/Bolt import, publication and backend provisioning require actual owner instructions. A bounded future Bolt prompt is: "Use the verified public HTML/SVG/JSON report assets as a static viewer. Preserve gaps/suppression and exact method/policy/source scope. Do not import private evaluator artifacts or invent results. No backend, migrations, auth, functions or provider bindings are needed for that viewer. Python, owner-private SQLite and any later providers remain external prerequisites." This prompt is an inventory handoff, not evidence of hosting or a provisioning action.
 
 `docs/synthetic-workflow.md` documents the source-checkout commands and explicit private/public directory separation. Small original integration controls do not replace the required independent fixture/Gold set. There are no new migrations/functions/auth resources to provision. Importing this Python repository into Bolt does not provision a Python runtime; a later static viewer can consume actual verified public report assets only after the remaining checks and owner instructions.
+
+`docs/evaluation-workflow.md` gives the exact DEV input/command and normal/refusal
+behavior. Outputs are private JSON/Markdown plus an artifact manifest, not public
+viewer assets. All37 axes remain accounted; semantic and dev-majority methods are
+explicitly unrun. Missing rule confidence stays null. No fitting, bootstrap,
+heldout reading or model calls occur in that CLI. This Python/local/static design
+is the documented MVP portability drift; importing it does not provision Python,
+independent data admission, human labels, model access or real source rights.

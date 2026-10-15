@@ -41,6 +41,9 @@ def scaffold_status() -> dict[str, object]:
             "canonical_evalkit_axis_status_library",
             "hiring_reference_codecs",
             "development_majority_fit_library",
+            "private_canonical_37field_comparison",
+            "private_class_skill_salary_calibration_statistics",
+            "explicit_synthetic_dev_rules_evaluation_cli",
             "original_synthetic_rules_cli",
             "public_report_export_verify_cli",
         ],
@@ -49,7 +52,8 @@ def scaffold_status() -> dict[str, object]:
             "semantic_cli_extraction",
             "live_acquisition",
             "annotation",
-            "evaluation",
+            "heldout_evaluation",
+            "semantic_cli_evaluation",
             "real_population_reports",
             "live_generation_content_repair",
             "live_semantic_extraction",
@@ -57,7 +61,7 @@ def scaffold_status() -> dict[str, object]:
         "complete_workflow": False,
         "network_required": False,
         "credentials_required": False,
-        "evaluation_status": "not_implemented",
+        "evaluation_status": "synthetic_dev_rules_only",
     }
 
 
@@ -71,6 +75,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     evaluate = commands.add_parser("eval", help="Check evaluation availability")
     evaluate.add_argument("--dataset", choices=["synthetic"], default="synthetic")
     evaluate.add_argument("--offline", action="store_true")
+    evaluate.add_argument("--show-bindings", action="store_true")
+    evaluate.add_argument("--split", choices=["dev"], default="dev")
+    evaluate.add_argument("--manifest", type=Path)
+    evaluate.add_argument("--manifest-sha256")
+    evaluate.add_argument("--sources", type=Path)
+    evaluate.add_argument("--sources-sha256")
+    evaluate.add_argument("--out", type=Path)
     run = commands.add_parser(
         "run-synthetic", help="Process an explicit original-synthetic manifest"
     )
@@ -96,6 +107,53 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "Use status --json."
             )
         return 0
+    if args.command == "eval" and args.offline:
+        supplied = (
+            args.manifest,
+            args.manifest_sha256,
+            args.sources,
+            args.sources_sha256,
+            args.out,
+        )
+        if args.show_bindings or any(value is not None for value in supplied):
+            from hiring_signals.evaluation import workflow as evaluation
+
+            try:
+                if args.show_bindings:
+                    if any(value is not None for value in supplied):
+                        raise evaluation.EvaluationError("bindings_command_requires_no_input")
+                    result = evaluation.bindings()
+                elif not all(value is not None for value in supplied):
+                    raise evaluation.EvaluationError("explicit_dev_inputs_and_hashes_required")
+                else:
+                    result = evaluation.execute_dev_rules(
+                        args.manifest,
+                        manifest_sha256=args.manifest_sha256,
+                        sources_path=args.sources,
+                        sources_sha256=args.sources_sha256,
+                        destination=args.out,
+                    )
+                print(json.dumps(result, sort_keys=True))
+                return 3 if result.get("status") == "partial" else 0
+            except evaluation.EvaluationError as error:
+                print(
+                    json.dumps(
+                        {
+                            "code": error.code,
+                            "private_effects_possible": error.private_effects_possible,
+                        }
+                    ),
+                    file=sys.stderr,
+                )
+                return 2
+            except (Exception, KeyboardInterrupt):
+                print(
+                    json.dumps(
+                        {"code": "evaluation_failed_or_cancelled", "private_effects_possible": True}
+                    ),
+                    file=sys.stderr,
+                )
+                return 2
     if args.command in {"run-synthetic", "report"}:
         # Lazy import keeps readiness independent of source/state/model access.
         from hiring_signals import workflow

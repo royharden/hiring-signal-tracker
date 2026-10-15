@@ -29,7 +29,7 @@ class ScaffoldTests(unittest.TestCase):
         self.assertEqual(result["stage"], "original_synthetic_cli_and_libraries")
         self.assertIn("domain_contracts", result["implemented"])
         self.assertFalse(result["complete_workflow"])
-        self.assertEqual(result["evaluation_status"], "not_implemented")
+        self.assertEqual(result["evaluation_status"], "synthetic_dev_rules_only")
         self.assertIn("semantic_cli_extraction", result["unavailable"])
         self.assertIn("deterministic_rules", result["implemented"])
         self.assertIn("population_reporting_library", result["implemented"])

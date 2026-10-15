@@ -24,9 +24,11 @@ syntax reduces recall. Whole-source semantic review coordinates are not localize
 evidence accuracy. Absence, explicit negatives, conflicts, multiple levels,
 uncertainty and processing failures remain different states.
 
-The taxonomy/rubric are not yet owner-ratified. Required independent synthetic
-fixtures/Gold, dev/heldout freezing, supported empirical calibration and actual
-human agreement remain incomplete. Private class/skill/salary statistics, scored
+The taxonomy/rubric are not yet owner-ratified. Independent input admission and
+freezing remain external prerequisites. The explicit synthetic DEV CLI runs actual
+rules and private37-field statistics against supplied frozen references, without
+heldout reading, fitting/bootstrap, human authority or semantic/model execution.
+Supported empirical calibration and human agreement remain incomplete. Private class/skill/salary statistics, scored
 coverage, fixed-bin calibration and paired whole-group intervals now compose the
 canonical arithmetic with hand-computed controls. They do not establish an actual
 benchmark, production thresholds or public quality release. The app-specific canonical
@@ -35,7 +37,8 @@ controller metadata. It enables no public quality release or empirical claim.
 The real benchmark still requires an authorized source, 300 corrected rows, a
 timing pilot and 20 blind repeats at least seven days later. No measured accuracy,
 population change, human agreement or live cost is claimed. Missing prerequisites
-are not waivers. Demo/evaluation entry points remain explicitly unavailable.
+are not waivers. The no-input demo/evaluator still refuses; the documented explicit
+DEV command provides limited rules functionality, not a completed benchmark.
 
 Private HMAC/SQLite state and the canonical annotation journal require trusted
 owner-controlled directories outside the checkout. Windows access control must

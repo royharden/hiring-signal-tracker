@@ -1,6 +1,6 @@
 # Hiring Signal Tracker
 
-Hiring Signal Tracker is being built to measure AI-engineering and portfolio-request signals in curated job postings and publish monthly aggregates. The current package provides a keyless original-synthetic rules workflow, public-report commands and tested privacy, annotation, semantic and reporting libraries. Semantic CLI, live execution, independent data and evaluation remain unfinished.
+Hiring Signal Tracker is being built to measure AI-engineering and portfolio-request signals in curated job postings and publish monthly aggregates. The current package provides a keyless original-synthetic rules workflow, public reports and private synthetic DEV rules evaluation. Semantic CLI, live execution, heldout evaluation and human measurements remain unfinished.
 
 ## Quickstart
 
@@ -20,10 +20,11 @@ uv run hst status
 uv run hst status --json
 uv run hst run-synthetic --input original-source.json --private-dir /owner/private/hst --out /owner/reports/new-report --lease-seconds 120 --policy v2
 uv run hst report verify --directory /owner/reports/new-report
+uv run hst eval --offline --show-bindings
 uv run python scripts/check_public_files.py
 ```
 
-`scripts/demo.py --offline` and `scripts/eval.py --dataset synthetic --offline` currently return `workflow_not_implemented` with exit code 2. They create no result files. This keeps an unfinished workflow from producing a passing demo or benchmark receipt.
+`scripts/demo.py --offline` and evaluation without explicit inputs return `workflow_not_implemented` with exit code2 and create no results. Explicit evaluation accepts an owner-admitted canonical DEV manifest, original-synthetic source JSONL, exact file hashes and a new private output directory. It runs actual rules/comparison/statistics and retains Jev/generation/dev-majority as not_run. Read [the runnable input, normal and refusal guide](docs/evaluation-workflow.md). No implicit dataset, heldout, model call or human-quality claim is supplied.
 
 `run-synthetic` requires an explicitly supplied original manifest and owner-private state outside the checkout. It preserves unreviewed/blocked rows in denominators and exports only closed released aggregates. Read [the input and state guide](docs/synthetic-workflow.md) before running it. Exit3 denotes partial/no-eligible processing; even exit0 does not establish quality or full workflow acceptance. Report export/verification accepts only bounded closed public JSON and new destinations.
 
@@ -31,6 +32,7 @@ uv run python scripts/check_public_files.py
 
 - `src/hiring_signals/cli.py`: readiness and explicit workflow availability.
 - `src/hiring_signals/workflow.py`: supplied-original-synthetic transport/privacy/rules/private-state/population/report joins and bounded public report IO; no network/model calls or implicit corpus.
+- `src/hiring_signals/evaluation/`: canonical label codecs, concrete execution bindings, full37-field comparison and private class/skill/salary/calibration/paired statistics. The synthetic DEV CLI joins rules to supplied frozen references and private artifact hashes, without heldout reading, model access or fitting/bootstrap.
 - `src/hiring_signals/public_files.py`: bounded checks of staged product paths and text for private material.
 - `src/hiring_signals/contracts.py`: 37 mandatory field IDs, 30 separate skill judgments, evidence/process consistency and closed private derivations. Actor references are self-attestation, not authentication.
 - `src/hiring_signals/ingest/`: bounded original-synthetic transport, reviewed-term transient redaction and generation-validating private HMAC/SQLite state. No live HN acquisition is implemented.
@@ -46,11 +48,11 @@ uv run python scripts/check_public_files.py
 - `docs/BOUNDARIES.proposed.md`: implemented domain boundary and remaining proposals. `docs/providers.md` records the actual offline provider scope and unfinished joins.
 - `tests/`: command, detached-copy, no-network/no-credential, domain/privacy-boundary and publication-guard controls.
 
-The later workflow will join these libraries to counting and rules/Jev/generative comparison. Independently authored frozen synthetic data, real human gold and the gold/report example remain required. Upstream modules will be integrated only from verified owner sources with provenance and compatibility tests.
+Local rules workflows join supplied synthetic inputs to population reporting or frozen DEV evaluation. Independent source/Gold admission remains outside the checkout. Semantic CLI comparisons, heldout execution, human Gold and agreement remain required. Upstream modules are integrated from verified owner sources with provenance and compatibility controls.
 
 ## Results and cost
 
-Extraction accuracy, per-field quality, model usage/cost, four-month trends and human self-agreement are **not yet measured**. The canonical offline provider/controller is available; no live call or completed semantic-extraction workflow exists. `results/README.md` records the present evidence scope without placeholder performance numbers.
+Real extraction accuracy, model usage/cost, population trends and human self-agreement are **not yet measured**. The DEV evaluator computes private rules statistics against supplied synthetic/agent-provisional references; those values are not heldout or human-quality evidence. No live call or completed semantic CLI exists. `results/README.md` records the evidence scope without placeholder performance numbers.
 
 ## Verification
 
