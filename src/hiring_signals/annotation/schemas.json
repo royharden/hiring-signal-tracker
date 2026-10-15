@@ -1,0 +1,1799 @@
+{
+  "append-receipt": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "durable": {
+        "title": "Durable",
+        "type": "boolean"
+      },
+      "event_id": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Event Id",
+        "type": "string"
+      },
+      "origin": {
+        "enum": [
+          "test_staging",
+          "owner_runtime"
+        ],
+        "title": "Origin",
+        "type": "string"
+      },
+      "sequence": {
+        "anyOf": [
+          {
+            "exclusiveMinimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Sequence"
+      },
+      "status": {
+        "enum": [
+          "accepted",
+          "conflict",
+          "unavailable",
+          "unknown"
+        ],
+        "title": "Status",
+        "type": "string"
+      }
+    },
+    "required": [
+      "event_id",
+      "status",
+      "origin",
+      "sequence",
+      "durable"
+    ],
+    "title": "AppendReceipt",
+    "type": "object",
+    "x-runtime-validators-required": true
+  },
+  "blind-repeat": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "actor_ref": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Actor Ref",
+        "type": "string"
+      },
+      "first_at_utc": {
+        "format": "date-time",
+        "title": "First At Utc",
+        "type": "string"
+      },
+      "first_event_ref": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "First Event Ref",
+        "type": "string"
+      },
+      "item_id": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Item Id",
+        "type": "string"
+      },
+      "origin": {
+        "enum": [
+          "human_self_attested",
+          "synthetic_control"
+        ],
+        "title": "Origin",
+        "type": "string"
+      }
+    },
+    "required": [
+      "item_id",
+      "actor_ref",
+      "first_event_ref",
+      "first_at_utc",
+      "origin"
+    ],
+    "title": "BlindRepeat",
+    "type": "object",
+    "x-runtime-validators-required": true
+  },
+  "field-decision": {
+    "$defs": {
+      "CandidateReference": {
+        "additionalProperties": false,
+        "description": "Coordinates only, never snippets, names, URLs or source identifiers.\n\nByte coordinates refer to a transient input with this digest. This validates\nshape and bounds, not candidate recall or correspondence to actual input.",
+        "properties": {
+          "end_byte": {
+            "exclusiveMinimum": 0,
+            "maximum": 32768,
+            "title": "End Byte",
+            "type": "integer"
+          },
+          "input_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Input Sha256",
+            "type": "string"
+          },
+          "start_byte": {
+            "exclusiveMaximum": 32768,
+            "minimum": 0,
+            "title": "Start Byte",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "input_sha256",
+          "start_byte",
+          "end_byte"
+        ],
+        "title": "CandidateReference",
+        "type": "object"
+      },
+      "MultipleLevels": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "const": "multiple",
+            "title": "Category",
+            "type": "string"
+          },
+          "levels": {
+            "items": {
+              "enum": [
+                "junior",
+                "mid",
+                "senior",
+                "staff_or_lead"
+              ],
+              "type": "string"
+            },
+            "maxItems": 4,
+            "minItems": 2,
+            "title": "Levels",
+            "type": "array"
+          }
+        },
+        "required": [
+          "category",
+          "levels"
+        ],
+        "title": "MultipleLevels",
+        "type": "object"
+      },
+      "SalaryValue": {
+        "additionalProperties": false,
+        "properties": {
+          "currency": {
+            "anyOf": [
+              {
+                "enum": [
+                  "USD",
+                  "EUR",
+                  "GBP",
+                  "CAD",
+                  "AUD",
+                  "JPY",
+                  "CHF",
+                  "INR"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currency"
+          },
+          "maximum": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Maximum"
+          },
+          "minimum": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Minimum"
+          },
+          "period": {
+            "anyOf": [
+              {
+                "enum": [
+                  "hour",
+                  "day",
+                  "week",
+                  "month",
+                  "year"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period"
+          }
+        },
+        "required": [
+          "minimum",
+          "maximum",
+          "currency",
+          "period"
+        ],
+        "title": "SalaryValue",
+        "type": "object"
+      }
+    },
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "evidence": {
+        "items": {
+          "$ref": "#/$defs/CandidateReference"
+        },
+        "maxItems": 8,
+        "title": "Evidence",
+        "type": "array"
+      },
+      "field_id": {
+        "enum": [
+          "ai_engineering_role",
+          "portfolio_requested",
+          "seniority",
+          "work_mode",
+          "employment",
+          "skills.python",
+          "skills.javascript",
+          "skills.typescript",
+          "skills.go",
+          "skills.rust",
+          "skills.java",
+          "skills.c",
+          "skills.cpp",
+          "skills.sql",
+          "skills.pytorch",
+          "skills.tensorflow",
+          "skills.jax",
+          "skills.llm_apis",
+          "skills.agents",
+          "skills.rag",
+          "skills.evals",
+          "skills.fine_tuning",
+          "skills.mcp",
+          "skills.vector_db",
+          "skills.prompt_engineering",
+          "skills.mlops",
+          "skills.data_pipelines",
+          "skills.kubernetes",
+          "skills.aws",
+          "skills.gcp",
+          "skills.react",
+          "skills.node",
+          "skills.postgres",
+          "skills.distributed_systems",
+          "skills.security",
+          "salary",
+          "location_stated"
+        ],
+        "maxLength": 48,
+        "minLength": 1,
+        "title": "Field Id",
+        "type": "string"
+      },
+      "presence": {
+        "enum": [
+          "present",
+          "absent",
+          "unlabelled"
+        ],
+        "title": "Presence",
+        "type": "string"
+      },
+      "value": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "enum": [
+              "junior",
+              "mid",
+              "senior",
+              "staff_or_lead",
+              "remote",
+              "hybrid",
+              "onsite",
+              "full_time",
+              "part_time",
+              "contract",
+              "internship",
+              "not_stated",
+              "none"
+            ],
+            "type": "string"
+          },
+          {
+            "$ref": "#/$defs/SalaryValue"
+          },
+          {
+            "$ref": "#/$defs/MultipleLevels"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Value"
+      }
+    },
+    "required": [
+      "field_id",
+      "presence",
+      "value",
+      "evidence"
+    ],
+    "title": "FieldDecision",
+    "type": "object",
+    "x-runtime-validators-required": true
+  },
+  "machine-prefill": {
+    "$defs": {
+      "BooleanJudgment": {
+        "additionalProperties": false,
+        "description": "Absent is null/ok/absent; an explicit negative is false/ok/explicit_negative.",
+        "properties": {
+          "candidates": {
+            "items": {
+              "$ref": "#/$defs/CandidateReference"
+            },
+            "maxItems": 8,
+            "title": "Candidates",
+            "type": "array"
+          },
+          "certainty": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Certainty"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "enum": [
+                  "provider_error",
+                  "invalid_output",
+                  "candidate_missing",
+                  "screen_hold"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "evidence_state": {
+            "enum": [
+              "absent",
+              "explicit_positive",
+              "explicit_negative",
+              "multiple",
+              "conflicting",
+              "uncertain",
+              "unavailable"
+            ],
+            "title": "Evidence State",
+            "type": "string"
+          },
+          "process_status": {
+            "enum": [
+              "ok",
+              "abstained",
+              "error",
+              "blocked"
+            ],
+            "title": "Process Status",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "evidence_state",
+          "process_status",
+          "certainty",
+          "candidates",
+          "error_code",
+          "value"
+        ],
+        "title": "BooleanJudgment",
+        "type": "object"
+      },
+      "CandidateReference": {
+        "additionalProperties": false,
+        "description": "Coordinates only, never snippets, names, URLs or source identifiers.\n\nByte coordinates refer to a transient input with this digest. This validates\nshape and bounds, not candidate recall or correspondence to actual input.",
+        "properties": {
+          "end_byte": {
+            "exclusiveMinimum": 0,
+            "maximum": 32768,
+            "title": "End Byte",
+            "type": "integer"
+          },
+          "input_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Input Sha256",
+            "type": "string"
+          },
+          "start_byte": {
+            "exclusiveMaximum": 32768,
+            "minimum": 0,
+            "title": "Start Byte",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "input_sha256",
+          "start_byte",
+          "end_byte"
+        ],
+        "title": "CandidateReference",
+        "type": "object"
+      },
+      "Certainty": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "native_probability",
+              "self_reported_confidence"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "value": {
+            "maximum": 1,
+            "minimum": 0,
+            "title": "Value",
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "value"
+        ],
+        "title": "Certainty",
+        "type": "object"
+      },
+      "Classification": {
+        "additionalProperties": false,
+        "properties": {
+          "ai_engineering_role": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "employment": {
+            "$ref": "#/$defs/EmploymentJudgment"
+          },
+          "location_stated": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "portfolio_requested": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "salary": {
+            "$ref": "#/$defs/SalaryJudgment"
+          },
+          "seniority": {
+            "$ref": "#/$defs/SeniorityJudgment"
+          },
+          "skills": {
+            "$ref": "#/$defs/SkillJudgments"
+          },
+          "work_mode": {
+            "$ref": "#/$defs/WorkModeJudgment"
+          }
+        },
+        "required": [
+          "ai_engineering_role",
+          "portfolio_requested",
+          "seniority",
+          "work_mode",
+          "employment",
+          "skills",
+          "salary",
+          "location_stated"
+        ],
+        "title": "Classification",
+        "type": "object"
+      },
+      "EmploymentJudgment": {
+        "additionalProperties": false,
+        "properties": {
+          "candidates": {
+            "items": {
+              "$ref": "#/$defs/CandidateReference"
+            },
+            "maxItems": 8,
+            "title": "Candidates",
+            "type": "array"
+          },
+          "certainty": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Certainty"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "enum": [
+                  "provider_error",
+                  "invalid_output",
+                  "candidate_missing",
+                  "screen_hold"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "evidence_state": {
+            "enum": [
+              "absent",
+              "explicit_positive",
+              "explicit_negative",
+              "multiple",
+              "conflicting",
+              "uncertain",
+              "unavailable"
+            ],
+            "title": "Evidence State",
+            "type": "string"
+          },
+          "process_status": {
+            "enum": [
+              "ok",
+              "abstained",
+              "error",
+              "blocked"
+            ],
+            "title": "Process Status",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "enum": [
+                  "full_time",
+                  "part_time",
+                  "contract",
+                  "internship",
+                  "not_stated"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "evidence_state",
+          "process_status",
+          "certainty",
+          "candidates",
+          "error_code",
+          "value"
+        ],
+        "title": "EmploymentJudgment",
+        "type": "object"
+      },
+      "LabelProvenance": {
+        "additionalProperties": false,
+        "description": "Self-attested human provenance is not authentication or supplied human gold.",
+        "properties": {
+          "actor_ref": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actor Ref"
+          },
+          "attestation_sha256": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attestation Sha256"
+          },
+          "source": {
+            "enum": [
+              "unprovided",
+              "synthetic_expectation",
+              "human_self_attested"
+            ],
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "actor_ref",
+          "attestation_sha256"
+        ],
+        "title": "LabelProvenance",
+        "type": "object"
+      },
+      "NormalizedSalary": {
+        "additionalProperties": false,
+        "description": "Unit-preserving decimal range; no annual conversion or inferred units.",
+        "properties": {
+          "currency": {
+            "enum": [
+              "USD",
+              "EUR",
+              "GBP",
+              "CAD",
+              "AUD",
+              "JPY",
+              "CHF",
+              "INR"
+            ],
+            "title": "Currency",
+            "type": "string"
+          },
+          "maximum": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Maximum"
+          },
+          "minimum": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Minimum"
+          },
+          "period": {
+            "enum": [
+              "hour",
+              "day",
+              "week",
+              "month",
+              "year"
+            ],
+            "title": "Period",
+            "type": "string"
+          }
+        },
+        "required": [
+          "minimum",
+          "maximum",
+          "currency",
+          "period"
+        ],
+        "title": "NormalizedSalary",
+        "type": "object"
+      },
+      "PrivateDerivedRecord": {
+        "additionalProperties": false,
+        "description": "Closed private derivation; neither raw text nor a public per-item output type.\n\nID generation, source mapping, storage and aggregate privacy are unimplemented.\nDigest syntax does not prove HMAC generation or authentication.",
+        "properties": {
+          "classification": {
+            "$ref": "#/$defs/Classification"
+          },
+          "config_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Config Sha256",
+            "type": "string"
+          },
+          "implementation_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Implementation Sha256",
+            "type": "string"
+          },
+          "input_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Input Sha256",
+            "type": "string"
+          },
+          "item_id": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Item Id",
+            "type": "string"
+          },
+          "method": {
+            "enum": [
+              "rules",
+              "jev",
+              "generative",
+              "dev_majority",
+              "human"
+            ],
+            "title": "Method",
+            "type": "string"
+          },
+          "model_sha256": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Sha256"
+          },
+          "month": {
+            "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$",
+            "title": "Month",
+            "type": "string"
+          },
+          "provenance": {
+            "$ref": "#/$defs/LabelProvenance"
+          },
+          "schema_version": {
+            "maximum": 1,
+            "minimum": 1,
+            "title": "Schema Version",
+            "type": "integer"
+          },
+          "taxonomy_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Taxonomy Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "schema_version",
+          "item_id",
+          "month",
+          "input_sha256",
+          "taxonomy_sha256",
+          "config_sha256",
+          "implementation_sha256",
+          "method",
+          "model_sha256",
+          "provenance",
+          "classification"
+        ],
+        "title": "PrivateDerivedRecord",
+        "type": "object"
+      },
+      "SalaryJudgment": {
+        "additionalProperties": false,
+        "properties": {
+          "currency": {
+            "anyOf": [
+              {
+                "enum": [
+                  "USD",
+                  "EUR",
+                  "GBP",
+                  "CAD",
+                  "AUD",
+                  "JPY",
+                  "CHF",
+                  "INR"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currency"
+          },
+          "normalization_status": {
+            "enum": [
+              "ok",
+              "abstained",
+              "not_applicable",
+              "error",
+              "blocked"
+            ],
+            "title": "Normalization Status",
+            "type": "string"
+          },
+          "normalized": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/NormalizedSalary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "period": {
+            "anyOf": [
+              {
+                "enum": [
+                  "hour",
+                  "day",
+                  "week",
+                  "month",
+                  "year"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period"
+          },
+          "presence": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "stated_maximum": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stated Maximum"
+          },
+          "stated_minimum": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stated Minimum"
+          }
+        },
+        "required": [
+          "presence",
+          "stated_minimum",
+          "stated_maximum",
+          "currency",
+          "period",
+          "normalization_status",
+          "normalized"
+        ],
+        "title": "SalaryJudgment",
+        "type": "object"
+      },
+      "SeniorityJudgment": {
+        "additionalProperties": false,
+        "properties": {
+          "candidates": {
+            "items": {
+              "$ref": "#/$defs/CandidateReference"
+            },
+            "maxItems": 8,
+            "title": "Candidates",
+            "type": "array"
+          },
+          "certainty": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Certainty"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "enum": [
+                  "provider_error",
+                  "invalid_output",
+                  "candidate_missing",
+                  "screen_hold"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "evidence_state": {
+            "enum": [
+              "absent",
+              "explicit_positive",
+              "explicit_negative",
+              "multiple",
+              "conflicting",
+              "uncertain",
+              "unavailable"
+            ],
+            "title": "Evidence State",
+            "type": "string"
+          },
+          "levels": {
+            "items": {
+              "enum": [
+                "junior",
+                "mid",
+                "senior",
+                "staff_or_lead"
+              ],
+              "type": "string"
+            },
+            "maxItems": 4,
+            "title": "Levels",
+            "type": "array"
+          },
+          "process_status": {
+            "enum": [
+              "ok",
+              "abstained",
+              "error",
+              "blocked"
+            ],
+            "title": "Process Status",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "enum": [
+                  "junior",
+                  "mid",
+                  "senior",
+                  "staff_or_lead",
+                  "not_stated",
+                  "multiple"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "evidence_state",
+          "process_status",
+          "certainty",
+          "candidates",
+          "error_code",
+          "value",
+          "levels"
+        ],
+        "title": "SeniorityJudgment",
+        "type": "object"
+      },
+      "SkillJudgments": {
+        "additionalProperties": false,
+        "description": "Thirty separately required judgments; no omitted skill defaults.",
+        "properties": {
+          "agents": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "aws": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "c": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "cpp": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "data_pipelines": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "distributed_systems": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "evals": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "fine_tuning": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "gcp": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "go": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "java": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "javascript": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "jax": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "kubernetes": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "llm_apis": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "mcp": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "mlops": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "node": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "postgres": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "prompt_engineering": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "python": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "pytorch": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "rag": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "react": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "rust": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "security": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "sql": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "tensorflow": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "typescript": {
+            "$ref": "#/$defs/BooleanJudgment"
+          },
+          "vector_db": {
+            "$ref": "#/$defs/BooleanJudgment"
+          }
+        },
+        "required": [
+          "python",
+          "javascript",
+          "typescript",
+          "go",
+          "rust",
+          "java",
+          "c",
+          "cpp",
+          "sql",
+          "pytorch",
+          "tensorflow",
+          "jax",
+          "llm_apis",
+          "agents",
+          "rag",
+          "evals",
+          "fine_tuning",
+          "mcp",
+          "vector_db",
+          "prompt_engineering",
+          "mlops",
+          "data_pipelines",
+          "kubernetes",
+          "aws",
+          "gcp",
+          "react",
+          "node",
+          "postgres",
+          "distributed_systems",
+          "security"
+        ],
+        "title": "SkillJudgments",
+        "type": "object"
+      },
+      "SourcePin": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence_revision_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Evidence Revision Sha256",
+            "type": "string"
+          },
+          "input_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Input Sha256",
+            "type": "string"
+          },
+          "item_id": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Item Id",
+            "type": "string"
+          },
+          "raw_source_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Raw Source Sha256",
+            "type": "string"
+          },
+          "rubric_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Rubric Sha256",
+            "type": "string"
+          },
+          "taxonomy_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Taxonomy Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "item_id",
+          "raw_source_sha256",
+          "input_sha256",
+          "evidence_revision_sha256",
+          "taxonomy_sha256",
+          "rubric_sha256"
+        ],
+        "title": "SourcePin",
+        "type": "object"
+      },
+      "WorkModeJudgment": {
+        "additionalProperties": false,
+        "properties": {
+          "candidates": {
+            "items": {
+              "$ref": "#/$defs/CandidateReference"
+            },
+            "maxItems": 8,
+            "title": "Candidates",
+            "type": "array"
+          },
+          "certainty": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Certainty"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "enum": [
+                  "provider_error",
+                  "invalid_output",
+                  "candidate_missing",
+                  "screen_hold"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "evidence_state": {
+            "enum": [
+              "absent",
+              "explicit_positive",
+              "explicit_negative",
+              "multiple",
+              "conflicting",
+              "uncertain",
+              "unavailable"
+            ],
+            "title": "Evidence State",
+            "type": "string"
+          },
+          "process_status": {
+            "enum": [
+              "ok",
+              "abstained",
+              "error",
+              "blocked"
+            ],
+            "title": "Process Status",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "enum": [
+                  "remote",
+                  "hybrid",
+                  "onsite",
+                  "not_stated"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "evidence_state",
+          "process_status",
+          "certainty",
+          "candidates",
+          "error_code",
+          "value"
+        ],
+        "title": "WorkModeJudgment",
+        "type": "object"
+      }
+    },
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "prediction": {
+        "$ref": "#/$defs/PrivateDerivedRecord"
+      },
+      "source": {
+        "$ref": "#/$defs/SourcePin"
+      }
+    },
+    "required": [
+      "source",
+      "prediction"
+    ],
+    "title": "MachinePrefill",
+    "type": "object",
+    "x-runtime-validators-required": true
+  },
+  "scalar-app-command": {
+    "$defs": {
+      "Actor": {
+        "additionalProperties": false,
+        "properties": {
+          "actor_ref": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Actor Ref",
+            "type": "string"
+          },
+          "attestation_ref": {
+            "anyOf": [
+              {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attestation Ref"
+          },
+          "origin": {
+            "enum": [
+              "agent_provisional",
+              "human_self_attested"
+            ],
+            "title": "Origin",
+            "type": "string"
+          }
+        },
+        "required": [
+          "origin",
+          "actor_ref",
+          "attestation_ref"
+        ],
+        "title": "Actor",
+        "type": "object"
+      },
+      "CandidateReference": {
+        "additionalProperties": false,
+        "description": "Coordinates only, never snippets, names, URLs or source identifiers.\n\nByte coordinates refer to a transient input with this digest. This validates\nshape and bounds, not candidate recall or correspondence to actual input.",
+        "properties": {
+          "end_byte": {
+            "exclusiveMinimum": 0,
+            "maximum": 32768,
+            "title": "End Byte",
+            "type": "integer"
+          },
+          "input_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Input Sha256",
+            "type": "string"
+          },
+          "start_byte": {
+            "exclusiveMaximum": 32768,
+            "minimum": 0,
+            "title": "Start Byte",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "input_sha256",
+          "start_byte",
+          "end_byte"
+        ],
+        "title": "CandidateReference",
+        "type": "object"
+      },
+      "FieldDecision": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence": {
+            "items": {
+              "$ref": "#/$defs/CandidateReference"
+            },
+            "maxItems": 8,
+            "title": "Evidence",
+            "type": "array"
+          },
+          "field_id": {
+            "enum": [
+              "ai_engineering_role",
+              "portfolio_requested",
+              "seniority",
+              "work_mode",
+              "employment",
+              "skills.python",
+              "skills.javascript",
+              "skills.typescript",
+              "skills.go",
+              "skills.rust",
+              "skills.java",
+              "skills.c",
+              "skills.cpp",
+              "skills.sql",
+              "skills.pytorch",
+              "skills.tensorflow",
+              "skills.jax",
+              "skills.llm_apis",
+              "skills.agents",
+              "skills.rag",
+              "skills.evals",
+              "skills.fine_tuning",
+              "skills.mcp",
+              "skills.vector_db",
+              "skills.prompt_engineering",
+              "skills.mlops",
+              "skills.data_pipelines",
+              "skills.kubernetes",
+              "skills.aws",
+              "skills.gcp",
+              "skills.react",
+              "skills.node",
+              "skills.postgres",
+              "skills.distributed_systems",
+              "skills.security",
+              "salary",
+              "location_stated"
+            ],
+            "maxLength": 48,
+            "minLength": 1,
+            "title": "Field Id",
+            "type": "string"
+          },
+          "presence": {
+            "enum": [
+              "present",
+              "absent",
+              "unlabelled"
+            ],
+            "title": "Presence",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "enum": [
+                  "junior",
+                  "mid",
+                  "senior",
+                  "staff_or_lead",
+                  "remote",
+                  "hybrid",
+                  "onsite",
+                  "full_time",
+                  "part_time",
+                  "contract",
+                  "internship",
+                  "not_stated",
+                  "none"
+                ],
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/SalaryValue"
+              },
+              {
+                "$ref": "#/$defs/MultipleLevels"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "field_id",
+          "presence",
+          "value",
+          "evidence"
+        ],
+        "title": "FieldDecision",
+        "type": "object"
+      },
+      "MultipleLevels": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "const": "multiple",
+            "title": "Category",
+            "type": "string"
+          },
+          "levels": {
+            "items": {
+              "enum": [
+                "junior",
+                "mid",
+                "senior",
+                "staff_or_lead"
+              ],
+              "type": "string"
+            },
+            "maxItems": 4,
+            "minItems": 2,
+            "title": "Levels",
+            "type": "array"
+          }
+        },
+        "required": [
+          "category",
+          "levels"
+        ],
+        "title": "MultipleLevels",
+        "type": "object"
+      },
+      "SalaryValue": {
+        "additionalProperties": false,
+        "properties": {
+          "currency": {
+            "anyOf": [
+              {
+                "enum": [
+                  "USD",
+                  "EUR",
+                  "GBP",
+                  "CAD",
+                  "AUD",
+                  "JPY",
+                  "CHF",
+                  "INR"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currency"
+          },
+          "maximum": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Maximum"
+          },
+          "minimum": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Minimum"
+          },
+          "period": {
+            "anyOf": [
+              {
+                "enum": [
+                  "hour",
+                  "day",
+                  "week",
+                  "month",
+                  "year"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period"
+          }
+        },
+        "required": [
+          "minimum",
+          "maximum",
+          "currency",
+          "period"
+        ],
+        "title": "SalaryValue",
+        "type": "object"
+      },
+      "SourcePin": {
+        "additionalProperties": false,
+        "properties": {
+          "evidence_revision_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Evidence Revision Sha256",
+            "type": "string"
+          },
+          "input_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Input Sha256",
+            "type": "string"
+          },
+          "item_id": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Item Id",
+            "type": "string"
+          },
+          "raw_source_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Raw Source Sha256",
+            "type": "string"
+          },
+          "rubric_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Rubric Sha256",
+            "type": "string"
+          },
+          "taxonomy_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Taxonomy Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "item_id",
+          "raw_source_sha256",
+          "input_sha256",
+          "evidence_revision_sha256",
+          "taxonomy_sha256",
+          "rubric_sha256"
+        ],
+        "title": "SourcePin",
+        "type": "object"
+      }
+    },
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "description": "Neutral app intent; a published owner adapter must construct rulings/1.",
+    "properties": {
+      "action": {
+        "enum": [
+          "correct",
+          "confirm",
+          "waive_absent",
+          "reopen"
+        ],
+        "title": "Action",
+        "type": "string"
+      },
+      "actor": {
+        "$ref": "#/$defs/Actor"
+      },
+      "assisted": {
+        "title": "Assisted",
+        "type": "boolean"
+      },
+      "at_utc": {
+        "format": "date-time",
+        "title": "At Utc",
+        "type": "string"
+      },
+      "decision": {
+        "$ref": "#/$defs/FieldDecision"
+      },
+      "event_id": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Event Id",
+        "type": "string"
+      },
+      "expected_prior_event_id": {
+        "anyOf": [
+          {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Expected Prior Event Id"
+      },
+      "namespace": {
+        "const": "hiring-signals",
+        "title": "Namespace",
+        "type": "string"
+      },
+      "prior_value": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/FieldDecision"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "reason": {
+        "enum": [
+          "manual_correction",
+          "explicit_confirmation",
+          "absence_confirmation",
+          "reopened"
+        ],
+        "title": "Reason",
+        "type": "string"
+      },
+      "schema_version": {
+        "maximum": 1,
+        "minimum": 1,
+        "title": "Schema Version",
+        "type": "integer"
+      },
+      "source": {
+        "$ref": "#/$defs/SourcePin"
+      }
+    },
+    "required": [
+      "schema_version",
+      "event_id",
+      "namespace",
+      "source",
+      "decision",
+      "action",
+      "expected_prior_event_id",
+      "prior_value",
+      "assisted",
+      "actor",
+      "at_utc",
+      "reason"
+    ],
+    "title": "ScalarCommand",
+    "type": "object",
+    "x-runtime-validators-required": true
+  },
+  "source-pin": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "additionalProperties": false,
+    "properties": {
+      "evidence_revision_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Evidence Revision Sha256",
+        "type": "string"
+      },
+      "input_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Input Sha256",
+        "type": "string"
+      },
+      "item_id": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Item Id",
+        "type": "string"
+      },
+      "raw_source_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Raw Source Sha256",
+        "type": "string"
+      },
+      "rubric_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Rubric Sha256",
+        "type": "string"
+      },
+      "taxonomy_sha256": {
+        "pattern": "^[0-9a-f]{64}$",
+        "title": "Taxonomy Sha256",
+        "type": "string"
+      }
+    },
+    "required": [
+      "item_id",
+      "raw_source_sha256",
+      "input_sha256",
+      "evidence_revision_sha256",
+      "taxonomy_sha256",
+      "rubric_sha256"
+    ],
+    "title": "SourcePin",
+    "type": "object",
+    "x-runtime-validators-required": true
+  }
+}
