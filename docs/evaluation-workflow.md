@@ -19,6 +19,19 @@ uv run hst eval --offline --dataset synthetic --split dev \
   --out /owner/private/dev/new-results
 ```
 
+To also construct a local privacy-safe prediction sample report, append an
+explicit four-month consecutive window:
+
+```sh
+  --sample-months 2026-07 2026-08 2026-09 2026-10
+```
+
+All supplied source months must be inside that window. Missing months remain
+gaps. Conservative min-ten V1 is the default. `--sample-policy v2` is an explicit
+alternative using the existing policy: zero cells can release only when the
+cohort is at least ten and every positive cell is at least ten. One rare positive
+cell suppresses all siblings. Policy changes break trend comparisons.
+
 The checkout equivalent is `uv run python scripts/eval.py` with the same arguments
 after `eval`. Without explicit inputs, `eval --offline` refuses without output.
 To demonstrate refusal, supply a deliberately different64-character manifest hash:
@@ -80,10 +93,31 @@ The owner establishes access control; creation modes do not prove Windows ACLs.
 - `run.json`: actual execution/input/config/order/provenance hashes and method scope.
 - `artifact-manifest.json`: the three files' hashes/byte counts, written last.
 
+With a sample window, `sample-report/` contains canonical closed aggregates,
+Markdown, HTML, SVG and its own manifest. `sample-limitations.md` reproduces from
+the released report JSON alone. The top artifact manifest also binds those exact
+files. `hst report verify --directory /owner/private/dev/new-results/sample-report`
+checks the nested report's bounded closure. The limitations file reports only
+released denominators; a suppressed small cohort stays withheld there too.
+An interrupted nested write may leave either an unsealed sample report or a
+complete sample report without the outer artifact manifest. In both cases the
+combined evaluator output is incomplete. Retrying the same destination refuses
+without altering retained files; inspect the partial directory and choose a new
+destination for an authorized retry.
+
+These optional assets describe **sample predictions**, not population trends or
+extraction quality. Expected IDs still contribute when predictions are missing;
+failures mark processing partial. Only actual current source-bound machine
+issuance is admitted. No Gold values, private accuracy statistics, source IDs,
+posting text or named geography enter the released projection. Keep private
+statistics/source data separate from the report folder. Creating local safe
+artifacts does not authorize external publication or establish anonymity.
+
 All expected IDs remain in all37 field denominators. Jev, generation and dev-majority
 remain not_run without fabricated predictions or zero scores. Rule confidence is
 missing, not calibrated. Human agreement, cost and heldout quality remain unmeasured.
-These artifacts stay private and do not pass through the public aggregate privacy
-projection. Hash closure does not authorize publication or certify a finished app.
+The private metric artifacts do not pass through the aggregate privacy projection.
+Only the optional sample-report assets use that closed release boundary. Hash
+closure does not authorize publication or certify a finished app.
 The separate `run-synthetic` command produces population reports; a DEV Gold sample
 is not a population and is not converted to monthly population trends here.

@@ -28,6 +28,13 @@ uv run python scripts/check_public_files.py
 
 `run-synthetic` requires an explicitly supplied original manifest and owner-private state outside the checkout. It preserves unreviewed/blocked rows in denominators and exports only closed released aggregates. Read [the input and state guide](docs/synthetic-workflow.md) before running it. Exit3 denotes partial/no-eligible processing; even exit0 does not establish quality or full workflow acceptance. Report export/verification accepts only bounded closed public JSON and new destinations.
 
+The DEV evaluator optionally takes `--sample-months YYYY-MM YYYY-MM YYYY-MM YYYY-MM`
+to produce privacy-safe sample-prediction JSON/Markdown/HTML/SVG and a reproducible
+limitations report. It uses the existing suppression policy, preserves missing
+months as gaps and keeps private reference/accuracy artifacts outside the nested
+report. Sample predictions are not population trends; local artifacts grant no
+external publication or measured-quality authority.
+
 ## Architecture
 
 - `src/hiring_signals/cli.py`: readiness and explicit workflow availability.

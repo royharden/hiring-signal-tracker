@@ -1,8 +1,8 @@
-# Development status — paused 2026-10-15
+# Development status — 2026-10-15
 
-Work is paused at a coherent local checkpoint. No deployment or independent
-finished-app acceptance is claimed. The current product is a Python3.12 CLI and
-portable local libraries; it is not a hosted Bolt backend.
+Local construction resumed after the earlier pause checkpoint. No deployment or
+independent finished-app acceptance is claimed. The current product is a Python3.12
+CLI and portable local libraries; it is not a hosted Bolt backend.
 
 ## Finished locally
 
@@ -29,6 +29,19 @@ portable local libraries; it is not a hosted Bolt backend.
 - The latest CLI/readiness/integration check passed42 focused tests. Earlier scoped
   controller/domain/statistics controls also passed. These are overlapping checks
   on different candidate slices, not a fresh whole-suite or quality certificate.
+- The optional DEV sample window joins actual rules issuance to the existing
+  aggregate privacy and report renderer. It creates closed JSON/Markdown/HTML/SVG,
+  a report manifest and reproducible limitations prose. Small cohorts stay
+  withheld, missing months stay gaps, and no private quality metric enters that
+  projection. The changed sample/workflow/readiness slice passed35 focused checks
+  with original owned syntax controls, without rerunning independent DEV data.
+- Successor verification passed72 focused evaluation/report/privacy checks,
+  including interrupted nested writes and retry preservation. A separate real CLI
+  check used one newly created owned syntax record: all37 outcomes processed,
+  the small cohort stayed suppressed, three missing months stayed gaps, all nine
+  sealed files matched, and limitations reproduced from the released JSON.
+  Wrong manifest hash and malformed source refused with exit2 and no output.
+  This is tiny synthetic wiring evidence, not a rerun of the independent DEV set.
 
 ## Worked on / current scope
 
@@ -48,7 +61,7 @@ database, migration, function, auth service, SDK install or live call was starte
 ## Outstanding
 
 - Independently review this local candidate and its stated MVP scope before
-  finished-app acceptance; complete any resulting defects after explicit resume.
+  finished-app acceptance; complete resulting defects under the active local scope.
 - Finish semantic CLI/multi-method comparison and reference-baseline prediction
   integration without inventing calls, replies or quality. Join real usage/cost/
   latency only from actual provider accounting evidence.
@@ -87,3 +100,6 @@ database, migration, function, auth service, SDK install or live call was starte
 - Freeze labels/families independently of the tuner. Synthetic DEV functionality,
   unit counts and artifact hashes do not establish human/heldout quality or release
   authority. Keep source/Gold private and never send scorer labels to methods.
+- A nested report manifest seals only that report. The outer artifact manifest
+  must also exist before calling the combined evaluator output complete; preserve
+  interrupted files and use a fresh destination rather than overwriting a retry.

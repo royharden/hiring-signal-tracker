@@ -19,9 +19,18 @@ Future GitHub/Bolt import, publication and backend provisioning require actual o
 `docs/synthetic-workflow.md` documents the source-checkout commands and explicit private/public directory separation. Small original integration controls do not replace the required independent fixture/Gold set. There are no new migrations/functions/auth resources to provision. Importing this Python repository into Bolt does not provision a Python runtime; a later static viewer can consume actual verified public report assets only after the remaining checks and owner instructions.
 
 `docs/evaluation-workflow.md` gives the exact DEV input/command and normal/refusal
-behavior. Outputs are private JSON/Markdown plus an artifact manifest, not public
-viewer assets. All37 axes remain accounted; semantic and dev-majority methods are
+behavior. Default outputs are private JSON/Markdown plus an artifact manifest;
+only the explicit sample window adds the separate closed viewer assets described
+below. All37 axes remain accounted; semantic and dev-majority methods are
 explicitly unrun. Missing rule confidence stays null. No fitting, bootstrap,
 heldout reading or model calls occur in that CLI. This Python/local/static design
 is the documented MVP portability drift; importing it does not provision Python,
 independent data admission, human labels, model access or real source rights.
+
+An explicit DEV sample window now composes the same privacy/report modules into
+a nested `sample-report/` bundle plus reproducible `sample-limitations.md`.
+Only those closed sample-prediction assets are candidates for a future static
+viewer. Keep the sibling private accuracy JSON/Markdown and run inputs private.
+The report retains min-ten suppression, scope/version/policy bindings, partial
+states and missing-month gaps. It is labelled a sample estimate, not a population
+trend or quality result. Local generation/verification is not a deployment.

@@ -23,7 +23,7 @@ from hiring_signals.shared.evalkit.models import Manifest
 from hiring_signals.shared.evalkit.runner import MethodConfig
 from hiring_signals.shared.skill_dictionary import core as dictionary
 
-from . import domain, metrics
+from . import domain, metrics, sample_report
 
 PRODUCT_ROOT = Path(__file__).resolve().parents[3]
 MAX_SOURCE_BYTES = 8 * 1024 * 1024
@@ -83,6 +83,7 @@ def bindings():
                         ("rules", rules),
                         ("dictionary", dictionary),
                         ("metrics", metrics),
+                        ("sample_report", sample_report),
                     )
                 },
                 "population": "all37fields/allfrozenDEV/1",
@@ -199,11 +200,27 @@ def _markdown(summary):
     return "\n".join(lines).encode()
 
 
-def execute_dev_rules(manifest_path, *, manifest_sha256, sources_path, sources_sha256, destination):
+def execute_dev_rules(
+    manifest_path,
+    *,
+    manifest_sha256,
+    sources_path,
+    sources_sha256,
+    destination,
+    sample_months=None,
+    sample_policy="v1",
+):
     """One actual fixed DEV rules pass, with no model/capture/heldout/Gold authoring."""
     created = False
     try:
         output = _new_private_output(destination)
+        from hiring_signals.shared.aggregate_privacy import models as privacy
+
+        if sample_policy not in {"v1", "v2"} or (sample_months is None and sample_policy != "v1"):
+            raise EvaluationError("sample_window_required_for_release_policy")
+        policy = privacy.POLICY_V1 if sample_policy == "v1" else privacy.POLICY_V2
+        if sample_months is not None:
+            sample_report.validate_window(sample_months, policy)
         actual = bindings()
         manifest_data = _read(
             manifest_path, suffix=".json", maximum=1024 * 1024, sha=manifest_sha256
@@ -243,6 +260,8 @@ def execute_dev_rules(manifest_path, *, manifest_sha256, sources_path, sources_s
             )
             for line in lines
         )
+        if sample_months is not None and any(row.month not in sample_months for row in source_rows):
+            raise EvaluationError("sample_source_outside_declared_window")
         if tuple(row.item_id for row in source_rows) != entry.ordered_item_ids or len(
             {row.source_id for row in source_rows}
         ) != len(source_rows):
@@ -316,6 +335,15 @@ def execute_dev_rules(manifest_path, *, manifest_sha256, sources_path, sources_s
             axis_status_port=adapter,
         )
         summary = metrics.private_summary(comparison, adapter)
+        sample = None
+        if sample_months is not None:
+            sample = sample_report.build(
+                registry,
+                expected_item_ids=comparison.frozen_item_ids,
+                predictions=comparison.methods["rules"].actual_predictions,
+                month_ids=sample_months,
+                policy=policy,
+            )
         if bindings() != actual:
             raise EvaluationError("execution_changed_during_run")
         # Inputs remain frozen; do not manufacture a successor after a concurrent change.
@@ -343,6 +371,13 @@ def execute_dev_rules(manifest_path, *, manifest_sha256, sources_path, sources_s
             "bootstrap": "not_run",
             "threshold_fit": "not_run",
             "semantic_methods": "not_run",
+            "sample_projection": {
+                "month_ids": sample_months,
+                "policy": policy,
+                "source_scope": "gold_sample",
+            }
+            if sample is not None
+            else None,
         }
         files = {
             "private-summary.json": canonical_bytes(summary) + b"\n",
@@ -356,6 +391,18 @@ def execute_dev_rules(manifest_path, *, manifest_sha256, sources_path, sources_s
         for name, data in files.items():
             with (output / name).open("xb") as stream:
                 stream.write(data)
+        if sample is not None:
+            from hiring_signals.reporting import render
+
+            sample_directory = output / "sample-report"
+            render.export_report(sample, sample_directory)
+            if render.verify_report(sample_directory) != sample:
+                raise EvaluationError("sample_report_verification_failed")
+            files["sample-limitations.md"] = sample_report.limitations(sample).encode("utf-8")
+            with (output / "sample-limitations.md").open("xb") as stream:
+                stream.write(files["sample-limitations.md"])
+            for name in (*render.ASSETS, "manifest.json"):
+                files["sample-report/" + name] = (sample_directory / name).read_bytes()
         seal = {
             "kind": "private-synthetic-dev-artifacts/1",
             "files": {
@@ -372,6 +419,7 @@ def execute_dev_rules(manifest_path, *, manifest_sha256, sources_path, sources_s
             "provider_attempts": 0,
             "semantic_methods": "not_run",
             "heldout_read": False,
+            "sample_report": "local_closed_projection" if sample is not None else "not_requested",
             "public_release": "not_authorized",
             "artifact_manifest_sha256": _sha((output / "artifact-manifest.json").read_bytes()),
         }

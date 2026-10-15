@@ -82,6 +82,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     evaluate.add_argument("--sources", type=Path)
     evaluate.add_argument("--sources-sha256")
     evaluate.add_argument("--out", type=Path)
+    evaluate.add_argument("--sample-months", nargs=4)
+    evaluate.add_argument("--sample-policy", choices=["v1", "v2"], default="v1")
     run = commands.add_parser(
         "run-synthetic", help="Process an explicit original-synthetic manifest"
     )
@@ -115,12 +117,21 @@ def main(argv: Sequence[str] | None = None) -> int:
             args.sources_sha256,
             args.out,
         )
-        if args.show_bindings or any(value is not None for value in supplied):
+        if (
+            args.show_bindings
+            or any(value is not None for value in supplied)
+            or args.sample_months is not None
+            or args.sample_policy != "v1"
+        ):
             from hiring_signals.evaluation import workflow as evaluation
 
             try:
                 if args.show_bindings:
-                    if any(value is not None for value in supplied):
+                    if (
+                        any(value is not None for value in supplied)
+                        or args.sample_months is not None
+                        or args.sample_policy != "v1"
+                    ):
                         raise evaluation.EvaluationError("bindings_command_requires_no_input")
                     result = evaluation.bindings()
                 elif not all(value is not None for value in supplied):
@@ -132,6 +143,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                         sources_path=args.sources,
                         sources_sha256=args.sources_sha256,
                         destination=args.out,
+                        sample_months=tuple(args.sample_months)
+                        if args.sample_months is not None
+                        else None,
+                        sample_policy=args.sample_policy,
                     )
                 print(json.dumps(result, sort_keys=True))
                 return 3 if result.get("status") == "partial" else 0
