@@ -4,8 +4,10 @@ No real or independent synthetic Gold body is supplied by this implementation.
 The app's closed annotation schema lives at `src/hiring_signals/annotation/schemas.json`.
 It describes safe field decisions, source pins and neutral commands, not a second
 canonical S2 rulings/evalkit wire. The actual published rulings adapter maps the
-source classes and preserves their licensed closure; evalkit integration remains
-pending. A journal acknowledgement is not an eligible Gold export.
+source classes and preserves their licensed closure. The canonical evalkit library
+and its public synthetic controls are vendored separately. App-specific pure label
+codecs use its actual GoldRecord/FieldLabels classes; the full experiment/scorer
+join remains pending. A journal acknowledgement is not an eligible Gold export.
 
 Every required field has independent presence: **present** with its actual typed
 value (including false, explicit none, multiple and a supported unknown class),
@@ -36,3 +38,12 @@ does not author a60-post/four-month Gold corpus or generator in this module.
 Only small original syntax/controller controls were written. No source body,
 private annotation journal, heldout labels or provenance file is copied into
 the public product repo.
+
+The pure `evaluation.labels` codec requires all37 explicit field labels and
+revalidates nested mutable wire contents. It preserves false, absent and unlabelled
+values, exact salary decimal ranges with unknown units and actual multiple levels.
+Human references require an injected authority after domain validation; test spies
+do not establish actual human trust. Raw-machine projections reject human/reference
+records and keep each field's processing/error/certainty metadata. They produce no
+Prediction, Outcome, metric or benchmark. The mixed-field shared runner join needs
+its separately published owner status contract and actual source-bound app adapter.
