@@ -61,8 +61,9 @@ CLI and portable local libraries; it is not a hosted Bolt backend.
 
 The modules are joined for rules population reporting and private synthetic DEV
 evaluation. Semantic controllers and metric adapters are tested libraries; semantic
-CLI/evaluation and full annotation workflow are
-unfinished. Independent original synthetic inputs were supplied outside the public
+CLI/evaluation and genuine Human annotation workflow are
+unfinished. The new annotation entry point is restricted to original-synthetic DEV
+agent-provisional inputs. Independent original synthetic inputs were supplied outside the public
 checkout; DEV intake checked actual closed labels/source hashes/order/families.
 Heldout source/labels were not read by this implementation session. Data and
 private evaluator artifacts are not bundled or published in the product repo.
@@ -121,3 +122,36 @@ database, migration, function, auth service, SDK install or live call was starte
   can differ at one commit; preserve that distinction and capture actual runtime
   bindings. Report-only verification is not full-evaluator config equivalence,
   and a new hash never reauthorizes consumed inputs or evaluation.
+
+## Synthetic DEV annotation join
+
+`hst annotate` binds exact manifest/source/current-code/rubric/taxonomy bytes and
+an opaque owner/actor marker to an existing trusted private journal outside the
+checkout. All37 explicit choices flow through the existing session and unchanged
+canonical S2 journal. False, absence, unlabelled and not_stated remain distinct.
+No source text or rejected label is printed or stored in the journal. One explicit
+same-process retry reuses cached intents; restart reinstalls matching source and
+replays owner history, without reconstructing lost ambiguous intents or claiming
+a durable outbox. Cancellation before submission writes no labels; an interrupted
+submission can retain a real acknowledged prefix.
+
+Human/heldout/prefill operation is refused by this entry point. Marker and actor
+JSON are attribution/binding, not Human authentication, source rights or Gold.
+The earlier synthetic baseline acceptance remains exact to its recorded candidate
+and working byte edition, with the original startup failures retained. New docs
+and source bindings do not reauthorize or rerun consumed baseline inputs.
+
+The final annotation slice passed27 focused checks (25 new join controls and two
+readiness controls) in81.72 seconds of test time. The first run had10 failures
+from passing bytes to a text-only strict JSON decoder; the first repair passed24
+of25, with one incorrectly targeted fsync injection. The final control selects
+the third written event, including its acknowledged prefix, instead of counting
+internal sync calls. Both failed runs are retained outside the checkout. Real
+journal IO and injected failure evidence are distinguished; this does not certify
+power-loss recovery, hostile filesystem isolation or Human agreement. Genuine
+rights/Human/pilot/repeat/quality gates and finished-app acceptance remain outstanding.
+
+Readiness retains the compatible `evaluation_status=synthetic_dev_rules_only`
+value for the default profile, now explicitly scoped by `evaluation_status_scope`.
+`reference_baseline_status` and the implemented capability list identify the
+optional synthetic DEV baseline; rules-only wording does not exclude that opt-in.

@@ -79,3 +79,72 @@ generation authority. Controller receipt counts acknowledge recorded writes;
 they do not assert that those labels are still effective. Actor strings/ref syntax
 remain unverified without actual human evidence. Local journal tests do not prove
 power-loss recovery, hostile multi-user filesystem safety or real human agreement.
+
+## Synthetic DEV annotation CLI
+
+This command is limited to caller-admitted original synthetic DEV data with an
+`agent_provisional` actor. It rejects Human actors, heldout, repeats and prefill.
+It uses identity preparation: the original UTF8 file bytes are also the prepared
+bytes (at most32768 bytes); raw/input digests must match. `source_pin` derives the
+item identity from owner/source digests, whole-source review revision from actual
+byte length/hash, and current taxonomy/rubric. It is a binding, not source rights.
+
+Obtain actual working bindings with `hst annotate --show-bindings`. Prepare a
+closed JSON manifest outside the checkout with these exact keys:
+
+```text
+kind: synthetic-dev-annotation/1
+origin: original_synthetic
+split: dev
+owner_ref: <opaque lowercase SHA256>
+actor: {origin: agent_provisional, actor_ref: <opaque SHA256>, attestation_ref: null}
+bindings: <exact show-bindings object>
+source_file: <simple sibling leaf ending .txt>
+source: <complete SourcePin from source_pin(actual_file_bytes, owner_ref)>
+```
+
+`source` contains item_id, raw_source_sha256, input_sha256,
+evidence_revision_sha256, taxonomy_sha256 and rubric_sha256. A preparation script
+may call `hiring_signals.annotation.workflow.source_pin` and `bindings`; that
+operation reads current code/rubric and returns closed digest metadata, without
+persisting text or authenticating a person. Hash the final manifest's actual
+bytes after writing it; duplicate keys and undeclared fields refuse.
+
+The operator supplies an existing trusted owner-private directory outside the
+checkout, with an `owner.json` marker containing exactly kind
+`synthetic-dev-annotation-owner/1`, owner_ref and actor_ref matching the manifest.
+The command creates no missing directory or owner marker. Links/reparse paths,
+hard-linked input/marker files, protected directories and targets inside or above
+the checkout refuse. On POSIX, ancestor owners must be the current UID or root;
+Windows uses the trusted-directory precondition and canonical local-path checks,
+not an invented ACL/authentication proof. Keep private directories owner-controlled.
+
+```sh
+uv run hst annotate --manifest /owner/synthetic/manifest.json --manifest-sha256 <exact-byte-sha256> --journal-dir /owner/private/annotation
+```
+
+View the admitted original separately. Field prompts and fixed diagnostics go to
+stderr; stdout is one closed result JSON. Every field needs an explicit choice.
+`?` stays unlabelled and prompts again; `q`, skip, EOF or Ctrl-C before submission
+writes no labels. Invalid/rejected choices never appear in output. No prefill or
+free-text reasoning is accepted. Input is rechecked during the draft and before
+writes; source, manifest, ownership or current binding drift refuses.
+
+Exit0 means37 real durable receipts, never Human/Gold validity. Exit3 denotes
+cancel/skip/incomplete/partial/conflict/unknown/dependency-unavailable; inspect
+status and acknowledged counts. Exit2 denotes refused/failed operation and
+reports whether private effects are possible plus acknowledged receipts when
+known. Canonical replay can create a lock file before an append; refusal after
+that point does not claim zero filesystem effects. A real acknowledged prefix
+is never fictitiously rolled back. Existing torn/corrupt state is preserved,
+not automatically repaired.
+
+After an unknown/partial/unavailable append, one explicit `retry` response retries
+unchanged cached intents in the same process; `q` or EOF preserves the result.
+CAS conflicts need owner resolution. Historical exact retries are receipts of
+past writes, not current-generation authority. A fresh invocation reads current
+heads and constructs new intents; it cannot recover a lost ambiguous intent.
+The journal is bounded to1MiB/256 events for this entry point; full journals refuse
+rather than rotate/delete history. Separate owner history/retention decisions
+are required for a larger workload. No raw posting, names or source mapping belongs
+in a journal. No public aggregate or label/Gold export is produced here.

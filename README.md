@@ -1,6 +1,6 @@
 # Hiring Signal Tracker
 
-Hiring Signal Tracker is being built to measure AI-engineering and portfolio-request signals in curated job postings and publish monthly aggregates. The current package provides a keyless original-synthetic rules workflow, public reports and private synthetic DEV rules evaluation. Semantic CLI, live execution, heldout evaluation and human measurements remain unfinished.
+Hiring Signal Tracker is being built to measure AI-engineering and portfolio-request signals in curated job postings and publish monthly aggregates. The current package provides a keyless original-synthetic rules workflow, public reports, private synthetic DEV rules evaluation with an optional reference baseline, and a synthetic DEV annotation CLI. Semantic CLI, live execution, heldout evaluation and human measurements remain unfinished.
 
 ## Quickstart
 
@@ -11,7 +11,7 @@ uv sync --frozen
 uv run hst status --json
 ```
 
-The readiness response identifies the current `original_synthetic_cli_and_libraries` stage, implemented capabilities and unavailable workflows. Readiness reads no posting data or credentials and requires no network after installation.
+The readiness response identifies the current `original_synthetic_cli_and_libraries` stage, implemented capabilities and unavailable workflows. Readiness reads no posting data or credentials and requires no network after installation. Its compatible `evaluation_status` describes the default rules profile; `evaluation_status_scope` and `reference_baseline_status` distinguish the explicit optional synthetic DEV baseline.
 
 ## Current commands
 
@@ -22,10 +22,11 @@ uv run hst run-synthetic --input original-source.json --private-dir /owner/priva
 uv run hst report verify --directory /owner/reports/new-report
 uv run hst report limitations --directory /owner/private/dev/new-results/sample-report
 uv run hst eval --offline --show-bindings
+uv run hst annotate --show-bindings
 uv run python scripts/check_public_files.py
 ```
 
-`scripts/demo.py --offline` and evaluation without explicit inputs return `workflow_not_implemented` with exit code2 and create no results. Explicit evaluation accepts an owner-admitted canonical DEV manifest, original-synthetic source JSONL, exact file hashes and a new private output directory. It runs actual rules/comparison/statistics and retains Jev/generation/dev-majority as not_run. Read [the runnable input, normal and refusal guide](docs/evaluation-workflow.md). No implicit dataset, heldout, model call or human-quality claim is supplied.
+`scripts/demo.py --offline` and evaluation without explicit inputs return `workflow_not_implemented` with exit code2 and create no results. Explicit evaluation accepts an owner-admitted canonical DEV manifest, original-synthetic source JSONL, exact file hashes and a new private output directory. By default it runs rules/comparison/statistics with Jev/generation/dev-majority not_run; the explicit support option below adds actual DEV-majority fitting. Read [the runnable input, normal and refusal guide](docs/evaluation-workflow.md). No implicit dataset, heldout, model call or human-quality claim is supplied.
 
 `run-synthetic` requires an explicitly supplied original manifest and owner-private state outside the checkout. It preserves unreviewed/blocked rows in denominators and exports only closed released aggregates. Read [the input and state guide](docs/synthetic-workflow.md) before running it. Exit3 denotes partial/no-eligible processing; even exit0 does not establish quality or full workflow acceptance. Report export/verification accepts only bounded closed public JSON and new destinations.
 
@@ -48,11 +49,13 @@ sample report alone. It does not reopen private evaluator inputs or write files.
 Tampered, unsealed, population-scope or other-method reports refuse. Verification
 proves local artifact consistency, not source authenticity or rights.
 
+`annotate` accepts a hashed original-synthetic DEV manifest and an existing owner-matched private journal directory. It requires all37 explicit keyboard choices and returns real durable receipt counts; it cannot authenticate a Human or export Gold. Cancel/skip/EOF before submission writes no labels. Read [the manifest, ownership and error guide](docs/annotation-guide.md#synthetic-dev-annotation-cli) before use.
+
 ## Architecture
 
 - `src/hiring_signals/cli.py`: readiness and explicit workflow availability.
 - `src/hiring_signals/workflow.py`: supplied-original-synthetic transport/privacy/rules/private-state/population/report joins and bounded public report IO; no network/model calls or implicit corpus.
-- `src/hiring_signals/evaluation/`: canonical label codecs, concrete execution bindings, full37-field comparison and private class/skill/salary/calibration/paired statistics. The synthetic DEV CLI joins rules to supplied frozen references and private artifact hashes, without heldout reading, model access or fitting/bootstrap.
+- `src/hiring_signals/evaluation/`: canonical label codecs, concrete execution bindings, full37-field comparison and private class/skill/salary/calibration/paired statistics. The synthetic DEV CLI joins rules to supplied frozen references and private artifact hashes, without heldout reading or model access. Optional DEV-majority fitting is explicit; bootstrap is not run by this CLI.
 - `src/hiring_signals/public_files.py`: bounded checks of staged product paths and text for private material.
 - `src/hiring_signals/contracts.py`: 37 mandatory field IDs, 30 separate skill judgments, evidence/process consistency and closed private derivations. Actor references are self-attestation, not authentication.
 - `src/hiring_signals/ingest/`: bounded original-synthetic transport, reviewed-term transient redaction and generation-validating private HMAC/SQLite state. No live HN acquisition is implemented.
@@ -60,7 +63,7 @@ proves local artifact consistency, not source authenticity or rights.
 - `src/hiring_signals/shared/skill_dictionary/`: thirty original alias entries, explicit clause-local requests/exclusions/unknowns and source-bound byte references; standalone M2/M9 consumers are exercised.
 - `src/hiring_signals/extract/rules.py`: narrow deterministic duty/application/category/salary/location grammar and actual private-state adapter. No calibrated confidence or empirical extraction-quality claim.
 - `src/hiring_signals/reporting/`: expected-ID monthly accounting and closed JSON/Markdown/HTML/four-month SVG exports. Missing/suppressed/partial points are gaps; no measured-quality rows. See `docs/reporting.md` for scope, version, denominator and current conservative suppression limits.
-- `src/hiring_signals/annotation/` and `adapters/rulings.py`: transient37-field keyboard/session controls and safe intents mapped to the actual canonical private journal, with fsync acknowledgements, current-source checks and head conflicts. No implicit absence, blind prefill or mock-as-human Gold. Human/Gold validation and CLI workflow remain pending; see `docs/annotation-guide.md` and `docs/gold-format.md`.
+- `src/hiring_signals/annotation/` and `adapters/rulings.py`: transient37-field keyboard/session controls and safe intents mapped to the actual canonical private journal, with fsync acknowledgements, current-source checks and head conflicts. No implicit absence, blind prefill or mock-as-human Gold. The explicit synthetic DEV CLI joins these to a real private journal; Human/Gold validation remains pending; see `docs/annotation-guide.md` and `docs/gold-format.md`.
 - `src/hiring_signals/shared/screen/` and `adapters/screen.py`: unchanged canonical offline rules/preparation plus an S10 gate over complete reviewed privacy-redacted input. Actual holds block semantic input; deterministic outcomes remain separate. Model probabilities stay null. See `VENDORED.md`; S6 typed-screen integration remains pending.
 - `src/hiring_signals/shared/providers/` and `shared/callledger/`: unchanged canonical offline controller and actual SQLite accounting, with moved allocation/replay/error/cumulative-limit controls. Synthetic replies/prices remain synthetic. Live adapters remain pending; see `docs/providers.md`.
 - `extract/jev.py`, `extract/generative.py`, `extract/semantic.py` and `adapters/providers.py`: all69 native questions/all37 field mappings, closed generation schema and actual zero-outbound synthetic Jev lookup orchestration. Absence, explicit negatives, unknown units and partial failures remain distinct. `adapters/generation.py` runs the full37 generation decoder with actual canonical counted fixed repair in injected simulation: two total transport/content attempts, at most one repair, actual counters/ledger liability and final physical-request provenance. It supplies no SDK/live-model evidence. Semantic CLI joins and quality/data gates remain pending; see `docs/providers.md`.

@@ -34,6 +34,7 @@ def scaffold_status() -> dict[str, object]:
             "annotation_session_library",
             "offline_rules_screen",
             "canonical_annotation_journal",
+            "synthetic_dev_annotation_cli",
             "canonical_offline_provider_ledger",
             "semantic_question_schema_compilers",
             "synthetic_offline_jev_extraction",
@@ -53,7 +54,7 @@ def scaffold_status() -> dict[str, object]:
             "live_cli_ingestion",
             "semantic_cli_extraction",
             "live_acquisition",
-            "annotation",
+            "human_annotation_cli",
             "heldout_evaluation",
             "semantic_cli_evaluation",
             "real_population_reports",
@@ -64,6 +65,8 @@ def scaffold_status() -> dict[str, object]:
         "network_required": False,
         "credentials_required": False,
         "evaluation_status": "synthetic_dev_rules_only",
+        "evaluation_status_scope": "default_profile",
+        "reference_baseline_status": "explicit_opt_in_synthetic_dev",
     }
 
 
@@ -87,6 +90,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     evaluate.add_argument("--sample-months", nargs=4)
     evaluate.add_argument("--sample-policy", choices=["v1", "v2"], default="v1")
     evaluate.add_argument("--dev-majority-min-support", type=int)
+    annotate = commands.add_parser(
+        "annotate", help="Annotate explicit original-synthetic DEV input"
+    )
+    annotate.add_argument("--show-bindings", action="store_true")
+    annotate.add_argument("--manifest", type=Path)
+    annotate.add_argument("--manifest-sha256")
+    annotate.add_argument("--journal-dir", type=Path)
     run = commands.add_parser(
         "run-synthetic", help="Process an explicit original-synthetic manifest"
     )
@@ -114,6 +124,54 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "Use status --json."
             )
         return 0
+    if args.command == "annotate":
+        from hiring_signals.annotation import workflow as annotation
+
+        def read_choice(prompt):
+            # Prompts and diagnostics use stderr; stdout remains one closed JSON result.
+            print(prompt, end="", file=sys.stderr, flush=True)
+            line = sys.stdin.readline(258)
+            if not line:
+                raise EOFError
+            if len(line) > 257 or (len(line) == 257 and not line.endswith("\n")):
+                # Do not echo an unbounded/rejected line or treat its tail as new choices.
+                raise EOFError
+            return line.rstrip("\r\n")
+
+        try:
+            supplied = (args.manifest, args.manifest_sha256, args.journal_dir)
+            if args.show_bindings and not any(value is not None for value in supplied):
+                result = annotation.bindings()
+            elif args.show_bindings or not all(value is not None for value in supplied):
+                raise annotation.AnnotationError("annotation_explicit_inputs_required")
+            else:
+                result = annotation.execute(
+                    args.manifest,
+                    manifest_sha256=args.manifest_sha256,
+                    journal_directory=args.journal_dir,
+                    reader=read_choice,
+                    writer=lambda message: print(message, file=sys.stderr),
+                )
+            print(json.dumps(result, sort_keys=True))
+            return 0 if result.get("status") in {None, "owner_receipts_complete"} else 3
+        except annotation.AnnotationError as error:
+            print(
+                json.dumps(
+                    {
+                        "code": error.code,
+                        "private_effects_possible": error.private_effects_possible,
+                        "durable_acknowledgments_this_process": error.durable_acknowledgments,
+                    }
+                ),
+                file=sys.stderr,
+            )
+            return 2
+        except (Exception, KeyboardInterrupt):
+            print(
+                json.dumps({"code": "annotation_failed", "private_effects_possible": True}),
+                file=sys.stderr,
+            )
+            return 2
     if args.command == "eval" and args.offline:
         supplied = (
             args.manifest,
