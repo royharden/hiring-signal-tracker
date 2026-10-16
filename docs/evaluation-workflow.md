@@ -174,3 +174,23 @@ are not applicable, rather than borrowed from a rules extraction. Jev/generation
 stay not run. The optional sample report still describes rules predictions only.
 No Human authority, source rights, controller admission or consumed-run access is
 created by this opt-in. All actual input/execution grants remain necessary.
+
+## Installed wheel
+
+The installed `hst eval --offline --show-bindings` command resolves the exact
+wheel-shipped rubric through the same product-asset resolver as annotation.
+It works from an unrelated directory without reading a source checkout. This
+applies to both default rules bindings and the explicit majority support option.
+
+Prepare a new manifest from the actual installed runtime bindings, then use the
+same explicit-input command above with private inputs and a new private output
+directory outside the installed product package. Resource or implementation
+changes invalidate existing bindings; package version equality does not permit
+reusing an old manifest or consumed evaluation grant.
+
+Installed regression controls run fresh original synthetic syntax through rules,
+the private artifact seal, a suppressed sample report, verification and reproduced
+limitations. Wrong manifest hashes and malformed source rows refuse before output.
+They block network, subprocess and source-checkout reads inside the command.
+This verifies that narrow installed path on the tested host, not human/heldout
+quality, prior admitted data, live providers or cross-platform application readiness.

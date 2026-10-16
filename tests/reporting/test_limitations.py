@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 import pytest
-import test_reporting as h
+import test_population_reporting as h
 
 from hiring_signals import cli
 from hiring_signals.reporting import render

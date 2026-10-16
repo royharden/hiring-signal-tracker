@@ -96,17 +96,20 @@ Live Hacker News import remains subject to a recorded current terms/data grant. 
 
 Coding agents wrote this package. Local verification covers the commands, contracts and guard above; later workflow, provider, reusable-module and independent app acceptance evidence remain separate.
 
-## Installed annotation bindings
+## Installed runtime assets
 
-A built wheel now includes the exact annotation rubric, VENDORED record and
-third-party LICENSES notices. `annotate --show-bindings` resolves package files
-from its installed location; it does not require a checkout or a particular cwd.
+A built wheel includes the exact annotation rubric, VENDORED record and
+third-party LICENSES notices. `annotate --show-bindings` and
+`eval --offline --show-bindings` share package asset resolution; they do not
+require a checkout or a particular cwd.
 The source rubric remains `docs/annotation-guide.md`; wheel construction copies
 that file directly, without maintaining a second committed rubric.
 
 Obtain fresh bindings from the actual runtime before preparing a new manifest.
 Code/asset changes invalidate older bindings even at the same package version.
-The installed-wheel checks cover input-free bindings, readiness, argument refusal
-and exact asset/license bytes. They do not rerun the prior annotation or baseline
-inputs, certify an installed posting workflow, qualify other commands' resource
-paths or establish full application/Bolt portability.
+Installed-wheel checks also exercise rules evaluation on fresh original synthetic
+syntax controls, the suppressed sample report and reproducible limitations, plus
+wrong-hash/malformed-source refusal before output. These are regression controls,
+not the prior admitted DEV inputs or a measured benchmark. Installed annotation
+with source inputs, other commands, other operating systems and hosted Bolt
+operation remain unqualified.

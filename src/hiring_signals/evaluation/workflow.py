@@ -13,6 +13,7 @@ from typing import Annotated, Literal
 from pydantic import Field, TypeAdapter
 
 from hiring_signals import contracts as c
+from hiring_signals import resources
 from hiring_signals.adapters.rulings import SourceAuthority
 from hiring_signals.annotation.models import SourcePin
 from hiring_signals.extract import rules
@@ -26,7 +27,7 @@ from hiring_signals.shared.skill_dictionary import core as dictionary
 
 from . import domain, majority, metrics, sample_report
 
-PRODUCT_ROOT = Path(__file__).resolve().parents[3]
+PRODUCT_ROOT = resources.PRODUCT_ROOT
 MAX_SOURCE_BYTES = 8 * 1024 * 1024
 MAX_ROWS = 512
 DENIED = {
@@ -71,7 +72,7 @@ def bindings(*, dev_majority_min_support=None):
     ):
         raise EvaluationError("explicit_majority_support_required")
     taxonomy = _sha(canonical_bytes({"fields": c.FIELD_IDS, "skills": c.SKILL_IDS}))
-    rubric = _sha((PRODUCT_ROOT / "docs/annotation-guide.md").read_bytes())
+    rubric = _sha(resources.RUBRIC_PATH.read_bytes())
     domain_sha = domain._implementation()
     config = _sha(
         canonical_bytes(
@@ -85,6 +86,7 @@ def bindings(*, dev_majority_min_support=None):
                     name: _sha(Path(module.__file__).read_bytes())
                     for name, module in (
                         ("workflow", __import__(__name__, fromlist=["*"])),
+                        ("resources", resources),
                         ("rules", rules),
                         ("dictionary", dictionary),
                         ("metrics", metrics),

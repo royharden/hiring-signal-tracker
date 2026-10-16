@@ -214,13 +214,15 @@ def test_actual_bindings_command_reads_only_product_metadata_and_is_explicit():
     assert json.loads(error.getvalue())["code"] == "bindings_command_requires_no_input"
 
 
-def test_bindings_include_the_canonical_report_limitations_source(tmp_path, monkeypatch):
-    """Catches moving prose code outside the frozen configuration's implementation hashes."""
+@pytest.mark.parametrize("module_name", ["report_limitations", "resources"])
+def test_bindings_include_the_canonical_helper_sources(tmp_path, monkeypatch, module_name):
+    """Catches resource/prose helpers changing outside frozen execution configuration pins."""
     before = w.bindings()
-    source = Path(w.report_limitations.__file__)
+    module = getattr(w, module_name)
+    source = Path(module.__file__)
     changed = tmp_path / "changed-helper.py"
     changed.write_bytes(source.read_bytes() + b"\n# Original binding change control\n")
-    monkeypatch.setattr(w.report_limitations, "__file__", str(changed))
+    monkeypatch.setattr(module, "__file__", str(changed))
     after = w.bindings()
     assert after["config_sha256"] != before["config_sha256"]
     assert after["domain_adapter_sha256"] == before["domain_adapter_sha256"]

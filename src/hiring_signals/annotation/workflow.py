@@ -17,21 +17,13 @@ from pydantic import Field, TypeAdapter
 
 from hiring_signals import contracts as c
 from hiring_signals.adapters import rulings
+from hiring_signals.resources import PACKAGE_ROOT, PRODUCT_ROOT, RUBRIC_PATH
 from hiring_signals.shared.callledger.models import decode_wire_json
 from hiring_signals.shared.evalkit.corpus import contained_corpus_path
 from hiring_signals.shared.rulings.identity import canonical_bytes
 
 from . import models, session
 
-PACKAGE_ROOT = Path(__file__).resolve().parents[1]
-_REPO_ROOT = PACKAGE_ROOT.parent.parent
-SOURCE_CHECKOUT = PACKAGE_ROOT.parent.name == "src" and (_REPO_ROOT / "pyproject.toml").is_file()
-PRODUCT_ROOT = _REPO_ROOT if SOURCE_CHECKOUT else PACKAGE_ROOT
-RUBRIC_PATH = (
-    PRODUCT_ROOT / "docs/annotation-guide.md"
-    if SOURCE_CHECKOUT
-    else PACKAGE_ROOT / "data/annotation-guide.md"
-)
 MAX_MANIFEST = 16 * 1024
 MAX_JOURNAL = 1024 * 1024
 DENIED = {
@@ -94,6 +86,7 @@ def bindings() -> dict:
     owned = [
         "cli.py",
         "contracts.py",
+        "resources.py",
         "annotation/models.py",
         "annotation/session.py",
         "annotation/workflow.py",

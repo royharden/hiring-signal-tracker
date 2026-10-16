@@ -50,10 +50,13 @@ Human-label, real-data, cloud or Bolt execution capability.
 
 The annotation CLI uses an explicit hashed synthetic DEV manifest, current byte bindings and an existing owner-matched directory outside the checkout. No backend is provisioned by import. Its source-free marker is an ownership binding within a trusted local directory, not Human authentication or hostile multi-user isolation. Actual runtime checks and their scope are recorded in DEVELOPMENT-STATUS.md.
 
-A local wheel can carry the annotation rubric and existing vendor/license notices.
-The input-free installed `annotate --show-bindings` command was checked from an
-unrelated directory against exact checkout bindings. This is Python package
-resource portability only: installed annotation with source inputs, other CLI
-resource paths, cross-platform runtime and hosted Bolt operation remain unqualified.
+A local wheel carries the annotation rubric and existing vendor/license notices.
+Annotation and DEV evaluation share the product-asset resolver. Installed default
+and majority binding commands use exact package bytes from an unrelated directory.
+Fresh original synthetic regression controls cover installed rules evaluation,
+private artifact closure, a suppressed sample report and reproduced limitations,
+plus wrong-hash/malformed-source refusal. They are not prior admitted DEV runs or
+quality evidence. Installed annotation with source inputs, other CLI resource
+paths, cross-platform runtime and hosted Bolt operation remain unqualified.
 New code produces new implementation bindings; old data grants/manifests are not
 silently migrated or rerun by packaging.
