@@ -49,3 +49,11 @@ baseline salary candidate/normalization claim is supplied. This adds no SDK/mode
 Human-label, real-data, cloud or Bolt execution capability.
 
 The annotation CLI uses an explicit hashed synthetic DEV manifest, current byte bindings and an existing owner-matched directory outside the checkout. No backend is provisioned by import. Its source-free marker is an ownership binding within a trusted local directory, not Human authentication or hostile multi-user isolation. Actual runtime checks and their scope are recorded in DEVELOPMENT-STATUS.md.
+
+A local wheel can carry the annotation rubric and existing vendor/license notices.
+The input-free installed `annotate --show-bindings` command was checked from an
+unrelated directory against exact checkout bindings. This is Python package
+resource portability only: installed annotation with source inputs, other CLI
+resource paths, cross-platform runtime and hosted Bolt operation remain unqualified.
+New code produces new implementation bindings; old data grants/manifests are not
+silently migrated or rerun by packaging.

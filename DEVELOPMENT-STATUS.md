@@ -155,3 +155,24 @@ Readiness retains the compatible `evaluation_status=synthetic_dev_rules_only`
 value for the default profile, now explicitly scoped by `evaluation_status_scope`.
 `reference_baseline_status` and the implemented capability list identify the
 optional synthetic DEV baseline; rules-only wording does not exclude that opt-in.
+
+## Input-free wheel resource boundary
+
+The first built wheel installed but `annotate --show-bindings` refused outside the
+checkout: runtime binding code used repository-only src/docs paths, and the wheel
+contained neither the rubric nor third-party notices. That original wheel and
+failure streams are retained outside the checkout. Binding code now resolves
+actual package files with stable logical source names; wheel configuration copies
+the existing rubric, VENDORED and LICENSES into package data without a duplicate
+committed source. New working bindings are distinct from the accepted817fc33
+annotation edition and earlier baseline39f356.
+
+Four focused checks passed in5.62 test seconds: real isolated installed command
+from an unrelated cwd matches checkout bindings; exact rubric/canonical S2/license
+asset bytes are present; partial arguments refuse without state; readiness stays
+keyless and incomplete. The corrected wheel build/reinstall was offline using
+an owned outer cache/environment. Initial necessary public locked dependency/build
+setup was authorized ordinary local setup; actual logs/versions are preserved.
+No posting, annotation/Gold, baseline, provider or heldout inputs were used. This
+checks package resource lookup, not the installed data journey, other commands,
+Linux/macOS, model/native worker qualification or whole-app/Bolt acceptance.

@@ -23,7 +23,15 @@ from hiring_signals.shared.rulings.identity import canonical_bytes
 
 from . import models, session
 
-PRODUCT_ROOT = Path(__file__).resolve().parents[3]
+PACKAGE_ROOT = Path(__file__).resolve().parents[1]
+_REPO_ROOT = PACKAGE_ROOT.parent.parent
+SOURCE_CHECKOUT = PACKAGE_ROOT.parent.name == "src" and (_REPO_ROOT / "pyproject.toml").is_file()
+PRODUCT_ROOT = _REPO_ROOT if SOURCE_CHECKOUT else PACKAGE_ROOT
+RUBRIC_PATH = (
+    PRODUCT_ROOT / "docs/annotation-guide.md"
+    if SOURCE_CHECKOUT
+    else PACKAGE_ROOT / "data/annotation-guide.md"
+)
 MAX_MANIFEST = 16 * 1024
 MAX_JOURNAL = 1024 * 1024
 DENIED = {
@@ -84,24 +92,32 @@ def _sha(data: bytes) -> str:
 def bindings() -> dict:
     """Actual working bytes, not a claim of Git LF/CRLF runtime equivalence."""
     owned = [
-        "src/hiring_signals/cli.py",
-        "src/hiring_signals/contracts.py",
-        "src/hiring_signals/annotation/models.py",
-        "src/hiring_signals/annotation/session.py",
-        "src/hiring_signals/annotation/workflow.py",
-        "src/hiring_signals/adapters/rulings.py",
-        "src/hiring_signals/shared/callledger/models.py",
-        "src/hiring_signals/shared/evalkit/corpus.py",
-        "src/hiring_signals/shared/evalkit/models.py",
-        "src/hiring_signals/shared/evalkit/identity.py",
+        "cli.py",
+        "contracts.py",
+        "annotation/models.py",
+        "annotation/session.py",
+        "annotation/workflow.py",
+        "adapters/rulings.py",
+        "shared/callledger/models.py",
+        "shared/evalkit/corpus.py",
+        "shared/evalkit/models.py",
+        "shared/evalkit/identity.py",
     ]
-    shared = sorted((PRODUCT_ROOT / "src/hiring_signals/shared/rulings").glob("*.py"))
-    hashes = {name: _sha((PRODUCT_ROOT / name).read_bytes()) for name in owned}
-    hashes.update({str(p.relative_to(PRODUCT_ROOT)): _sha(p.read_bytes()) for p in shared})
+    shared = sorted((PACKAGE_ROOT / "shared/rulings").glob("*.py"))
+    # Stable logical names, exact actual bytes: installation location is not an input.
+    hashes = {
+        "src/hiring_signals/" + name: _sha((PACKAGE_ROOT / name).read_bytes()) for name in owned
+    }
+    hashes.update(
+        {
+            "src/hiring_signals/" + p.relative_to(PACKAGE_ROOT).as_posix(): _sha(p.read_bytes())
+            for p in shared
+        }
+    )
     return Bindings(
         kind="synthetic-dev-annotation-bindings/1",
         taxonomy_sha256=_sha(canonical_bytes({"fields": c.FIELD_IDS, "skills": c.SKILL_IDS})),
-        rubric_sha256=_sha((PRODUCT_ROOT / "docs/annotation-guide.md").read_bytes()),
+        rubric_sha256=_sha(RUBRIC_PATH.read_bytes()),
         implementation_sha256=_sha(canonical_bytes(hashes)),
     ).model_dump()
 

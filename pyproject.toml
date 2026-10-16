@@ -20,6 +20,11 @@ dev = ["pytest>=8,<10", "ruff>=0.12,<1"]
 [tool.hatch.build.targets.wheel]
 packages = ["src/hiring_signals"]
 
+[tool.hatch.build.targets.wheel.force-include]
+"docs/annotation-guide.md" = "hiring_signals/data/annotation-guide.md"
+"VENDORED.md" = "hiring_signals/data/VENDORED.md"
+"LICENSES" = "hiring_signals/data/LICENSES"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
