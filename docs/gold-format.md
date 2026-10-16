@@ -81,5 +81,15 @@ train; unsupported fields get no guessed defaults. This support policy does not
 replace the separate per-class calibration/default-selection requirement. The fit
 emits no predictions, extraction candidates, calls, quality scores or public report.
 Heldout metadata is retained by the manifest; its bodies are never read by this
-fitter. Actual independent labels/rights/history and later prediction integration
-remain required.
+fitter. Actual independent labels/rights/history remain required.
+
+The explicit synthetic DEV CLI now joins an actual live fit to the trusted domain
+registry and canonical comparison runner. The baseline learns one fixed value per
+supported field from DEV labels; extraction methods still receive current source
+text rather than per-item scorer labels. Its predictions are explicitly tagged
+learned guesses, with no fabricated candidate/evidence records or confidence.
+Unlabelled fields do not train and unsupported fields abstain. Private scores on
+the same training DEV data are resubstitution functionality, not Human/heldout
+quality or permission to select a production default. Human-reference validation
+and frozen/source/current-code checks remain unchanged; a hash-shaped copied fit
+does not establish actual fitter issuance.

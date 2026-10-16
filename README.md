@@ -36,6 +36,13 @@ months as gaps and keeps private reference/accuracy artifacts outside the nested
 report. Sample predictions are not population trends; local artifacts grant no
 external publication or measured-quality authority.
 
+An explicit `--dev-majority-min-support N` option adds the DEV-majority reference
+baseline to private evaluation. Obtain matching bindings with that option before
+preparing the admitted manifest. Unsupported fields abstain; learned guesses do
+not fabricate extraction evidence. The same-DEV comparison is resubstitution,
+not heldout quality or a production default. See the evaluation guide for the
+exact opt-in and remaining data/Human requirements.
+
 `report limitations` prints reproducible Markdown from a verified closed rules
 sample report alone. It does not reopen private evaluator inputs or write files.
 Tampered, unsealed, population-scope or other-method reports refuse. Verification

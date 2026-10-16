@@ -6,20 +6,32 @@ report. Its private fitted choices are guesses learned from development labels.
 
 import hashlib
 import json
+import weakref
 from collections import Counter
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
 from hiring_signals.contracts import FIELD_IDS
-from hiring_signals.shared.evalkit.corpus import load_corpus
+from hiring_signals.shared.evalkit.corpus import contained_corpus_path, load_corpus
 from hiring_signals.shared.evalkit.identity import canonical_bytes
 from hiring_signals.shared.evalkit.models import GoldRecord, Manifest
 
-from .labels import project_reference
+from .labels import MachineField, project_reference
 
 TIE_POLICY = "canonical-json-lexicographic-v1"
-_FORBIDDEN = {".creds", ".chatexports", ".agent-registry", ".thinking", ".agent-work", ".git"}
+_FORBIDDEN = {
+    ".creds",
+    ".chatexports",
+    ".agent-registry",
+    ".thinking",
+    ".agent-work",
+    ".git",
+    "heldout",
+    "private-scratch",
+    ".thinkinglane",
+}
+_ISSUED = {}
 
 
 class MajorityFitError(ValueError):
@@ -55,6 +67,82 @@ class MajorityFit:
     label_version: str | None
     label_sources: tuple[str, ...]
     choices: tuple[MajorityChoice, ...]
+
+
+def _payload(fit):
+    return {
+        "version": "dev-majority-fit/1",
+        **{
+            key: getattr(fit, key)
+            for key in (
+                "manifest_sha256",
+                "dev_items_sha256",
+                "dev_order_sha256",
+                "implementation_sha256",
+                "min_support",
+                "tie_policy",
+                "dev_N",
+                "label_version",
+                "label_sources",
+            )
+        },
+        "choices": [
+            {
+                "field": row.field_id,
+                "value": row.value(),
+                "eligible_N": row.eligible_N,
+                "chosen_N": row.chosen_N,
+            }
+            for row in fit.choices
+        ],
+    }
+
+
+def validate_fit(fit):
+    """Actual in-process fitter issuance; matching caller-supplied hashes are insufficient.
+
+    This trusted Python boundary is not authentication against hostile Python code.
+    Only the original admitted DEV file is checked; no heldout path is selected.
+    """
+    try:
+        proof = _ISSUED.get(id(fit))
+        if type(fit) is not MajorityFit or proof is None or proof[0]() is not fit:
+            raise ValueError()
+        if fit.implementation_sha256 != hashlib.sha256(Path(__file__).read_bytes()).hexdigest():
+            raise ValueError()
+        if hashlib.sha256(canonical_bytes(_payload(fit))).hexdigest() != fit.model_sha256:
+            raise ValueError()
+        path = contained_corpus_path(proof[1], proof[2])
+        if path.stat().st_size != proof[3]:
+            raise ValueError()
+        with path.open("rb") as handle:
+            data = handle.read(proof[3] + 1)
+        if hashlib.sha256(data).hexdigest() != fit.dev_items_sha256:
+            raise ValueError()
+        return fit
+    except Exception:
+        raise MajorityFitError("unissued_changed_or_stale_majority_fit") from None
+
+
+def project_fit(fit):
+    """Learned constant guesses, never fabricated extraction candidate/evidence records."""
+    fit = validate_fit(fit)
+    result = []
+    for choice in fit.choices:
+        value = choice.value()
+        result.append(
+            MachineField(
+                choice.field_id,
+                value,
+                "ok" if choice.status == "trained" else "abstained",
+                "dev_majority_choice" if choice.status == "trained" else "uncertain",
+                None,
+                None,
+                None,
+                None,
+            )
+        )
+    return tuple(result)
 
 
 class _ReferenceValidation:
@@ -143,7 +231,7 @@ def fit_dev_majority(
                 for row in choices
             ],
         }
-        return MajorityFit(
+        fit = MajorityFit(
             manifest_sha,
             dev[0].items_sha256,
             dev[0].ordered_ids_sha256,
@@ -156,6 +244,18 @@ def fit_dev_majority(
             origins,
             tuple(choices),
         )
+        # Keep the public fitted value immutable and prove this process actually fit it.
+        # Weak ownership avoids retaining the private choices after callers release a fit.
+        assert hashlib.sha256(canonical_bytes(_payload(fit))).hexdigest() == fit.model_sha256
+        dev_path = contained_corpus_path(root, dev[0].items_file)
+        key = id(fit)
+        _ISSUED[key] = (
+            weakref.ref(fit, lambda _: _ISSUED.pop(key, None)),
+            root,
+            dev[0].items_file,
+            dev_path.stat().st_size,
+        )
+        return validate_fit(fit)
     except MajorityFitError:
         raise
     except Exception:

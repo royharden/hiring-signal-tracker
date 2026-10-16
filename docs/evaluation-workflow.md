@@ -143,3 +143,34 @@ Only the optional sample-report assets use that closed release boundary. Hash
 closure does not authorize publication or certify a finished app.
 The separate `run-synthetic` command produces population reports; a DEV Gold sample
 is not a population and is not converted to monthly population trends here.
+
+## Explicit DEV-majority reference baseline
+
+The default remains rules only. To also fit and execute the reference baseline,
+select the same explicit support policy when obtaining bindings and evaluating:
+
+```sh
+uv run hst eval --offline --show-bindings --dev-majority-min-support 2
+```
+
+Prepare a newly admitted manifest with those actual bindings, then append
+`--dev-majority-min-support 2` to the explicit-input evaluation command. A manifest
+bound to the rules-only configuration refuses. Support must be an explicit positive
+integer; this is a baseline training policy, not the per-class support required for
+threshold calibration or production method selection.
+
+The existing canonical frozen reader fits only DEV references. Only a live fit
+issued by that fitter is admitted; copies, changed training bytes or changed fitter
+code refuse. Learned constant guesses have their own tagged prediction profile.
+They never fabricate extraction candidate references or claim to observe a value
+in the current posting. Unsupported fields abstain, unlabelled training cells do
+not train, false stays distinct from absence, and certainty stays unmeasured.
+
+The private summary and Markdown include actual rules and baseline outcomes. The
+run record binds the fit/model hash, support, DEV population and baseline field
+count. This command fits and scores the same synthetic DEV set: **resubstitution**,
+not independent or heldout quality. Baseline salary candidate recall/normalization
+are not applicable, rather than borrowed from a rules extraction. Jev/generation
+stay not run. The optional sample report still describes rules predictions only.
+No Human authority, source rights, controller admission or consumed-run access is
+created by this opt-in. All actual input/execution grants remain necessary.

@@ -44,6 +44,7 @@ def scaffold_status() -> dict[str, object]:
             "private_canonical_37field_comparison",
             "private_class_skill_salary_calibration_statistics",
             "explicit_synthetic_dev_rules_evaluation_cli",
+            "explicit_synthetic_dev_majority_reference_baseline",
             "original_synthetic_rules_cli",
             "public_report_export_verify_cli",
             "public_sample_limitations_cli",
@@ -85,6 +86,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     evaluate.add_argument("--out", type=Path)
     evaluate.add_argument("--sample-months", nargs=4)
     evaluate.add_argument("--sample-policy", choices=["v1", "v2"], default="v1")
+    evaluate.add_argument("--dev-majority-min-support", type=int)
     run = commands.add_parser(
         "run-synthetic", help="Process an explicit original-synthetic manifest"
     )
@@ -125,6 +127,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             or any(value is not None for value in supplied)
             or args.sample_months is not None
             or args.sample_policy != "v1"
+            or args.dev_majority_min_support is not None
         ):
             from hiring_signals.evaluation import workflow as evaluation
 
@@ -136,7 +139,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                         or args.sample_policy != "v1"
                     ):
                         raise evaluation.EvaluationError("bindings_command_requires_no_input")
-                    result = evaluation.bindings()
+                    result = evaluation.bindings(
+                        dev_majority_min_support=args.dev_majority_min_support
+                    )
                 elif not all(value is not None for value in supplied):
                     raise evaluation.EvaluationError("explicit_dev_inputs_and_hashes_required")
                 else:
@@ -150,6 +155,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                         if args.sample_months is not None
                         else None,
                         sample_policy=args.sample_policy,
+                        dev_majority_min_support=args.dev_majority_min_support,
                     )
                 print(json.dumps(result, sort_keys=True))
                 return 3 if result.get("status") == "partial" else 0

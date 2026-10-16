@@ -47,12 +47,21 @@ CLI and portable local libraries; it is not a hosted Bolt backend.
   The canonical helper now lives in reporting; evaluation retains a compatible
   entrypoint and binds the helper bytes in its configuration fingerprint. A moved
   package control forbids evaluator imports, protected inputs and network use.
+- An explicit support option now joins actual DEV-majority fitting and prediction
+  to the canonical rules comparison and private summaries. Learned baseline values
+  use a tagged profile rather than fabricated extraction candidates; unsupported
+  fields abstain and fit/source/code changes refuse. The final combined slice
+  passed62 focused tests after correcting an absent-reference test value to null
+  and ensuring decoded projections are fresh; initial7 fixture failures remain
+  recorded. The final real CLI pass used3 newly owned syntax
+  controls and processed111 fields per method. This is same-DEV resubstitution
+  functionality, not independent Human/heldout quality or production calibration.
 
 ## Worked on / current scope
 
 The modules are joined for rules population reporting and private synthetic DEV
 evaluation. Semantic controllers and metric adapters are tested libraries; semantic
-CLI/evaluation, majority prediction integration and full annotation workflow are
+CLI/evaluation and full annotation workflow are
 unfinished. Independent original synthetic inputs were supplied outside the public
 checkout; DEV intake checked actual closed labels/source hashes/order/families.
 Heldout source/labels were not read by this implementation session. Data and
@@ -67,8 +76,8 @@ database, migration, function, auth service, SDK install or live call was starte
 
 - Independently review this local candidate and its stated MVP scope before
   finished-app acceptance; complete resulting defects under the active local scope.
-- Finish semantic CLI/multi-method comparison and reference-baseline prediction
-  integration without inventing calls, replies or quality. Join real usage/cost/
+- Finish semantic CLI/multi-method comparison against the reference baseline
+  without inventing calls, replies or quality. Join real usage/cost/
   latency only from actual provider accounting evidence.
 - Preserve independent source/Gold provenance, frozen family splits and controlled
   heldout exposure. Small synthetic coverage floors do not satisfy per-class

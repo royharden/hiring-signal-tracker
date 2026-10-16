@@ -24,7 +24,7 @@ from hiring_signals.shared.evalkit.models import Manifest
 from hiring_signals.shared.evalkit.runner import MethodConfig
 from hiring_signals.shared.skill_dictionary import core as dictionary
 
-from . import domain, metrics, sample_report
+from . import domain, majority, metrics, sample_report
 
 PRODUCT_ROOT = Path(__file__).resolve().parents[3]
 MAX_SOURCE_BYTES = 8 * 1024 * 1024
@@ -64,8 +64,12 @@ def _sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def bindings():
+def bindings(*, dev_majority_min_support=None):
     """Pathless actual local execution pins for a separately prepared DEV manifest."""
+    if dev_majority_min_support is not None and (
+        type(dev_majority_min_support) is not int or not 1 <= dev_majority_min_support <= MAX_ROWS
+    ):
+        raise EvaluationError("explicit_majority_support_required")
     taxonomy = _sha(canonical_bytes({"fields": c.FIELD_IDS, "skills": c.SKILL_IDS}))
     rubric = _sha((PRODUCT_ROOT / "docs/annotation-guide.md").read_bytes())
     domain_sha = domain._implementation()
@@ -91,7 +95,10 @@ def bindings():
                 "population": "all37fields/allfrozenDEV/1",
                 "projection": "private-only/1",
                 "method": "rules",
-                "methods_not_run": ("jev", "generative", "dev_majority"),
+                "dev_majority_min_support": dev_majority_min_support,
+                "methods_not_run": ("jev", "generative")
+                if dev_majority_min_support is not None
+                else ("jev", "generative", "dev_majority"),
             }
         )
     )
@@ -103,7 +110,10 @@ def bindings():
         "rubric_sha256": rubric,
         "scorer_version": "hiring-field-exact/1",
         "private_projection": "private-only/1",
-        "support_policy": "no_fit_or_intervals/1",
+        "support_policy": "reference_fit_no_threshold_or_intervals/1"
+        if dev_majority_min_support is not None
+        else "no_fit_or_intervals/1",
+        "dev_majority_min_support": dev_majority_min_support,
     }
 
 
@@ -192,11 +202,31 @@ def _markdown(summary):
             f"{number(result['end_to_end_accuracy'])} | "
             f"{number(result['accuracy_on_answered'])} |"
         )
+    baseline = summary["methods"].get("dev_majority", {})
+    if baseline.get("metrics") is not None:
+        lines += [
+            "",
+            "## DEV-majority reference baseline",
+            "",
+            "Fitted and scored on the same synthetic DEV controls (resubstitution).",
+            "This is not heldout quality or a production default.",
+            "",
+            "| Field | Eligible | Answered | End-to-end accuracy | Accuracy on answered |",
+            "|---|---:|---:|---:|---:|",
+        ]
+        for field, result in baseline["metrics"]["fields"].items():
+            lines.append(
+                f"| {field} | {result['eligibility'].get('eligible', 0)} | "
+                f"{result['answered_coverage']['numerator']} | "
+                f"{number(result['end_to_end_accuracy'])} | "
+                f"{number(result['accuracy_on_answered'])} |"
+            )
     lines += [
         "",
         "All class supports/confusions/P/R/F1, skill-set and salary coverage details are",
-        "in private-summary.json. Missing confidence stays unmeasured. Jev, generative and",
-        "dev-majority methods were not run. No thresholds, bootstrap or defaults were fit.",
+        "in private-summary.json. Missing confidence stays unmeasured. Jev and",
+        "generation were not run. DEV-majority, when explicitly selected, is a fitted",
+        "reference baseline only. No thresholds, bootstrap or production defaults were fit.",
         "",
     ]
     return "\n".join(lines).encode()
@@ -211,6 +241,7 @@ def execute_dev_rules(
     destination,
     sample_months=None,
     sample_policy="v1",
+    dev_majority_min_support=None,
 ):
     """One actual fixed DEV rules pass, with no model/capture/heldout/Gold authoring."""
     created = False
@@ -223,7 +254,8 @@ def execute_dev_rules(
         policy = privacy.POLICY_V1 if sample_policy == "v1" else privacy.POLICY_V2
         if sample_months is not None:
             sample_report.validate_window(sample_months, policy)
-        actual = bindings()
+        binding_options = {"dev_majority_min_support": dev_majority_min_support}
+        actual = bindings(**binding_options)
         manifest_data = _read(
             manifest_path, suffix=".json", maximum=1024 * 1024, sha=manifest_sha256
         )
@@ -318,13 +350,25 @@ def execute_dev_rules(
                 or reference.source_ref.sha256 != row.input_sha256
             ):
                 raise EvaluationError("synthetic_reference_source_binding_changed")
-        if bindings() != actual:
+        if bindings(**binding_options) != actual:
             raise EvaluationError("execution_changed_before_dispatch")
         runner = domain.HiringMethodRunner(registry, "rules", config_sha256=actual["config_sha256"])
         methods = {"rules": runner.method_config()} | {
             name: MethodConfig("not-run/1", actual["config_sha256"], "synthetic", None)
             for name in ("jev", "generative", "dev_majority")
         }
+        fitted = None
+        if dev_majority_min_support is not None:
+            fitted = majority.fit_dev_majority(root, manifest, min_support=dev_majority_min_support)
+            if fitted.label_sources not in {
+                ("synthetic",),
+                ("agent_provisional",),
+                ("agent_provisional", "synthetic"),
+            }:
+                raise EvaluationError("synthetic_majority_references_required")
+            methods["dev_majority"] = domain.HiringMethodRunner(
+                registry, "dev_majority", config_sha256=actual["config_sha256"], majority_fit=fitted
+            ).method_config()
         # Revalidate through canonical compare without reopening any input after dispatch.
         comparison = domain.compare(
             methods,
@@ -346,7 +390,7 @@ def execute_dev_rules(
                 month_ids=sample_months,
                 policy=policy,
             )
-        if bindings() != actual:
+        if bindings(**binding_options) != actual:
             raise EvaluationError("execution_changed_during_run")
         # Inputs remain frozen; do not manufacture a successor after a concurrent change.
         _read(manifest_path, suffix=".json", maximum=1024 * 1024, sha=manifest_sha256)
@@ -373,6 +417,16 @@ def execute_dev_rules(
             "bootstrap": "not_run",
             "threshold_fit": "not_run",
             "semantic_methods": "not_run",
+            "reference_baseline": {
+                "status": "run",
+                "model_sha256": fitted.model_sha256,
+                "dev_N": fitted.dev_N,
+                "min_support": fitted.min_support,
+                "scope": "same_synthetic_DEV_resubstitution",
+                "field_outcomes": len(comparison.methods["dev_majority"].outcomes),
+            }
+            if fitted is not None
+            else {"status": "not_run"},
             "sample_projection": {
                 "month_ids": sample_months,
                 "policy": policy,
@@ -415,11 +469,15 @@ def execute_dev_rules(
             stream.write(canonical_bytes(seal) + b"\n")
         return {
             "status": run["execution"],
-            "scope": "synthetic_dev_rules_only",
+            "scope": "synthetic_dev_rules_and_reference_baseline"
+            if fitted
+            else "synthetic_dev_rules_only",
             "count": run["count"],
             "field_outcomes": run["field_outcomes"],
             "provider_attempts": 0,
             "semantic_methods": "not_run",
+            "reference_baseline": run["reference_baseline"]["status"],
+            "reference_baseline_field_outcomes": run["reference_baseline"].get("field_outcomes", 0),
             "heldout_read": False,
             "sample_report": "local_closed_projection" if sample is not None else "not_requested",
             "public_release": "not_authorized",

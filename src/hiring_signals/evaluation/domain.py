@@ -38,7 +38,7 @@ from hiring_signals.shared.evalkit.models import (
 from hiring_signals.shared.evalkit.runner import MethodConfig, SourceView, compare
 from hiring_signals.shared.evalkit.statistics import typed_equal
 
-from . import labels
+from . import labels, majority
 
 AXES = tuple((field, None) for field in c.FIELD_IDS)
 
@@ -100,6 +100,7 @@ def _implementation() -> str:
                 ("jev_adapter", jev_adapter),
                 ("generation_adapter", generation_adapter),
                 ("labels", labels),
+                ("majority", majority),
             )
         }
     )
@@ -155,7 +156,7 @@ class ExecutionRegistry:
             return SourceView("stale", item.pin.input_sha256, {})
         return SourceView("available", item.pin.input_sha256, {"text": item.source.text})
 
-    def _lookup(self, prediction: Prediction) -> tuple[Prediction, c.PrivateDerivedRecord]:
+    def _lookup(self, prediction: Prediction):
         issued = self._issued.get((prediction.method, prediction.item_id))
         if issued is None or prediction_digest(prediction) != prediction_digest(issued[0]):
             raise DomainError("unissued_or_changed_prediction")
@@ -164,7 +165,26 @@ class ExecutionRegistry:
             raise DomainError("issued_source_no_longer_current")
         if issued[1].implementation_sha256 != _implementation():
             raise DomainError("issued_implementation_no_longer_current")
+        if type(issued[1]) is BaselineRecord:
+            majority.validate_fit(issued[1].fit)
         return issued
+
+
+@dataclass(frozen=True)
+class BaselineRecord:
+    """Actual learned-baseline values, deliberately not extraction evidence/candidates."""
+
+    method: str
+    config_sha256: str
+    implementation_sha256: str
+    fit: majority.MajorityFit
+
+
+def project_record(record):
+    if type(record) is BaselineRecord:
+        # Decode fresh values from the immutable fit, not shared mutable composite rows.
+        return majority.project_fit(record.fit)
+    return labels.project_machine(record)
 
 
 def _check_child_receipts(binding, packet):
@@ -253,9 +273,20 @@ class HiringMethodRunner:
         *,
         config_sha256: str,
         bindings: Mapping[str, JevBinding | GenerationBinding] | None = None,
+        majority_fit: majority.MajorityFit | None = None,
     ):
-        if type(registry) is not ExecutionRegistry or method not in {"rules", "jev", "generative"}:
+        if type(registry) is not ExecutionRegistry or method not in {
+            "rules",
+            "jev",
+            "generative",
+            "dev_majority",
+        }:
             raise DomainError("concrete_hiring_method_required")
+        if (method == "dev_majority") != (majority_fit is not None):
+            raise DomainError("explicit_majority_fit_required")
+        self.majority_fit = (
+            majority.validate_fit(majority_fit) if majority_fit is not None else None
+        )
         TypeAdapter(c.Digest).validate_python(config_sha256, strict=True)
         self.registry, self.method, self.config_sha256 = registry, method, config_sha256
         self.bindings = dict(bindings or {})
@@ -285,7 +316,7 @@ class HiringMethodRunner:
                 "partition": len(binding.bundle.requests) if method == "jev" else 1,
             }
             definitions.add(canonical_digest(definition))
-        if len(definitions) > 1 or (method == "rules" and self.bindings):
+        if len(definitions) > 1 or (method in {"rules", "dev_majority"} and self.bindings):
             raise DomainError("mixed_method_configuration")
         self.version = "hiring/" + canonical_digest(
             {
@@ -293,6 +324,7 @@ class HiringMethodRunner:
                 "config": config_sha256,
                 "method": method,
                 "definition": sorted(definitions),
+                "reference_model": self.majority_fit.model_sha256 if self.majority_fit else None,
             }
         )
 
@@ -317,6 +349,8 @@ class HiringMethodRunner:
         ):
             raise DomainError("method_public_source_mismatch")
         with self.registry.sources.guard(item.pin.item_id):
+            if self.method == "dev_majority":
+                return self._predict_majority(item)
             controller, refs, model_sha = {}, (), None
             if self.method == "rules":
                 classification = rules.classify(item.source)
@@ -437,6 +471,41 @@ class HiringMethodRunner:
             self.registry._issued[self.method, item.pin.item_id] = (prediction, record)
             return Prediction.model_validate_json(prediction.model_dump_json(warnings="error"))
 
+    def _predict_majority(self, item):
+        fit = majority.validate_fit(self.majority_fit)
+        fields = majority.project_fit(fit)
+        record = BaselineRecord(self.method, self.config_sha256, self.implementation_sha256, fit)
+        prediction = Prediction(
+            item_id=item.pin.item_id,
+            method=self.method,
+            method_version=self.version,
+            config_sha256=self.config_sha256,
+            model=fit.model_sha256,
+            origin="synthetic",
+            status="ok",
+            domain_payload={
+                "kind": "hiring-dev-majority/1",
+                "controller_status": "outcomes_complete",
+                "rubric_sha256": item.pin.rubric_sha256,
+                "source_generation": generation(item.pin).evidence_revision,
+            },
+            machine_output={
+                "kind": "learned-dev-constant-values/1",
+                "model_sha256": fit.model_sha256,
+                "fields": [
+                    {"field": row.field_id, "value": row.value, "status": row.process_status}
+                    for row in fields
+                ],
+            },
+            human_effective_output=None,
+            human_provenance_ref=None,
+            issues=("dev_training_resubstitution",),
+            ledger_refs=(),
+            source_refs=(SourceRef(handle=item.pin.item_id, sha256=item.pin.input_sha256),),
+        )
+        self.registry._issued[self.method, item.pin.item_id] = (prediction, record)
+        return Prediction.model_validate_json(prediction.model_dump_json(warnings="error"))
+
 
 class HiringDomainAdapter:
     """Actual canonical DomainAdapter plus the optional trusted raw-axis port."""
@@ -476,7 +545,7 @@ class HiringDomainAdapter:
             or record.method != prediction.method
             or (
                 record.config_sha256 != prediction.config_sha256
-                or tuple(row.field_id for row in labels.project_machine(record)) != c.FIELD_IDS
+                or tuple(row.field_id for row in project_record(record)) != c.FIELD_IDS
             )
         ):
             raise DomainError("raw_prediction_profile_mismatch")
@@ -490,8 +559,7 @@ class HiringDomainAdapter:
             prediction_digest(prediction),
             raw_machine_digest(prediction),
             tuple(
-                AxisStatus(row.field_id, None, _field_status(row))
-                for row in labels.project_machine(record)
+                AxisStatus(row.field_id, None, _field_status(row)) for row in project_record(record)
             ),
         )
 
@@ -506,7 +574,7 @@ class HiringDomainAdapter:
         projected = None
         if machine.status == "ok":
             self.validate_prediction(machine)
-            projected = labels.project_machine(self.registry._lookup(machine)[1])
+            projected = project_record(self.registry._lookup(machine)[1])
         elif machine.machine_output is not None:
             # A canonical invalid demotion retains raw execution, never field successes.
             issued = self.registry._issued.get((machine.method, machine.item_id))

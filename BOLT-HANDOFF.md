@@ -40,3 +40,10 @@ Markdown from verified closed sample assets alone, with no evaluator import,
 source/label access or file writes. This report-only command works with a moved
 local package and report directory. It supplies no new runtime, data, provider or
 hosting capability to Bolt; Python remains an external prerequisite.
+
+The optional synthetic DEV-majority baseline now runs through the actual canonical
+fit/comparison path, selected by explicit minimum support and matching bindings.
+Outputs remain private; scores on the same DEV training labels are resubstitution,
+not quality proof. Learned guesses do not fabricate extraction evidence, and no
+baseline salary candidate/normalization claim is supplied. This adds no SDK/model,
+Human-label, real-data, cloud or Bolt execution capability.

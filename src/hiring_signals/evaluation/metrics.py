@@ -20,8 +20,7 @@ from hiring_signals.shared.evalkit.models import Outcome, ResamplingSpec
 from hiring_signals.shared.evalkit.resampling import paired_group_resample
 from hiring_signals.shared.evalkit.runner import Comparison
 
-from . import labels
-from .domain import DomainError, HiringDomainAdapter, _field_status
+from .domain import DomainError, HiringDomainAdapter, _field_status, project_record
 
 STATUSES = (
     "ok",
@@ -214,7 +213,7 @@ def _machine_rows(result, adapter, method):
             adapter.validate_prediction(prediction)
             record = adapter.registry._lookup(prediction)[1]
         predictions[prediction.item_id] = prediction
-        for row in labels.project_machine(record):
+        for row in project_record(record):
             projected[prediction.item_id, row.field_id] = row
     for row in result.outcomes:
         prediction = predictions.get(row.item_id)
@@ -238,14 +237,14 @@ def _machine_rows(result, adapter, method):
     return projected, predictions
 
 
-def salary_summary(rows, machines, registry):
+def salary_summary(rows, machines, registry, *, extraction=True):
     eligible = tuple(row for row in rows if row.eligibility == "eligible")
     stated = tuple(row for row in eligible if type(row.expected) is dict)
     predicted = sum(row.status == "ok" and type(row.predicted) is dict for row in eligible)
     candidates, normalized, exact = 0, 0, 0
     for row in stated:
         item = registry._items.get(row.item_id)
-        if item is not None and registry._current(item):
+        if extraction and item is not None and registry._current(item):
             baseline = rules.classify(item.source)
             salary = baseline.salary
             if salary.presence.value is True:
@@ -271,13 +270,19 @@ def salary_summary(rows, machines, registry):
     return {
         "stated_prediction_rate": stats.rate(predicted, len(eligible)),
         "stated_gold_support": len(stated),
-        "exact_candidate_recall_on_gold_stated": stats.rate(candidates, len(stated)),
-        "accepted_normalization_coverage_on_gold_stated": stats.rate(normalized, len(stated)),
+        "exact_candidate_recall_on_gold_stated": stats.rate(candidates, len(stated))
+        if extraction
+        else None,
+        "accepted_normalization_coverage_on_gold_stated": stats.rate(normalized, len(stated))
+        if extraction
+        else None,
         "exact_range_correctness_on_gold_stated": stats.rate(exact, len(stated)),
         "unknown_unit_gold_count": sum(
             row.expected["currency"] is None or row.expected["period"] is None for row in stated
         ),
-        "candidate_policy": "same_narrow_rules_single_candidate/1",
+        "candidate_policy": "same_narrow_rules_single_candidate/1"
+        if extraction
+        else "not_applicable_learned_reference_baseline/1",
     }
 
 
@@ -355,6 +360,7 @@ def private_summary(comparison, adapter, *, calibration_specs=None):
                     tuple(row for row in result.outcomes if row.field == "salary"),
                     machines,
                     adapter.registry,
+                    extraction=method != "dev_majority",
                 ),
             },
         }
