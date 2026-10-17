@@ -22,6 +22,7 @@ def scaffold_status() -> dict[str, object]:
         "stage": "original_synthetic_cli_and_libraries",
         "implemented": [
             "readiness_command",
+            "input_free_keyless_rules_demo",
             "staged_public_file_checks",
             "domain_contracts",
             "json_schemas",
@@ -75,8 +76,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     commands = parser.add_subparsers(dest="command", required=True, parser_class=SafeParser)
     status = commands.add_parser("status", help="Show the current package stage")
     status.add_argument("--json", action="store_true", help="Emit machine-readable metadata")
-    demo = commands.add_parser("demo", help="Check offline demo availability")
+    demo = commands.add_parser("demo", help="Run four original synthetic records without keys")
     demo.add_argument("--offline", action="store_true")
+    demo.add_argument("--out", type=Path, help="New report directory outside the product checkout")
     evaluate = commands.add_parser("eval", help="Check evaluation availability")
     evaluate.add_argument("--dataset", choices=["synthetic"], default="synthetic")
     evaluate.add_argument("--offline", action="store_true")
@@ -124,6 +126,19 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "Use status --json."
             )
         return 0
+    if args.command == "demo" and args.offline:
+        from hiring_signals import demo as demo_workflow
+
+        try:
+            result = demo_workflow.execute(args.out)
+            print(json.dumps(result, sort_keys=True))
+            return 0
+        except demo_workflow.DemoError as error:
+            print(
+                json.dumps({"code": error.code, "effects_possible": error.effects_possible}),
+                file=sys.stderr,
+            )
+            return 2
     if args.command == "annotate":
         from hiring_signals.annotation import workflow as annotation
 

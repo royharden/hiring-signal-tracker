@@ -66,6 +66,51 @@ source authenticity. Keep private state separate from the public artifact folder
 This is an original-synthetic rules workflow. The required independently authored
 60-post/four-month fixtures/Gold, semantic CLI, evaluation, real data rights,
 300 human-corrected labels, timing pilot and blind repeats remain separate gates.
-`demo --offline` and `eval --dataset synthetic --offline` still return an explicit
-unavailable result until their required inputs and evaluation are implemented.
+`eval --dataset synthetic --offline` without explicit frozen inputs still returns
+an explicit unavailable result. The separate tiny demo below needs no input data.
+
+## Input-free offline demo
+
+```sh
+uv run hst demo --offline
+uv run python scripts/demo.py --offline --out "/owner/reports/new-demo"
+```
+
+The module and script run the same bounded operation. With no `--out`, a unique
+`hst-demo-...` directory under the OS temporary directory holds the report. The
+JSON response gives its full `report_directory` and `report_entry` (`report.html`).
+Temporary directories can be removed by the OS; choose a new durable `--out`
+directory to keep the report. Its parent must already exist. Output inside the
+product, credential/export/registry/heldout/scratch paths, linked/reparse ancestors
+and existing destinations refuse before processing. No live demo mode is supplied;
+`--offline` is required.
+
+Four original authored records, one per consecutive month, exercise the existing
+transport/privacy/rules/private-state/report join. Their exact fixture hash and
+demo/rules implementation hashes are returned with the report manifest hash.
+The synthetic origin URLs describe local transport envelopes; they are never
+fetched and do not identify actual source postings. These records contain no
+reference labels and are not the independent required fixture corpus or Gold.
+They establish no measured extraction accuracy, Human agreement or model access.
+
+Own synthetic input and private SQLite/HMAC state exist only in a temporary
+processing directory, closed and removed before success. The retained output is
+exactly the canonical five-file report: JSON, Markdown, HTML, SVG and manifest.
+No raw text, author/organization tokens, source IDs, private keys or per-item
+predictions belong in that output. The optional destination is the report itself,
+so `hst report verify --directory "REPORT_DIRECTORY"` verifies it directly.
+
+Conservative min-ten suppression remains active. All four tiny monthly cohorts
+and complementary cells are withheld consistently in the table and chart. The
+SVG is real but contains no observed points or trend segments; suppressed states
+are labelled. Filling the graph with synthetic percentages would defeat this
+privacy demonstration. This command does not change the rules-only evaluation
+default or mark the complete app ready.
+
+Exit0 means this narrow offline demo completed and its report verified. Exit2
+means refusal, failure or cancellation, with a closed code and `effects_possible`
+flag. A later failure can retain a partial/unsealed report; it is never silently
+deleted or overwritten. Inspect it and use a fresh destination for a retry.
+Successful cleanup of the temporary state is part of completion. Creation modes
+and link checks do not certify hostile filesystem isolation or Windows ACLs.
 Small integration controls do not substitute for that corpus or measure quality.

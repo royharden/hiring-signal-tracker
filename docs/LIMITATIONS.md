@@ -37,8 +37,11 @@ controller metadata. It enables no public quality release or empirical claim.
 The real benchmark still requires an authorized source, 300 corrected rows, a
 timing pilot and 20 blind repeats at least seven days later. No measured accuracy,
 population change, human agreement or live cost is claimed. Missing prerequisites
-are not waivers. The no-input demo/evaluator still refuses; the documented explicit
+are not waivers. The no-input evaluator still refuses; the documented explicit
 DEV command provides limited rules functionality, not a completed benchmark.
+The input-free offline demo runs four original synthetic wiring records through
+the rules/report pipeline. All tiny monthly cohorts stay suppressed, with no
+observed chart points, reference labels, model calls or quality evidence.
 
 Private HMAC/SQLite state and the canonical annotation journal require trusted
 owner-controlled directories outside the checkout. Windows access control must
