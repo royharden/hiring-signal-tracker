@@ -6,6 +6,7 @@ Owners supply and admit inputs before invoking this bounded local workflow.
 
 import hashlib
 import os
+from contextlib import nullcontext
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
 from typing import Annotated, Literal
@@ -65,8 +66,15 @@ def _sha(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def bindings(*, dev_majority_min_support=None):
+def bindings(*, dev_majority_min_support=None, semantic_mock=False):
     """Pathless actual local execution pins for a separately prepared DEV manifest."""
+    if type(semantic_mock) is not bool:
+        raise EvaluationError("explicit_semantic_mock_boolean_required")
+    mock_profile = None
+    if semantic_mock:
+        from . import offline_semantic
+
+        mock_profile = offline_semantic.profile()
     if dev_majority_min_support is not None and (
         type(dev_majority_min_support) is not int or not 1 <= dev_majority_min_support <= MAX_ROWS
     ):
@@ -74,6 +82,12 @@ def bindings(*, dev_majority_min_support=None):
     taxonomy = _sha(canonical_bytes({"fields": c.FIELD_IDS, "skills": c.SKILL_IDS}))
     rubric = _sha(resources.RUBRIC_PATH.read_bytes())
     domain_sha = domain._implementation()
+    methods_not_run = tuple(
+        name
+        for name in ("jev", "generative", "dev_majority")
+        if (name == "dev_majority" and dev_majority_min_support is None)
+        or (name != "dev_majority" and not semantic_mock)
+    )
     config = _sha(
         canonical_bytes(
             {
@@ -97,14 +111,13 @@ def bindings(*, dev_majority_min_support=None):
                 "population": "all37fields/allfrozenDEV/1",
                 "projection": "private-only/1",
                 "method": "rules",
+                "semantic_mock": mock_profile,
                 "dev_majority_min_support": dev_majority_min_support,
-                "methods_not_run": ("jev", "generative")
-                if dev_majority_min_support is not None
-                else ("jev", "generative", "dev_majority"),
+                "methods_not_run": methods_not_run,
             }
         )
     )
-    return {
+    result = {
         "kind": "synthetic-dev-rules-bindings/1",
         "config_sha256": config,
         "domain_adapter_sha256": domain_sha,
@@ -116,7 +129,11 @@ def bindings(*, dev_majority_min_support=None):
         if dev_majority_min_support is not None
         else "no_fit_or_intervals/1",
         "dev_majority_min_support": dev_majority_min_support,
+        "methods_not_run": list(methods_not_run),
     }
+    if semantic_mock:
+        result["semantic_mock"] = mock_profile
+    return result
 
 
 def _safe_input(path, suffix):
@@ -223,11 +240,33 @@ def _markdown(summary):
                 f"{number(result['end_to_end_accuracy'])} | "
                 f"{number(result['accuracy_on_answered'])} |"
             )
+    for method in ("jev", "generative"):
+        result = summary["methods"].get(method, {})
+        if result.get("metrics") is None:
+            continue
+        lines += [
+            "",
+            f"## {method}: authored constant mock",
+            "",
+            "All replies are authored not_stated controls independent of source/reference.",
+            "These are wiring statistics, not model judgments or empirical model quality.",
+            "",
+            "| Field | Eligible | Answered | End-to-end accuracy | Accuracy on answered |",
+            "|---|---:|---:|---:|---:|",
+        ]
+        for field, outcome in result["metrics"]["fields"].items():
+            lines.append(
+                f"| {field} | {outcome['eligibility'].get('eligible', 0)} | "
+                f"{outcome['answered_coverage']['numerator']} | "
+                f"{number(outcome['end_to_end_accuracy'])} | "
+                f"{number(outcome['accuracy_on_answered'])} |"
+            )
     lines += [
         "",
         "All class supports/confusions/P/R/F1, skill-set and salary coverage details are",
-        "in private-summary.json. Missing confidence stays unmeasured. Jev and",
-        "generation were not run. DEV-majority, when explicitly selected, is a fitted",
+        "in private-summary.json. Missing confidence stays unmeasured. Semantic methods",
+        "run only with explicit authored mock opt-in; no real model was run. Any mock",
+        "confidence/token/price values are synthetic. DEV-majority is a fitted",
         "reference baseline only. No thresholds, bootstrap or production defaults were fit.",
         "",
     ]
@@ -244,6 +283,7 @@ def execute_dev_rules(
     sample_months=None,
     sample_policy="v1",
     dev_majority_min_support=None,
+    semantic_mock=False,
 ):
     """One actual fixed DEV rules pass, with no model/capture/heldout/Gold authoring."""
     created = False
@@ -256,7 +296,10 @@ def execute_dev_rules(
         policy = privacy.POLICY_V1 if sample_policy == "v1" else privacy.POLICY_V2
         if sample_months is not None:
             sample_report.validate_window(sample_months, policy)
-        binding_options = {"dev_majority_min_support": dev_majority_min_support}
+        binding_options = {
+            "dev_majority_min_support": dev_majority_min_support,
+            "semantic_mock": semantic_mock,
+        }
         actual = bindings(**binding_options)
         manifest_data = _read(
             manifest_path, suffix=".json", maximum=1024 * 1024, sha=manifest_sha256
@@ -371,18 +414,47 @@ def execute_dev_rules(
             methods["dev_majority"] = domain.HiringMethodRunner(
                 registry, "dev_majority", config_sha256=actual["config_sha256"], majority_fit=fitted
             ).method_config()
-        # Revalidate through canonical compare without reopening any input after dispatch.
-        comparison = domain.compare(
-            methods,
-            manifest,
-            "dev",
-            gold,
-            adapter,
-            "hiring-field-exact/1",
-            registry.source_view,
-            axis_status_port=adapter,
-        )
-        summary = metrics.private_summary(comparison, adapter)
+        semantic_context = nullcontext({})
+        if semantic_mock:
+            from . import offline_semantic
+
+            semantic_context = offline_semantic.methods(registry, actual["config_sha256"])
+        # The existing canonical compare remains the only evaluation engine.
+        with semantic_context as semantic_methods:
+            methods.update(semantic_methods)
+            comparison = domain.compare(
+                methods,
+                manifest,
+                "dev",
+                gold,
+                adapter,
+                "hiring-field-exact/1",
+                registry.source_view,
+                axis_status_port=adapter,
+            )
+            calibration_specs = {}
+            if semantic_mock:
+                from hiring_signals.shared.evalkit.calibration import CalibrationSpec
+
+                calibration_specs = {
+                    (method, field): CalibrationSpec(
+                        kind, methods[method].version, (0.0, 0.5, 1.0), "authored-mock-bins/1"
+                    )
+                    for method, kind in (
+                        ("jev", "native_probability"),
+                        ("generative", "self_reported_confidence"),
+                    )
+                    for field in c.FIELD_IDS
+                }
+            summary = metrics.private_summary(
+                comparison, adapter, calibration_specs=calibration_specs
+            )
+        simulated_attempts = 0
+        if semantic_mock:
+            for prediction in comparison.methods["generative"].actual_predictions:
+                packet = prediction.machine_output["controller"]
+                simulated_attempts += packet["child_used_attempts"] or 0
+            summary["semantic_mock"] = actual["semantic_mock"]
         sample = None
         if sample_months is not None:
             sample = sample_report.build(
@@ -418,7 +490,19 @@ def execute_dev_rules(
             "human_agreement": None,
             "bootstrap": "not_run",
             "threshold_fit": "not_run",
-            "semantic_methods": "not_run",
+            "semantic_methods": "authored_mock" if semantic_mock else "not_run",
+            "semantic_execution": {
+                name: {
+                    "status": summary["methods"][name]["execution"],
+                    "field_outcomes": len(comparison.methods[name].outcomes),
+                    "method_version": methods[name].version,
+                }
+                for name in ("jev", "generative")
+            }
+            if semantic_mock
+            else None,
+            "simulated_generation_attempts": simulated_attempts,
+            "external_cost_usd": "0",
             "reference_baseline": {
                 "status": "run",
                 "model_sha256": fitted.model_sha256,
@@ -470,14 +554,22 @@ def execute_dev_rules(
         with (output / "artifact-manifest.json").open("xb") as stream:
             stream.write(canonical_bytes(seal) + b"\n")
         return {
-            "status": run["execution"],
-            "scope": "synthetic_dev_rules_and_reference_baseline"
-            if fitted
-            else "synthetic_dev_rules_only",
+            "status": "partial"
+            if any(result["execution"] == "partial" for result in summary["methods"].values())
+            else run["execution"],
+            "scope": "synthetic_dev_authored_semantic_mock"
+            if semantic_mock
+            else (
+                "synthetic_dev_rules_and_reference_baseline"
+                if fitted
+                else "synthetic_dev_rules_only"
+            ),
             "count": run["count"],
             "field_outcomes": run["field_outcomes"],
             "provider_attempts": 0,
-            "semantic_methods": "not_run",
+            "semantic_methods": run["semantic_methods"],
+            "simulated_generation_attempts": simulated_attempts,
+            "external_cost_usd": "0",
             "reference_baseline": run["reference_baseline"]["status"],
             "reference_baseline_field_outcomes": run["reference_baseline"].get("field_outcomes", 0),
             "heldout_read": False,
