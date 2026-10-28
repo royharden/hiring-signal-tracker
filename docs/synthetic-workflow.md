@@ -69,6 +69,65 @@ This is an original-synthetic rules workflow. The required independently authore
 `eval --dataset synthetic --offline` without explicit frozen inputs still returns
 an explicit unavailable result. The separate tiny demo below needs no input data.
 
+## One original-synthetic posting file
+
+For one owner-authored synthetic posting, select the UTF-8 text file and its
+separate review JSON explicitly:
+
+```sh
+uv run hst import --file owned-posting.txt --month 2026-10 --source-id 79301 --review review.json --synthetic-only --private-dir /owner/private/hst-file --lease-seconds 120
+```
+
+This command reads posting text directly. It requires no response envelope or
+four-month manifest. `--synthetic-only` is mandatory; the declaration supplies
+no permission to read real postings. Select only original synthetic input. HN
+fetching, real-source rights and the human benchmark remain separate work.
+
+The `.txt` file must be nonempty UTF-8, at most 32,768 bytes and 20,000
+characters. The UTF-8 `.json` review file is also bounded to 32,768 bytes and
+uses exactly the existing five review keys shown above. Its positive integer
+`source_id` must match `--source-id` (at most 2^63 - 1). The month must match
+YYYY-MM with a valid month number. For example, this closed review matches the
+synthetic organization token in a caller-authored posting with no links:
+
+```json
+{"source_id":79301,"identities_reviewed":true,"identity_terms":["SYNTHETIC_EXAMPLE_COMPANY"],"organization":"SYNTHETIC_EXAMPLE_COMPANY","link_kinds":[]}
+```
+
+Every organization token must occur in the reviewed identity inventory. Supply
+one allowed link kind per detected link, as in the manifest workflow. Duplicate
+JSON keys, unknown review fields, invalid types, missing review, unsupported
+markup/schemes and quarantined privacy results cannot create an accepted
+derivation. Input validation and transient reviewed redaction finish before
+private state initialization. Missing/invalid input produces a closed error;
+it does not create an empty successful record.
+
+Protected credential, transcript, registry, Git, scratch and heldout paths are
+refused. Linked/reparse paths or ancestors and multiply linked input/state
+files are refused. The private directory must be outside the product checkout
+and may not contain either selected input. Use owner-restricted permissions.
+These checks assume an owner-controlled filesystem; they do not establish
+hostile filesystem isolation, secure memory erasure or Windows ACL privacy.
+
+The command constructs the existing transient posting and applies the existing
+reviewed redaction, HMAC identity, rules and closed derived-record storage.
+It retains only the existing private source/hash mappings and derived schema.
+It creates no public report, per-posting output or raw/redacted text copy. The
+owner-selected source and review files remain in place. A stored derivation
+preserves field-level absence, uncertainty and processing errors, with no
+fabricated labels or successful classification claim for errored fields.
+
+Exit 0 and `synthetic_file_derivation_stored` mean this single private rules
+derivation was stored. The response still says `complete_workflow: false` and
+`quality_status: not_measured`; no population, benchmark or extraction accuracy
+is established. Exit 2 gives only a closed code and `private_effects_possible`.
+A later state/classifier failure can leave a source mapping without a derived
+record; this is an error, not successful intake. An unchanged retry reuses the
+private HMAC identity. A changed source/month/organization for the same source
+ID requires a deliberate successor; another method's records are refused.
+Keep the identity secret and consistent state backup together. The four-month
+population report continues to use the separate manifest workflow above.
+
 ## Input-free offline demo
 
 ```sh

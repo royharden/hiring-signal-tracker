@@ -49,6 +49,7 @@ def scaffold_status() -> dict[str, object]:
             "explicit_synthetic_dev_majority_reference_baseline",
             "explicit_synthetic_dev_semantic_mock_comparison",
             "original_synthetic_rules_cli",
+            "original_synthetic_posting_file_cli",
             "public_report_export_verify_cli",
             "public_sample_limitations_cli",
         ],
@@ -113,6 +114,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     run.add_argument("--out", required=True, type=Path)
     run.add_argument("--lease-seconds", required=True, type=float)
     run.add_argument("--policy", choices=["v1", "v2"], default="v1")
+    intake = commands.add_parser("import", help="Import one reviewed original-synthetic posting")
+    intake.add_argument("--file", required=True, type=Path)
+    intake.add_argument("--review", required=True, type=Path)
+    intake.add_argument("--month", required=True)
+    intake.add_argument("--source-id", required=True, type=int)
+    intake.add_argument("--synthetic-only", action="store_true")
+    intake.add_argument("--private-dir", required=True, type=Path)
+    intake.add_argument("--lease-seconds", required=True, type=float)
     report = commands.add_parser("report", help="Export or verify closed public report artifacts")
     actions = report.add_subparsers(dest="action", required=True, parser_class=SafeParser)
     export = actions.add_parser("export")
@@ -260,6 +269,37 @@ def main(argv: Sequence[str] | None = None) -> int:
                     file=sys.stderr,
                 )
                 return 2
+    if args.command == "import":
+        from hiring_signals.ingest import file_import
+
+        try:
+            result = file_import.execute_file_import(
+                args.file,
+                review_path=args.review,
+                month=args.month,
+                source_id=args.source_id,
+                synthetic_only=args.synthetic_only,
+                private_directory=args.private_dir,
+                lease_seconds=args.lease_seconds,
+            )
+            print(json.dumps(result, sort_keys=True))
+            return 0
+        except file_import.FileImportError as error:
+            print(
+                json.dumps(
+                    {"code": error.code, "private_effects_possible": error.private_effects_possible}
+                ),
+                file=sys.stderr,
+            )
+            return 2
+        except (Exception, KeyboardInterrupt):
+            print(
+                json.dumps(
+                    {"code": "file_import_failed_or_cancelled", "private_effects_possible": True}
+                ),
+                file=sys.stderr,
+            )
+            return 2
     if args.command in {"run-synthetic", "report"}:
         # Lazy import keeps readiness independent of source/state/model access.
         from hiring_signals import workflow

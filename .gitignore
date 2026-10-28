@@ -20,3 +20,11 @@ data/
 .chatexports/
 .thinking/
 .creds/
+
+# Local credentials and generated archives
+ArchiveManager-creds.txt
+*.pem
+*.key
+*.p12
+*.pfx
+*.zip
