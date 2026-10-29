@@ -9,6 +9,7 @@ With Python 3.12 and uv installed:
 ```sh
 uv sync --frozen
 uv run hst status --json
+uv run python scripts/demo.py --offline
 ```
 
 The readiness response identifies the current `original_synthetic_cli_and_libraries` stage, implemented capabilities and unavailable workflows. Readiness reads no posting data or credentials and requires no network after installation. Its compatible `evaluation_status` describes the default rules profile; `evaluation_status_scope` and `reference_baseline_status` distinguish the explicit optional synthetic DEV baseline.
@@ -26,7 +27,24 @@ uv run hst annotate --show-bindings
 uv run python scripts/check_public_files.py
 ```
 
-`scripts/demo.py --offline` and evaluation without explicit inputs return `workflow_not_implemented` with exit code2 and create no results. Explicit evaluation accepts an owner-admitted canonical DEV manifest, original-synthetic source JSONL, exact file hashes and a new private output directory. By default it runs rules/comparison/statistics with Jev/generation/dev-majority not_run; the explicit support option below adds actual DEV-majority fitting. Read [the runnable input, normal and refusal guide](docs/evaluation-workflow.md). No implicit dataset, heldout, model call or human-quality claim is supplied.
+`hst demo --offline` (also `scripts/demo.py --offline`) runs four built-in original
+synthetic wiring records through the existing rules/privacy/report pipeline.
+It needs no inputs, credentials or network. The JSON response gives a unique
+temporary report directory; open its `report.html` for tables and the four-month
+SVG chart. Each tiny cohort stays suppressed, so the chart shows gaps rather
+than invented trends. Add `--out "NEW_REPORT_DIRECTORY"` to choose a new directory
+outside the product checkout with an existing parent. Existing outputs refuse.
+Temporary synthetic processing state is removed; only the closed report remains.
+This is a demonstration of wiring, with no model, Human, Gold or quality evidence.
+See [demo output and failure behavior](docs/synthetic-workflow.md#input-free-offline-demo).
+
+Evaluation without explicit inputs still returns `workflow_not_implemented` with
+exit code2 and creates no results. Explicit evaluation accepts an owner-admitted
+canonical DEV manifest, original-synthetic source JSONL, exact file hashes and a
+new private output directory. By default it runs rules/comparison/statistics with
+Jev/generation/dev-majority not_run; the explicit support option below adds actual
+DEV-majority fitting. Read [the runnable input, normal and refusal guide](docs/evaluation-workflow.md).
+No implicit evaluation dataset, heldout, model call or human-quality claim is supplied.
 
 `run-synthetic` requires an explicitly supplied original manifest and owner-private state outside the checkout. It preserves unreviewed/blocked rows in denominators and exports only closed released aggregates. Read [the input and state guide](docs/synthetic-workflow.md) before running it. Exit3 denotes partial/no-eligible processing; even exit0 does not establish quality or full workflow acceptance. Report export/verification accepts only bounded closed public JSON and new destinations.
 
@@ -54,6 +72,7 @@ proves local artifact consistency, not source authenticity or rights.
 ## Architecture
 
 - `src/hiring_signals/cli.py`: readiness and explicit workflow availability.
+- `src/hiring_signals/demo.py`: four original built-in wiring records composed through the existing rules workflow, with temporary private state and a verified closed report; no reference labels or model calls.
 - `src/hiring_signals/workflow.py`: supplied-original-synthetic transport/privacy/rules/private-state/population/report joins and bounded public report IO; no network/model calls or implicit corpus.
 - `src/hiring_signals/evaluation/`: canonical label codecs, concrete execution bindings, full37-field comparison and private class/skill/salary/calibration/paired statistics. The synthetic DEV CLI joins rules to supplied frozen references and private artifact hashes, without heldout reading or model access. Optional DEV-majority fitting is explicit; bootstrap is not run by this CLI.
 - `src/hiring_signals/public_files.py`: bounded checks of staged product paths and text for private material.

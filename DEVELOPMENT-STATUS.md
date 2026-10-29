@@ -1,4 +1,4 @@
-# Development status — 2026-10-15
+# Development status — 2026-10-17
 
 Local construction resumed after the earlier pause checkpoint. No deployment or
 independent finished-app acceptance is claimed. The current product is a Python3.12
@@ -6,6 +6,11 @@ CLI and portable local libraries; it is not a hosted Bolt backend.
 
 ## Finished locally
 
+- The input-free `hst demo --offline` / `scripts/demo.py --offline` command joins
+  four original synthetic wiring records to the existing privacy/rules/state/
+  report pipeline. It removes temporary synthetic processing state and returns
+  the verified HTML/table/SVG report path. One record per month stays suppressed;
+  no observed trend, Gold, Human or semantic-quality claim is supplied.
 - Supplied original-synthetic four-month input can pass through bounded ingest,
   reviewed privacy handling, deterministic37-field rules, private SQLite/HMAC
   state and closed JSON/Markdown/HTML/SVG population reports.
@@ -70,7 +75,8 @@ private evaluator artifacts are not bundled or published in the product repo.
 
 README.md, docs/evaluation-workflow.md, docs/providers.md, docs/gold-format.md,
 docs/reporting.md and BOLT-HANDOFF.md describe implemented commands and boundaries.
-The no-input demo/evaluator still refuses. No listener, Docker resource, hosted
+The no-input evaluator still refuses; the bounded synthetic demo is available.
+No listener, Docker resource, hosted
 database, migration, function, auth service, SDK install or live call was started.
 
 ## Outstanding

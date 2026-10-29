@@ -1,4 +1,4 @@
-"""Report the explicit availability of the future offline workflow."""
+"""Run the input-free original-synthetic offline demo through the package CLI."""
 
 from _bootstrap import run
 

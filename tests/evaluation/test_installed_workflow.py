@@ -125,3 +125,54 @@ def test_installed_bad_dev_input_refuses_before_output(installed_python, tmp_pat
     assert json.loads(result.stderr)["private_effects_possible"] is False
     assert "SYNTHETIC_REJECTED_SOURCE_CANARY" not in result.stderr
     assert not options["destination"].exists()
+
+
+@pytest.mark.parametrize("support", [None, 1])
+def test_installed_mock_bindings_match_source(installed_python, tmp_path, support):
+    """Catches source-only mock policy/config hashes and hidden default method drift."""
+    args = ["eval", "--offline", "--show-bindings", "--semantic-mock"]
+    if support is not None:
+        args += ["--dev-majority-min-support", str(support)]
+    result = run(installed_python, tmp_path, *args)
+    assert result.returncode == 0 and not result.stderr
+    expected = w.bindings(semantic_mock=True, dev_majority_min_support=support)
+    expected = json.loads(json.dumps(expected))
+    assert json.loads(result.stdout) == expected
+
+
+def test_installed_mock_four_methods_preserve_suppression(installed_python, tmp_path):
+    """Catches repo-only semantic wiring, private leaks and mock quality overclaims."""
+    import test_semantic_workflow as semantic_wiring
+
+    options = semantic_wiring.inputs(tmp_path / "input", support=1)
+    result = run(
+        installed_python,
+        tmp_path,
+        *wiring.command(options),
+        "--semantic-mock",
+        "--dev-majority-min-support",
+        "1",
+        "--sample-months",
+        "2026-07",
+        "2026-08",
+        "2026-09",
+        "2026-10",
+    )
+    assert result.returncode == 0 and not result.stderr
+    actual = json.loads(result.stdout)
+    assert actual["semantic_methods"] == "authored_mock"
+    assert actual["provider_attempts"] == 0 and actual["external_cost_usd"] == "0"
+    assert actual["simulated_generation_attempts"] == 1
+    output = options["destination"]
+    summary = json.loads((output / "private-summary.json").read_bytes())
+    for method in ("rules", "jev", "generative", "dev_majority"):
+        assert summary["methods"][method]["actual_predictions"] == 1
+    assert summary["semantic_mock"]["quality_status"] == "not_measured"
+    public = json.loads((output / "sample-report/aggregates.json").read_bytes())
+    assert all(month["eligible_denominator"] is None for month in public["months"])
+    seal = json.loads((output / "artifact-manifest.json").read_bytes())
+    for name, pin in seal["files"].items():
+        data = (output / name).read_bytes()
+        assert hashlib.sha256(data).hexdigest() == pin["sha256"]
+    public_text = "".join(p.read_text() for p in (output / "sample-report").iterdir())
+    assert "Requirements: Python" not in public_text

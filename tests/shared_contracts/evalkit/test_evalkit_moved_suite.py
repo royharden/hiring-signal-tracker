@@ -69,7 +69,8 @@ raise SystemExit(code)
         env=env,
         capture_output=True,
         text=True,
-        timeout=60,
+        # The moved suite is 101 tests. 60s expired on a loaded host.
+        timeout=180,
     )
     assert run.returncode == 0, run.stdout + run.stderr
     proof = json.loads(run.stdout.strip().splitlines()[-1])

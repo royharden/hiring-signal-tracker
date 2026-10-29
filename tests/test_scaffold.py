@@ -56,8 +56,8 @@ class ScaffoldTests(unittest.TestCase):
         self.assertNotIn(canary, output.getvalue())
 
     def test_unimplemented_workflows_fail_without_writes(self):
-        """Catches a fake demo/evaluation pass or manufactured result files."""
-        for command in (["demo", "--offline"], ["eval", "--dataset", "synthetic", "--offline"]):
+        """Catches implicit live demo or input-free evaluator success/result files."""
+        for command in (["demo"], ["eval", "--dataset", "synthetic", "--offline"]):
             with tempfile.TemporaryDirectory() as directory:
                 before = Path.cwd()
                 error = io.StringIO()
@@ -107,7 +107,7 @@ class ScaffoldTests(unittest.TestCase):
             environment = os.environ.copy()
             environment.pop("PYTHONPATH", None)
             for script, args in (
-                ("demo.py", ["--offline"]),
+                ("demo.py", []),
                 ("eval.py", ["--dataset", "synthetic", "--offline"]),
             ):
                 completed = subprocess.run(
